@@ -1,0 +1,39 @@
+name: Deploy landing
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-landing
+      cancel-in-progress: false
+
+    steps:
+      - name: SSH & rebuild landing
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: ${{ secrets.VM_PORT }}
+          script_stop: true
+          command_timeout: 15m
+          script: |
+            set -e
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            cd /var/www/merodafa/dafai-landing
+            echo "▸ Pulling latest"
+            git pull origin main
+            echo "▸ Installing deps"
+            npm ci
+            echo "▸ Building"
+            npm run build
+            echo "▸ Restarting PM2"
+            pm2 restart merodafa-landing
+            echo "✓ Landing deployed"
