@@ -6,7 +6,7 @@ const config: Config = {
     extend: {
       colors: {
         midnight: '#0F172A',
-        electric: '#2563EB',
+        electric: '#09383e',
         paper: '#FFFFFF',
         emerald: '#059669',
       },

@@ -41,13 +41,13 @@ export function PricingCard({
 
       {/* Tier + description */}
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-lg font-semibold text-midnight">{tier}</h3>
+        <h3 className="text-lg font-semibold text-slate-900">{tier}</h3>
         <p className="text-slate-500 text-sm">{description}</p>
       </div>
 
       {/* Price */}
       <div className="flex items-baseline gap-1">
-        <span className="text-3xl font-extrabold text-midnight">{price}</span>
+        <span className="text-3xl font-extrabold text-slate-900">{price}</span>
         {period && <span className="text-slate-400 text-sm">{period}</span>}
       </div>
 

@@ -73,7 +73,7 @@ export function WaitlistModal({ open, onClose, tier, source = 'modal' }: Waitlis
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-midnight font-display">
+            <h2 className="text-2xl font-bold text-slate-900 font-display">
               You&apos;re on the list!
             </h2>
             <p className="text-slate-500">We&apos;ll reach out when your spot is ready.</p>
@@ -84,7 +84,7 @@ export function WaitlistModal({ open, onClose, tier, source = 'modal' }: Waitlis
         ) : (
           /* form state */
           <>
-            <h2 className="text-2xl font-bold text-midnight mb-1 font-display">
+            <h2 className="text-2xl font-bold text-slate-900 mb-1 font-display">
               Get Early Access
             </h2>
             <p className="text-slate-500 text-sm mb-6">

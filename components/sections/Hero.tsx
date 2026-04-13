@@ -1,96 +1,188 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/Button'
 import { WaitlistModal } from '@/components/ui/WaitlistModal'
+import { AnimatedQuery } from '@/components/ui/AnimatedQuery'
+
+const TOPICS = [
+  'Income Tax Act',
+  'VAT Act',
+  'NRB Directives',
+  'Finance Act 2081',
+  'IRD Circulars',
+  'Nepal Gazette',
+]
 
 export function Hero() {
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <>
-      {/* Outer — white with padding so banner doesn't stick to edges */}
-      <section className="bg-white px-4 sm:px-6 pt-3 pb-0">
-        {/* Inner banner card — rounded, dark background */}
+      <section className="px-4 sm:px-6 pt-8">
+        {/* Outer bordered card — faint teal tint to separate from page */}
         <div
-          className="relative mx-auto max-w-[1620px] overflow-hidden rounded-2xl sm:rounded-3xl"
-          style={{
-            background: 'linear-gradient(170deg, #0B1120 0%, #111a2e 25%, #14203a 55%, #0f1829 100%)',
-          }}
+          className="relative mx-auto max-w-[1400px] overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200"
+          style={{ backgroundColor: '#f6faf9' }}
         >
-          {/* Grid texture */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
-              backgroundSize: '56px 56px',
-            }}
-          />
+          {/* Abstract decoration layer — no strips, just soft shapes */}
+          <div className="absolute inset-0 pointer-events-none" aria-hidden>
+            {/* Soft radial glow behind content */}
+            <div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[760px] h-[400px] rounded-full blur-3xl"
+              style={{
+                background: 'radial-gradient(ellipse, rgba(9,56,62,0.1) 0%, transparent 70%)',
+              }}
+            />
 
-          {/* Ambient orbs — brand teal */}
-          <div className="absolute -top-48 left-1/4 w-[700px] h-[500px] pointer-events-none" style={{
-            background: 'radial-gradient(ellipse at center, rgba(9,56,62,0.35) 0%, transparent 70%)',
-          }} />
-          <div className="absolute top-1/3 -right-24 w-[400px] h-[400px] pointer-events-none" style={{
-            background: 'radial-gradient(circle at center, rgba(13,79,87,0.2) 0%, transparent 70%)',
-          }} />
-          <div className="absolute -bottom-24 left-1/2 w-[500px] h-[350px] pointer-events-none" style={{
-            background: 'radial-gradient(ellipse at center, rgba(9,56,62,0.15) 0%, transparent 70%)',
-          }} />
+            {/* Corner accent rings — top-left cluster */}
+            <div
+              className="absolute -top-20 -left-20 w-64 h-64 rounded-full border"
+              style={{ borderColor: 'rgba(9,56,62,0.08)' }}
+            />
+            <div
+              className="absolute -top-40 -left-40 w-[26rem] h-[26rem] rounded-full border"
+              style={{ borderColor: 'rgba(9,56,62,0.05)' }}
+            />
+            <div
+              className="absolute -top-64 -left-64 w-[34rem] h-[34rem] rounded-full border"
+              style={{ borderColor: 'rgba(9,56,62,0.03)' }}
+            />
+
+            {/* Corner accent rings — bottom-right cluster */}
+            <div
+              className="absolute -bottom-24 -right-24 w-72 h-72 rounded-full border"
+              style={{ borderColor: 'rgba(9,56,62,0.08)' }}
+            />
+            <div
+              className="absolute -bottom-44 -right-44 w-[28rem] h-[28rem] rounded-full border"
+              style={{ borderColor: 'rgba(9,56,62,0.05)' }}
+            />
+
+            {/* Floating dot accents */}
+            <div
+              className="absolute top-[20%] left-[10%] w-1.5 h-1.5 rounded-full"
+              style={{ backgroundColor: 'rgba(9,56,62,0.3)' }}
+            />
+            <div
+              className="absolute top-[32%] right-[14%] w-2 h-2 rounded-full"
+              style={{ backgroundColor: 'rgba(9,56,62,0.22)' }}
+            />
+            <div
+              className="absolute bottom-[28%] left-[16%] w-1 h-1 rounded-full"
+              style={{ backgroundColor: 'rgba(9,56,62,0.26)' }}
+            />
+            <div
+              className="absolute bottom-[36%] right-[10%] w-1.5 h-1.5 rounded-full"
+              style={{ backgroundColor: 'rgba(9,56,62,0.22)' }}
+            />
+
+            {/* Dotted grid patch — top right */}
+            <svg
+              className="absolute top-10 right-10 w-28 h-28 opacity-50"
+              viewBox="0 0 100 100"
+              aria-hidden
+            >
+              {Array.from({ length: 6 }).map((_, row) =>
+                Array.from({ length: 6 }).map((_, col) => (
+                  <circle
+                    key={`${row}-${col}`}
+                    cx={10 + col * 16}
+                    cy={10 + row * 16}
+                    r="1"
+                    fill="#09383e"
+                  />
+                )),
+              )}
+            </svg>
+
+            {/* Dotted grid patch — bottom left */}
+            <svg
+              className="absolute bottom-10 left-10 w-28 h-28 opacity-50"
+              viewBox="0 0 100 100"
+              aria-hidden
+            >
+              {Array.from({ length: 6 }).map((_, row) =>
+                Array.from({ length: 6 }).map((_, col) => (
+                  <circle
+                    key={`${row}-${col}`}
+                    cx={10 + col * 16}
+                    cy={10 + row * 16}
+                    r="1"
+                    fill="#09383e"
+                  />
+                )),
+              )}
+            </svg>
+          </div>
 
           {/* Content */}
-          <div className="relative z-10 px-6 sm:px-10 lg:px-16 pt-16 pb-16 lg:pt-20 lg:pb-20">
-            {/* Center text */}
-            <div className="flex flex-col items-center text-center max-w-2xl mx-auto mb-14 lg:mb-16">
-              {/* Pill */}
-              <div className="mb-5">
-                <span className="inline-flex items-center gap-2 rounded-full border border-teal-400/20 bg-teal-500/10 px-4 py-1.5 text-[13px] text-teal-300 font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
-                  Nepal&apos;s first AI-powered legal intelligence
-                </span>
-              </div>
+          <div className="relative z-10 px-4 sm:px-6 lg:px-8 pt-16 pb-16 lg:pt-24 lg:pb-24 flex flex-col items-center text-center">
+            {/* Kicker pill */}
+            <span
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[12px] font-semibold mb-6 bg-white border"
+              style={{
+                borderColor: 'rgba(9,56,62,0.15)',
+                color: '#09383e',
+              }}
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full opacity-60 animate-ping" style={{ backgroundColor: '#09383e' }} />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#09383e' }} />
+              </span>
+              Built for Nepal&apos;s CAs &amp; finance teams
+            </span>
 
-              {/* Headline */}
-              <h1 className="font-display font-bold text-white text-[2.25rem] sm:text-[2.75rem] lg:text-5xl leading-[1.1] tracking-tight mb-4">
-                Compliance at the{' '}
-                <br className="hidden sm:block" />
-                <span
-                  style={{
-                    background: 'linear-gradient(135deg, #5eead4 0%, #14b8a6 50%, #0d9488 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  speed of thought.
-                </span>
-              </h1>
+            {/* Headline */}
+            <h1 className="font-display font-bold text-slate-900 text-[2.5rem] sm:text-[3rem] lg:text-[3.75rem] leading-[1.05] tracking-tight max-w-3xl mb-5">
+              Your smart AI{' '}
+              <span
+                style={{
+                  background: 'linear-gradient(135deg, #09383e 0%, #0d4f57 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}
+              >
+                legal research partner.
+              </span>
+            </h1>
 
-              {/* Subheadline */}
-              <p className="text-slate-400 text-[15px] sm:text-base leading-relaxed max-w-lg mb-7">
-                Ask questions in plain language. Get cited answers from Nepal&apos;s official
-                gazette — with the source document right beside every response.
-              </p>
+            {/* Subheadline */}
+            <p className="text-slate-600 text-[15px] sm:text-base leading-relaxed max-w-xl mb-9">
+              Ask any question about Nepal&apos;s Acts, directives, and gazettes. Get a
+              clear answer with the exact source beside it &mdash; in seconds, not hours.
+            </p>
 
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Button variant="primary" size="md" onClick={() => setModalOpen(true)}>
-                  Get early access
-                </Button>
-                <Button variant="outline" size="md" className="gap-2">
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-white/10 text-[10px]">▶</span>
-                  Watch demo
-                </Button>
-              </div>
-
-              {/* Social proof */}
-              <p className="mt-5 text-slate-500 text-sm">
-                Trusted by <span className="text-slate-300 font-medium">500+</span> CAs and finance professionals
-              </p>
+            {/* CTA */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-10">
+              <Button variant="primary" size="md" onClick={() => setModalOpen(true)}>
+                Get early access
+              </Button>
+              <Link
+                href="/how-it-works"
+                className="inline-flex items-center justify-center px-6 py-3 text-[15px] font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors"
+              >
+                See how it works
+              </Link>
             </div>
 
-            {/* Product mockup */}
-            <div className="hidden sm:block">
-              <ProductMockup />
+            {/* Live query demo — rotates through real example questions */}
+            <div className="w-full flex justify-center mb-8">
+              <AnimatedQuery />
+            </div>
+
+            {/* Topic chips */}
+            <div className="flex flex-wrap justify-center gap-2 max-w-2xl">
+              {TOPICS.map((t) => (
+                <span
+                  key={t}
+                  className="inline-flex items-center rounded-full border bg-white px-3 py-1.5 text-[12px] font-medium text-slate-700 shadow-sm"
+                  style={{ borderColor: 'rgba(9,56,62,0.15)' }}
+                >
+                  {t}
+                </span>
+              ))}
             </div>
           </div>
         </div>
@@ -98,108 +190,5 @@ export function Hero() {
 
       <WaitlistModal open={modalOpen} onClose={() => setModalOpen(false)} source="hero" />
     </>
-  )
-}
-
-function ProductMockup() {
-  return (
-    <div className="relative mx-auto max-w-4xl">
-      {/* Glow */}
-      <div className="absolute inset-x-8 -inset-y-4 rounded-3xl pointer-events-none" style={{
-        background: 'radial-gradient(ellipse at 50% 40%, rgba(9,56,62,0.3) 0%, transparent 70%)',
-        filter: 'blur(48px)',
-      }} />
-
-      {/* Card */}
-      <div className="relative rounded-xl border border-white/[0.08] bg-gradient-to-b from-white/[0.07] to-white/[0.02] backdrop-blur-sm overflow-hidden shadow-[0_24px_64px_rgba(0,0,0,0.4)]">
-        {/* Chrome */}
-        <div className="flex items-center gap-2 px-5 py-2.5 border-b border-white/[0.06] bg-white/[0.03]">
-          <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-            <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
-          </div>
-          <div className="flex-1 flex justify-center">
-            <div className="flex items-center gap-2 rounded-md bg-white/[0.04] border border-white/[0.06] px-3 py-1">
-              <svg className="w-3 h-3 text-teal-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" /></svg>
-              <span className="text-slate-500 text-[11px] font-mono">merodafa.com/workspace</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Split pane */}
-        <div className="flex" style={{ minHeight: '300px' }}>
-          {/* Chat */}
-          <div className="flex-1 p-4 flex flex-col gap-2.5 border-r border-white/[0.06]" style={{ minWidth: 0 }}>
-            <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Chat</span>
-
-            <div className="flex justify-end">
-              <div className="rounded-2xl rounded-tr-md bg-teal-500/15 border border-teal-400/20 px-3.5 py-2 max-w-[85%]">
-                <p className="text-white/90 text-[12px] leading-relaxed">What is the TDS rate on consulting fees?</p>
-              </div>
-            </div>
-
-            <div className="rounded-2xl rounded-tl-md bg-white/[0.04] border border-white/[0.06] px-3.5 py-2.5 max-w-[92%]">
-              <p className="text-slate-300 text-[12px] leading-relaxed mb-2">
-                Consulting fees to a resident: <span className="text-white font-semibold">1.5% TDS</span> with VAT invoice, <span className="text-white font-semibold">15%</span> without.
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-teal-500/10 border border-teal-400/20 text-teal-300 text-[10px] font-medium">
-                  ITA 2058, §88
-                </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-slate-500 text-[10px]">
-                  Finance Act 2081
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-auto flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2">
-              <span className="flex-1 text-slate-600 text-[12px]">Ask a legal question…</span>
-              <div className="w-6 h-6 rounded-md bg-teal-700 flex items-center justify-center flex-shrink-0">
-                <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          {/* Document */}
-          <div className="flex-1 p-4 flex flex-col gap-2.5 bg-white/[0.01]" style={{ minWidth: 0 }}>
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Document</span>
-              <span className="text-[10px] text-slate-600 font-mono">Income Tax Act 2058</span>
-            </div>
-
-            <div className="flex-1 rounded-lg bg-white p-4 flex flex-col gap-2 shadow-inner">
-              <div className="flex flex-col gap-1 pb-2 border-b border-slate-100">
-                <div className="h-2 w-2/3 bg-slate-200 rounded-sm" />
-                <div className="h-1.5 w-1/3 bg-slate-100 rounded-sm" />
-              </div>
-              <div className="space-y-[4px]">
-                {[82, 96, 68, 88].map((w, i) => (
-                  <div key={i} className="h-[4px] bg-slate-100 rounded-sm" style={{ width: `${w}%` }} />
-                ))}
-              </div>
-              {/* Highlighted section — teal accent */}
-              <div className="rounded-md border-2 border-teal-400/40 bg-teal-50/50 px-3 py-2.5 space-y-[4px]">
-                <span className="text-teal-600 text-[9px] font-bold uppercase tracking-wider">§88 — Matched</span>
-                <div className="h-[4px] bg-teal-400/25 rounded-sm w-full" />
-                <div className="h-[4px] bg-teal-400/20 rounded-sm w-11/12" />
-                <div className="h-[4px] bg-teal-400/25 rounded-sm w-4/5" />
-              </div>
-              <div className="space-y-[4px]">
-                {[75, 92, 58].map((w, i) => (
-                  <div key={i} className="h-[4px] bg-slate-100 rounded-sm" style={{ width: `${w}%` }} />
-                ))}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-[10px] text-slate-500">
-              <span className="font-mono">Page 47 of 312</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   )
 }

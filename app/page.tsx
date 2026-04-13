@@ -1,20 +1,24 @@
 import { Hero } from '@/components/sections/Hero'
+import { BeforeAfter } from '@/components/sections/BeforeAfter'
+import { UseCases } from '@/components/sections/UseCases'
 import { FeaturesBento } from '@/components/sections/FeaturesBento'
 import { HowItWorksPreview } from '@/components/sections/HowItWorksPreview'
-import { WorkspaceShowcase } from '@/components/sections/WorkspaceShowcase'
-import { CtaBanner } from '@/components/sections/CtaBanner'
 import { Pricing } from '@/components/sections/Pricing'
+import { FAQ } from '@/components/sections/FAQ'
+import { CtaBanner } from '@/components/sections/CtaBanner'
 import { FadeInView } from '@/components/ui/FadeInView'
 
 export default function Home() {
   return (
-    <main>
+    <main className="bg-white">
       <Hero />
+      <FadeInView><BeforeAfter /></FadeInView>
+      <FadeInView><UseCases /></FadeInView>
       <FadeInView><FeaturesBento /></FadeInView>
       <FadeInView><HowItWorksPreview /></FadeInView>
-      <FadeInView><WorkspaceShowcase /></FadeInView>
-      <FadeInView><CtaBanner /></FadeInView>
       <FadeInView><Pricing /></FadeInView>
+      <FadeInView><FAQ /></FadeInView>
+      <FadeInView><CtaBanner /></FadeInView>
     </main>
   )
 }
