@@ -99,10 +99,10 @@ function ReviewedBadge() {
         className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md"
         style={{ background: 'linear-gradient(135deg, #09383e 0%, #0d4f57 100%)' }}
       >
-        NM
+        SA
       </div>
       <div className="flex flex-col">
-        <span className="text-[13px] font-semibold text-slate-900">Niroj Mainali</span>
+        <span className="text-[13px] font-semibold text-slate-900">Sabin Adhikari</span>
         <span className="text-[11px]" style={{ color: '#09383e' }}>
           Chartered Accountant
         </span>

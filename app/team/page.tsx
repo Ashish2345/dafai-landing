@@ -22,10 +22,10 @@ const teamMembers: TeamMember[] = [
     initials: 'AR',
   },
   {
-    name: 'Niroj Mainali',
+    name: 'Sabin Adhikari',
     role: 'Chartered Accountant',
-    photo: '/team/niroj-mainali.jpg',
-    initials: 'NM',
+    photo: '/team/sabin-adhikari.jpg',
+    initials: 'SA',
   },
 ]
 
