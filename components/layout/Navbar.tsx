@@ -12,6 +12,8 @@ const NAV_LINKS = [
   { label: 'Team', href: '/team' },
 ]
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5173'
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -78,7 +80,7 @@ export function Navbar() {
           {/* Right — single dark CTA that launches the app */}
           <div className="flex items-center gap-2">
             <Link
-              href="http://localhost:5173"
+              href={APP_URL}
               className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 text-sm font-semibold text-white rounded-xl transition-all duration-200 hover:brightness-110"
               style={{
                 background: 'linear-gradient(135deg, #09383e 0%, #0d4f57 100%)',
