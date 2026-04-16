@@ -5,11 +5,11 @@ import { AnimatedQuery } from '@/components/ui/AnimatedQuery'
 const TOPICS = [
   'Income Tax Act',
   'VAT Act',
-  'Company Act',
+  'नजिर / Case Law',
   'NRB Directives',
+  'Company Act',
   'Finance Act 2081',
   'IRD Circulars',
-  'नजिर / Case Law',
 ]
 
 export function Hero() {

@@ -14,7 +14,7 @@ const PRODUCT_LINKS = [
 
 const COMPANY_LINKS = [
   { label: 'Team', href: '/team' },
-  { label: 'Contact', href: 'mailto:support@dafa.ai' },
+  { label: 'Contact', href: 'mailto:support@merodafa.com' },
 ]
 
 function NewsletterForm() {
@@ -97,7 +97,7 @@ export function Footer() {
           </div>
 
           {/* Link columns */}
-          <div className="lg:col-span-6 grid grid-cols-2 gap-8">
+          <div className="lg:col-span-6 grid grid-cols-3 gap-8">
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">Product</h4>
               <ul className="space-y-3">
@@ -121,6 +121,23 @@ export function Footer() {
                     </Link>
                   </li>
                 ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-4">Contact</h4>
+              <ul className="space-y-3">
+                <li>
+                  <a href="mailto:support@merodafa.com" className="text-sm text-slate-400 hover:text-white transition-colors duration-200">
+                    support@merodafa.com
+                  </a>
+                </li>
+                <li>
+                  <a href="tel:+9779823380132" className="text-sm text-slate-400 hover:text-white transition-colors duration-200">
+                    +977 9823380132
+                  </a>
+                </li>
+                <li className="text-sm text-slate-500">Kathmandu, Nepal</li>
               </ul>
             </div>
           </div>

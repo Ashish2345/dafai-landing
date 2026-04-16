@@ -57,7 +57,7 @@ const plans = [
 export function Pricing() {
   function handleCta(plan: (typeof plans)[number]) {
     if (plan.ctaTier === 'enterprise') {
-      window.location.href = 'mailto:sales@dafa.ai'
+      window.location.href = 'mailto:support@merodafa.com'
     } else {
       window.location.href = 'https://app.merodafa.com/signup'
     }

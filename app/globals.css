@@ -46,14 +46,7 @@ html {
 .blog-content ul { list-style-type: disc; }
 .blog-content ol { list-style-type: decimal; }
 .blog-content li { margin-bottom: 0.5rem; line-height: 1.7; }
-.blog-content blockquote {
-  border-left: 4px solid #09383e;
-  padding: 0.5rem 1rem;
-  margin: 1.5rem 0;
-  color: #64748b;
-  background: #e8f2f3;
-  border-radius: 0 0.5rem 0.5rem 0;
-}
+/* blockquote — defined below with tables */
 .blog-content code {
   background: #e8f2f3;
   color: #09383e;
@@ -75,8 +68,81 @@ html {
   color: inherit;
   padding: 0;
 }
+/* Tables */
+.blog-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+.blog-content thead {
+  background: #f8fafc;
+}
+.blog-content th {
+  text-align: left;
+  font-weight: 600;
+  color: #0f172a;
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.blog-content td {
+  padding: 0.625rem 1rem;
+  color: #475569;
+  border-bottom: 1px solid #f1f5f9;
+  line-height: 1.5;
+}
+.blog-content tbody tr:last-child td {
+  border-bottom: none;
+}
+.blog-content tbody tr:hover {
+  background: #f8fafc;
+}
+/* Bold cells in tables */
+.blog-content td strong,
+.blog-content th strong {
+  color: #09383e;
+}
+
+/* Blockquote — used for example queries */
+.blog-content blockquote {
+  border-left: 4px solid #09383e;
+  padding: 0.75rem 1.25rem;
+  margin: 1.5rem 0;
+  color: #334155;
+  background: #f0fdf4;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-style: italic;
+}
+.blog-content blockquote p {
+  margin-bottom: 0;
+  color: inherit;
+}
+
 .blog-content hr {
   border: none;
   border-top: 1px solid #e2e8f0;
-  margin: 2rem 0;
+  margin: 2.5rem 0;
+}
+
+/* Images */
+.blog-content img {
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+  max-width: 100%;
+  height: auto;
+}
+
+/* H2 style refinement */
+.blog-content h2 {
+  margin-top: 2.5rem;
+}
+
+/* H3 after H2 — tighter spacing */
+.blog-content h2 + h3 {
+  margin-top: 1.25rem;
 }
