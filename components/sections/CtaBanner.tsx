@@ -1,11 +1,7 @@
 'use client'
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { WaitlistModal } from '@/components/ui/WaitlistModal'
 
 export function CtaBanner() {
-  const [modalOpen, setModalOpen] = useState(false)
-
   return (
     <>
       <div className="mx-auto max-w-[1400px] px-4 sm:px-6 py-8 sm:py-10">
@@ -57,32 +53,31 @@ export function CtaBanner() {
                     style={{ backgroundColor: '#5eead4' }}
                   />
                 </span>
-                Early access open
+                Free to start
               </span>
 
               <h2 className="font-display font-bold text-xl sm:text-2xl text-white leading-snug">
-                Ready to research the law, cited?
+                Ready to research smarter?
               </h2>
             </div>
 
-            <button
-              onClick={() => setModalOpen(true)}
+            <a
+              href="https://app.merodafa.com/signup"
               className="flex-shrink-0 self-start sm:self-auto inline-flex items-center gap-2 rounded-xl px-5 py-3 text-[14px] font-semibold text-white cursor-pointer transition-all duration-200 hover:brightness-110"
               style={{
                 background: 'linear-gradient(135deg, #09383e 0%, #0d4f57 100%)',
                 boxShadow: '0 6px 18px rgba(9,56,62,0.35)',
               }}
             >
-              Get early access
+              Get started
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
-            </button>
+            </a>
           </div>
         </section>
       </div>
 
-      <WaitlistModal open={modalOpen} onClose={() => setModalOpen(false)} source="cta-banner" />
     </>
   )
 }

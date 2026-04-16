@@ -10,21 +10,21 @@ type Step = {
 const STEPS: Step[] = [
   {
     number: '01',
-    title: 'Ask your question',
+    title: 'Pick a document',
     description:
-      'In plain English or Nepali. No keywords, no syntax. Just ask the way you\u2019d ask a colleague.',
+      'Open any act, directive, or circular from the Library. Income Tax, VAT, NRB, IRD, Company Act, case law \u2014 all pre-loaded.',
   },
   {
     number: '02',
-    title: 'We search the gazette',
+    title: 'Ask in plain language',
     description:
-      'Mero Dafa looks through Nepal\u2019s Acts, directives, and Finance Acts to find the sections that actually answer you.',
+      'Type your question in English or \u0928\u0947\u092A\u093E\u0932\u0940. No keywords needed \u2014 ask the way you\u2019d ask a colleague.',
   },
   {
     number: '03',
-    title: 'Get the cited answer',
+    title: 'Get a sourced answer',
     description:
-      'A plain-language answer with the exact section, rule, or circular it came from \u2014 so you can verify before you act.',
+      'A clear answer with exact page numbers and section references. Click any source to see it in the original document.',
   },
 ]
 
@@ -69,7 +69,7 @@ export function HowItWorksPreview() {
                 How it works
               </span>
               <h2 className="font-display font-bold text-2xl sm:text-3xl lg:text-[2.25rem] text-white leading-tight max-w-2xl">
-                From question to cited answer in{' '}
+                From question to verified answer in{' '}
                 <span
                   style={{
                     background: 'linear-gradient(135deg, #5eead4 0%, #14b8a6 100%)',

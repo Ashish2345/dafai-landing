@@ -1,38 +1,38 @@
 'use client'
-import { useState } from 'react'
 import { PricingCard } from '@/components/ui/PricingCard'
-import { WaitlistModal } from '@/components/ui/WaitlistModal'
 
 const plans = [
   {
     tier: 'Starter',
-    description: 'Solo CAs',
-    price: 'रू 1,999',
-    period: '/mo',
+    description: 'Solo CAs & students',
+    price: 'Free',
+    period: undefined,
     features: [
-      'Unlimited search',
+      '10 questions per day',
       'Latest 2 years of Gazette',
-      'Standard RAG chat',
-      '5 PDF downloads/day',
+      'English & Nepali answers',
+      '3 PDF downloads per day',
+      'Star & save responses',
       'Email support',
     ],
-    cta: 'Get Early Access',
+    cta: 'Create free account',
     highlighted: false,
     ctaTier: 'starter',
   },
   {
     tier: 'Pro',
-    description: 'Audit Firms (5\u201320 staff)',
+    description: 'Audit firms & busy CAs',
     price: 'रू 7,999',
     period: '/mo',
     features: [
       'Everything in Starter',
+      'Unlimited questions & PDFs',
       'Full archive (2015\u20132081)',
-      'Priority table parsing',
-      'Unlimited PDF downloads',
-      'Team collaboration folders',
+      'Unlimited chat history',
+      '50 starred responses',
+      'Priority email support',
     ],
-    cta: 'Get Early Access',
+    cta: 'Upgrade to Pro',
     highlighted: true,
     ctaTier: 'pro',
   },
@@ -44,7 +44,7 @@ const plans = [
     features: [
       'Everything in Pro',
       'Dedicated account manager',
-      'On-prem / private cloud',
+      'On-premise / private cloud',
       'API access',
       'Custom legal logic',
     ],
@@ -55,15 +55,11 @@ const plans = [
 ]
 
 export function Pricing() {
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedTier, setSelectedTier] = useState<string | undefined>(undefined)
-
   function handleCta(plan: (typeof plans)[number]) {
     if (plan.ctaTier === 'enterprise') {
       window.location.href = 'mailto:sales@dafa.ai'
     } else {
-      setSelectedTier(plan.ctaTier)
-      setModalOpen(true)
+      window.location.href = 'https://app.merodafa.com/signup'
     }
   }
 
@@ -125,8 +121,7 @@ export function Pricing() {
                   </span>
                 </h2>
                 <p className="text-slate-600 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
-                  Start free during early access. Lock in founding-member rates before
-                  we launch publicly.
+                  Start with the free Starter plan. Upgrade when you need unlimited questions and full archive access.
                 </p>
               </div>
 
@@ -151,12 +146,6 @@ export function Pricing() {
         </div>
       </section>
 
-      <WaitlistModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        tier={selectedTier}
-        source="pricing"
-      />
     </>
   )
 }

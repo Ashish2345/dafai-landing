@@ -4,26 +4,42 @@ import { PageHero } from '@/components/ui/PageHero'
 const steps = [
   {
     number: '1',
-    label: 'Scrape',
-    summary: 'We monitor the Department of Printing, NRB, and IRD 24/7.',
+    label: 'Browse',
+    summary: 'Open any act, directive, or circular from the Library.',
     description:
-      "Nepal's legal landscape changes constantly. Our scrapers watch every official source and capture new documents within hours of publication.",
+      'Income Tax Act, VAT Act, Company Act, NRB directives, IRD circulars, Finance Acts, and Supreme Court case law — all pre-loaded and ready to search.',
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
+          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
         />
       </svg>
     ),
   },
   {
     number: '2',
-    label: 'Parse',
-    summary: 'Our parsing engine turns scanned images into searchable, structured data.',
+    label: 'Ask',
+    summary: 'Type your question in English or नेपाली.',
     description:
-      'Using OCR with table extraction, we convert scanned gazette PDFs into structured, searchable content so you can cite specific sections and tables.',
+      'No keywords or legal jargon needed. Ask the way you\u2019d ask a colleague — "What is the TDS rate on consulting fees?" or "कम्पनी दर्ताको प्रक्रिया के हो?"',
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+        />
+      </svg>
+    ),
+  },
+  {
+    number: '3',
+    label: 'Read',
+    summary: 'Get a clear answer with exact citations.',
+    description:
+      'Every answer includes page numbers and section references. Click any citation to jump to the exact location in the original document and see it side-by-side.',
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
         <path
@@ -35,33 +51,17 @@ const steps = [
     ),
   },
   {
-    number: '3',
-    label: 'Verify',
-    summary: 'A chartered accountant audits the AI\u2019s legal interpretation.',
-    description:
-      "AI is powerful but not infallible. A practicing CA on the team reviews how Mero Dafa interprets Nepal's tax law to keep the answers accurate.",
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-        />
-      </svg>
-    ),
-  },
-  {
     number: '4',
-    label: 'Answer',
-    summary: 'You get instant, accurate, and cited financial intelligence.',
+    label: 'Save',
+    summary: 'Star answers, download PDFs, and keep researching.',
     description:
-      'Ask any question in plain English or Nepali. Get cited answers with direct links to the original gazette pages.',
+      'Star important responses to revisit later. Download documents as PDF. AI suggests follow-up questions so you can dig deeper without starting over.',
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
-          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+          d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
         />
       </svg>
     ),
@@ -72,10 +72,10 @@ export default function HowItWorksPage() {
   return (
     <main className="bg-white pb-16">
       <PageHero
-        kicker="The process"
-        title="How Mero Dafa"
-        titleAccent="turns gazettes into cited answers."
-        description={<>From raw government publications to cited, accurate answers &mdash; a four-step pipeline built for Nepal&apos;s legal landscape.</>}
+        kicker="How it works"
+        title="From question to"
+        titleAccent="cited answer in seconds."
+        description={<>Pick a document, ask your question, get an answer with exact citations. Here&apos;s the workflow.</>}
       />
 
       {/* Timeline card */}
@@ -178,17 +178,17 @@ export default function HowItWorksPage() {
               aria-hidden
             />
             <h2 className="relative font-display font-bold text-2xl sm:text-3xl text-white">
-              Ready to experience it for yourself?
+              Ready to try it yourself?
             </h2>
             <Link
-              href="/#pricing"
+              href="https://app.merodafa.com/signup"
               className="relative inline-flex items-center justify-center rounded-xl font-semibold px-7 py-3.5 text-[15px] text-white transition-all duration-200 hover:brightness-110"
               style={{
                 background: 'linear-gradient(135deg, #09383e 0%, #0d4f57 100%)',
                 boxShadow: '0 6px 18px rgba(9,56,62,0.35)',
               }}
             >
-              Start using Mero Dafa
+              Create free account
             </Link>
           </div>
         </div>

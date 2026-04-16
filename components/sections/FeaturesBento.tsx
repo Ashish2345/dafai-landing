@@ -92,45 +92,43 @@ function ScanningDoc() {
   )
 }
 
-function ReviewedBadge() {
+function LanguageToggle() {
   return (
     <div className="flex items-center gap-3">
       <div
-        className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md"
-        style={{ background: 'linear-gradient(135deg, #09383e 0%, #0d4f57 100%)' }}
+        className="flex items-stretch overflow-hidden rounded-full border"
+        style={{ borderColor: 'rgba(9,56,62,0.2)' }}
       >
-        SA
-      </div>
-      <div className="flex flex-col">
-        <span className="text-[13px] font-semibold text-slate-900">Sabin Adhikari</span>
-        <span className="text-[11px]" style={{ color: '#09383e' }}>
-          Chartered Accountant
+        <span
+          className="px-4 py-2 text-[13px] font-bold text-white"
+          style={{ backgroundColor: '#09383e' }}
+        >
+          EN
+        </span>
+        <span className="px-4 py-2 text-[13px] font-semibold text-slate-500 bg-white">
+          ने
         </span>
       </div>
-      <motion.svg
-        className="w-5 h-5 ml-1"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-        style={{ color: '#09383e' }}
-        initial={{ scale: 0, rotate: -45, opacity: 0 }}
-        whileInView={{ scale: 1, rotate: 0, opacity: 1 }}
+      <motion.div
+        className="flex flex-col gap-0.5"
+        initial={{ opacity: 0, x: 8 }}
+        whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, margin: '-40px' }}
-        transition={{ type: 'spring', stiffness: 200, damping: 14, delay: 0.2 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-        />
-      </motion.svg>
+        <span className="text-[12px] font-medium text-slate-700">English selected</span>
+        <span className="text-[10px] text-slate-400">Switch anytime with one click</span>
+      </motion.div>
     </div>
   )
 }
 
-function PrivacyStack() {
-  const items = ['Your question', 'Your documents', 'Your research history']
+function SaveExportVisual() {
+  const items = [
+    { icon: '⭐', label: 'Star response', action: 'Saved' },
+    { icon: '📄', label: 'Download PDF', action: '3.2 MB' },
+    { icon: '📋', label: 'Copy with citations', action: 'Copied' },
+  ]
   return (
     <motion.div
       className="flex flex-col gap-1.5"
@@ -139,30 +137,25 @@ function PrivacyStack() {
       viewport={{ once: true, margin: '-40px' }}
       variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
     >
-      {items.map((label, i) => (
+      {items.map((item, i) => (
         <motion.div
-          key={label}
+          key={item.label}
           variants={{
             hidden: { opacity: 0, x: -8 },
-            show: { opacity: 1 - i * 0.1, x: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+            show: { opacity: 1 - i * 0.08, x: 0, transition: { duration: 0.35, ease: 'easeOut' } },
           }}
           className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2"
         >
-          <span className="text-[12px] font-medium text-slate-700">{label}</span>
-          <svg
-            className="w-3.5 h-3.5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-            style={{ color: '#09383e' }}
+          <span className="flex items-center gap-2">
+            <span className="text-[12px]">{item.icon}</span>
+            <span className="text-[12px] font-medium text-slate-700">{item.label}</span>
+          </span>
+          <span
+            className="text-[10px] font-semibold rounded-full px-2 py-0.5"
+            style={{ backgroundColor: 'rgba(9,56,62,0.08)', color: '#09383e' }}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 15v2m0 0a2 2 0 100-4m0 4a2 2 0 110-4m-6-4V7a6 6 0 1112 0v4M5 11h14a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7a2 2 0 012-2z"
-            />
-          </svg>
+            {item.action}
+          </span>
         </motion.div>
       ))}
     </motion.div>
@@ -173,26 +166,26 @@ const FEATURES: Feature[] = [
   {
     title: 'Answers in seconds',
     description:
-      'Skip the 200-page PDF scroll. Type a question, get an answer \u2014 with the exact section it came from.',
+      'Skip the 200-page PDF scroll. Ask a question, get an answer with the exact page number and section reference.',
     visual: <ScanningDoc />,
   },
   {
-    title: 'Every answer cited',
+    title: 'Every answer has a source',
     description:
-      'Mero Dafa links every answer to the exact section, rule, or circular \u2014 so you can verify before you act on it.',
+      'Click any reference to jump to the exact page in the original document — verify before you act on it.',
     visual: <CitationChips />,
   },
   {
-    title: 'Reviewed by a CA',
+    title: 'Ask in English or नेपाली',
     description:
-      'A chartered accountant is on the team reviewing how the system interprets Nepal\u2019s tax law.',
-    visual: <ReviewedBadge />,
+      'Switch languages with one click. Answers come back in the language you choose, citing the original text.',
+    visual: <LanguageToggle />,
   },
   {
-    title: 'Your queries stay private',
+    title: 'Save & export your research',
     description:
-      'Your questions and documents are yours. We don\u2019t sell your data or use your queries to train public models.',
-    visual: <PrivacyStack />,
+      'Star important answers, download documents as PDF, and copy responses with full citations for your reports.',
+    visual: <SaveExportVisual />,
   },
 ]
 

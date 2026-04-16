@@ -7,8 +7,9 @@ const DOC_LINES = [
 ]
 
 const CITATIONS = [
-  { label: 'ITA 2058, \u00a788', primary: true },
+  { label: 'ITA 2058, §88, p.107', primary: true },
   { label: 'Finance Act 2081', primary: false },
+  { label: 'नजिर #2074-0382', primary: false },
 ]
 
 export function BeforeAfter() {
@@ -26,7 +27,7 @@ export function BeforeAfter() {
             </span>
 
             <h3 className="font-display font-bold text-xl sm:text-2xl text-slate-900 leading-snug">
-              200+ pages of the Finance Act, every amendment buried somewhere.
+              Hundreds of pages across acts, directives, and circulars — every amendment buried somewhere.
             </h3>
 
             {/* Animated document lines — stagger in on view */}
@@ -67,7 +68,7 @@ export function BeforeAfter() {
             </span>
 
             <h3 className="font-display font-bold text-xl sm:text-2xl text-slate-900 leading-snug">
-              One plain-language answer, with the exact section cited.
+              One plain-language answer, with the exact section and page linked.
             </h3>
 
             {/* Answer card with animated citation chips */}

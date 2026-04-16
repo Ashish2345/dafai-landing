@@ -6,27 +6,31 @@ type QA = { q: string; a: string }
 const FAQS: QA[] = [
   {
     q: 'What sources does Mero Dafa draw from?',
-    a: 'Nepal\u2019s official legal corpus \u2014 Acts (including the Income Tax Act and VAT Act), Finance Acts, NRB directives, IRD circulars, and Nepal Gazette publications. Every answer cites the specific source it came from.',
+    a: 'Nepal\u2019s official legal corpus \u2014 the Income Tax Act, VAT Act, Company Act, Finance Acts, NRB directives, IRD circulars, Nepal Gazette, and Supreme Court case law. Every answer cites the specific section and page number it came from.',
   },
   {
     q: 'How current is the information?',
     a: 'We index new gazettes and directives as they\u2019re published. The citation beside every answer tells you the exact source and version, so you can verify it\u2019s the latest applicable rule.',
   },
   {
+    q: 'Can I ask in Nepali?',
+    a: 'Yes. You can switch between English and Nepali with one click. Answers come back in the language you choose, with citations pointing to the original document text.',
+  },
+  {
+    q: 'Can I save answers for later?',
+    a: 'Yes. Star any response to save it to your Starred collection. You can also download documents as PDFs and copy answers with full citations for your reports.',
+  },
+  {
     q: 'Does Mero Dafa replace my CA or legal advisor?',
     a: 'No. Mero Dafa is a research tool that helps you find the right section fast and understand it in plain language. For filings, planning, or anything binding, your CA is still the professional call.',
   },
   {
-    q: 'Can I ask in Nepali?',
-    a: 'Yes. You can ask in English or Nepali, and Mero Dafa finds the relevant section in the original document language.',
-  },
-  {
     q: 'Is my data private?',
-    a: 'Your questions and any documents you upload are yours. We don\u2019t sell your data, and we don\u2019t use your queries to train public models.',
+    a: 'Your questions and documents are yours. We don\u2019t sell your data, and we don\u2019t use your queries to train public models.',
   },
   {
-    q: 'When can I start using it?',
-    a: 'We\u2019re in early access now. Join the waitlist and we\u2019ll reach out as soon as your slot opens.',
+    q: 'Is there a free plan?',
+    a: 'Yes. The Starter plan is free and includes 10 questions per day, 3 PDF downloads, and access to the last 2 years of Gazette content. No credit card required.',
   },
 ]
 

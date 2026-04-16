@@ -13,13 +13,19 @@ const DEMOS: Demo[] = [
     question: 'What is the TDS rate on consulting fees?',
     answerHighlight: '1.5% TDS',
     answerAfter: ' with VAT invoice, 15% without.',
-    citations: ['ITA 2058, \u00a788', 'Finance Act 2081'],
+    citations: ['ITA 2058, §88, p.107', 'Finance Act 2081'],
   },
   {
     question: 'VAT registration threshold for services?',
-    answerHighlight: 'NPR 20 lakh',
+    answerHighlight: 'NPR 50 lakh',
     answerAfter: ' annual turnover for service providers.',
-    citations: ['VAT Act 2052', 'IRD Circular'],
+    citations: ['VAT Act 2052, §9', 'IRD Circular'],
+  },
+  {
+    question: 'कम्पनी विघटनको प्रक्रिया के हो?',
+    answerHighlight: 'दफा १५६–१६५',
+    answerAfter: ' अनुसार स्वैच्छिक वा अदालतद्वारा विघटन हुन सक्छ।',
+    citations: ['Company Act 2063, p.89', 'नजिर #2074-0382'],
   },
   {
     question: 'Corporate tax rate for manufacturers?',

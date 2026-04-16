@@ -1,22 +1,18 @@
 'use client'
-import { useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/Button'
-import { WaitlistModal } from '@/components/ui/WaitlistModal'
 import { AnimatedQuery } from '@/components/ui/AnimatedQuery'
 
 const TOPICS = [
   'Income Tax Act',
   'VAT Act',
+  'Company Act',
   'NRB Directives',
   'Finance Act 2081',
   'IRD Circulars',
-  'Nepal Gazette',
+  'नजिर / Case Law',
 ]
 
 export function Hero() {
-  const [modalOpen, setModalOpen] = useState(false)
-
   return (
     <>
       <section className="px-4 sm:px-6 pt-8">
@@ -130,7 +126,7 @@ export function Hero() {
                 <span className="absolute inline-flex h-full w-full rounded-full opacity-60 animate-ping" style={{ backgroundColor: '#09383e' }} />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#09383e' }} />
               </span>
-              Built for Nepal&apos;s CAs &amp; finance teams
+              Built for Nepal&apos;s legal &amp; finance professionals
             </span>
 
             {/* Headline */}
@@ -156,9 +152,16 @@ export function Hero() {
 
             {/* CTA */}
             <div className="flex flex-col sm:flex-row gap-3 mb-10">
-              <Button variant="primary" size="md" onClick={() => setModalOpen(true)}>
-                Get early access
-              </Button>
+              <Link
+                href="https://app.merodafa.com/signup"
+                className="inline-flex items-center justify-center px-6 py-3 text-[15px] font-semibold rounded-xl text-white transition-all duration-200 hover:brightness-110"
+                style={{
+                  background: 'linear-gradient(135deg, #09383e 0%, #0d4f57 100%)',
+                  boxShadow: '0 4px 14px rgba(9,56,62,0.3)',
+                }}
+              >
+                Start researching
+              </Link>
               <Link
                 href="/how-it-works"
                 className="inline-flex items-center justify-center px-6 py-3 text-[15px] font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors"
@@ -188,7 +191,6 @@ export function Hero() {
         </div>
       </section>
 
-      <WaitlistModal open={modalOpen} onClose={() => setModalOpen(false)} source="hero" />
     </>
   )
 }

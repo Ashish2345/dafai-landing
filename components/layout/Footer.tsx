@@ -86,7 +86,7 @@ export function Footer() {
 
             <p className="text-slate-400 text-sm leading-relaxed max-w-sm mb-6">
               AI-powered legal research for Nepal&apos;s finance professionals. Ask
-              questions about any Act, Directive, or Gazette &mdash; get cited answers.
+              questions about any Act, Directive, or Gazette &mdash; get answers with exact sources.
             </p>
 
             {/* Newsletter inline */}
@@ -131,7 +131,7 @@ export function Footer() {
       <div className="border-t border-white/[0.06]">
         <div className="mx-auto max-w-[1400px] px-5 sm:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-slate-600">&copy; {new Date().getFullYear()} Mero Dafa. Kathmandu, Nepal.</p>
-          <p className="text-xs text-slate-600">Built for Nepal&apos;s CAs &amp; finance teams.</p>
+          <p className="text-xs text-slate-600">Built for Nepal&apos;s legal &amp; finance professionals.</p>
         </div>
       </div>
     </footer>
