@@ -5,39 +5,25 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import {
   breadcrumbListSchema,
   faqPageSchema,
-  howToSchema,
   softwareToolSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
 
 const PAGE_URL = `${SITE_URL}/tools/salary-tax-calculator`
 const PAGE_TITLE = 'Nepal Salary Tax Calculator (FY 2081/82)'
 const PAGE_DESCRIPTION =
-  "Calculate your monthly salary TDS for FY 2081/82 in seconds. Per Finance Act 2081 slabs. Handles SSF, PF/EPF, CIT, life and health insurance deductions for single & married employees in Nepal."
+  'Calculate monthly salary TDS for FY 2081/82 in seconds. Finance Act 2081 slabs. Handles SSF, PF/EPF, CIT, life & health insurance deductions.'
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   alternates: { canonical: '/tools/salary-tax-calculator' },
-  keywords: [
-    'salary tax calculator nepal',
-    'nepal income tax calculator',
-    'tds calculator nepal',
-    'monthly tds calculator',
-    'fy 2081/82 tax calculator',
-    'finance act 2081',
-    'nepal salary tax slab',
-    'pf calculator nepal',
-    'ssf calculator nepal',
-    'epf deduction nepal',
-    'CA TDS calculator',
-  ],
-  openGraph: {
+  ...socialMeta({
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
     url: '/tools/salary-tax-calculator',
-    type: 'website',
-  },
+  }),
 }
 
 const FAQ = [
@@ -78,25 +64,6 @@ const FAQ = [
   },
 ]
 
-const HOW_TO_STEPS = [
-  {
-    name: 'Calculate annual gross income',
-    text: 'Multiply your monthly basic salary by 12, add the annual sum of allowances (basic × 12 + allowances × 12), then add any annual festival bonus (Dashain Kharcha).',
-  },
-  {
-    name: 'Apply allowed deductions',
-    text: 'Sum SSF + PF + CIT and apply the combined retirement cap — lowest of actual contribution, 1/3 of gross annual income, or Rs 5,00,000. Life insurance premium (max Rs 40,000) and health insurance premium (max Rs 20,000) are deducted separately on top.',
-  },
-  {
-    name: 'Run the remainder through the slab table',
-    text: 'Use the FY 2081/82 slabs for your filing status (single or couple). Each slab applies its rate only to the portion of income that falls within it.',
-  },
-  {
-    name: 'Divide annual tax by 12',
-    text: 'The result is your monthly TDS — the amount your employer will withhold each month. Multiply back by 12 to validate the annual figure.',
-  },
-]
-
 export default function SalaryTaxCalculatorPage() {
   return (
     <main className="bg-white pb-16 pt-8">
@@ -106,18 +73,6 @@ export default function SalaryTaxCalculatorPage() {
           name: PAGE_TITLE,
           url: PAGE_URL,
           description: PAGE_DESCRIPTION,
-        })}
-      />
-      <JsonLd
-        id="ld-tool-howto"
-        data={howToSchema({
-          name: 'How to calculate monthly salary TDS in Nepal (FY 2081/82)',
-          description:
-            'Compute your monthly Tax Deducted at Source from annual gross salary using Finance Act 2081 slabs.',
-          url: PAGE_URL,
-          totalTimeIso: 'PT3M',
-          tools: ['Mero Dafa Salary Tax Calculator'],
-          steps: HOW_TO_STEPS.map((s) => ({ ...s, url: PAGE_URL })),
         })}
       />
       <JsonLd id="ld-tool-faq" data={faqPageSchema(FAQ)} />

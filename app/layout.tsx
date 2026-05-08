@@ -13,7 +13,7 @@ const lora = Lora({ subsets: ['latin'], variable: '--font-lora' })
 const SITE_NAME = 'Mero Dafa'
 const HOME_TITLE = 'Mero Dafa — AI Legal Research for Nepal'
 const HOME_DESCRIPTION =
-  "Ask questions about Nepal's tax acts, NRB directives, and IRD circulars. Get AI-powered answers with exact citations, page numbers, and section references — in English or Nepali."
+  "Ask questions about Nepal's tax acts, NRB directives, and IRD circulars. Get cited answers with exact page numbers and section references."
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://merodafa.com'),

@@ -29,14 +29,9 @@ export function websiteSchema() {
     name: 'Mero Dafa',
     publisher: { '@id': ORG_ID },
     inLanguage: 'en',
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}/blog?q={search_term_string}`,
-      },
-      'query-input': 'required name=search_term_string',
-    },
+    // SearchAction removed — /blog?q= didn't exist as a real endpoint, and
+    // Google won't surface a sitelinks search box for a non-functional URL.
+    // Re-add when a sitewide /search route is implemented.
   }
 }
 

@@ -9,6 +9,7 @@ import {
   breadcrumbListSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
 
 export async function generateStaticParams() {
   const posts = getAllPosts()
@@ -29,28 +30,31 @@ export async function generateMetadata({
     }
   }
   const url = `/blog/${slug}`
+  // metaTitle is the full SERP title (no brand suffix appended), used for posts
+  // whose title would truncate after the layout-wide "%s — Mero Dafa" template.
+  const ogTitle = post.metaTitle ?? post.title
+  const social = socialMeta({
+    title: ogTitle,
+    description: post.excerpt,
+    url,
+    type: 'article',
+  })
   return {
-    title: post.title,
+    title: post.metaTitle ? { absolute: post.metaTitle } : post.title,
     description: post.excerpt,
     alternates: { canonical: url },
     authors: post.authorEntity
       ? [{ name: post.authorEntity.name, url: `${SITE_URL}/authors/${post.authorEntity.slug}` }]
       : [{ name: post.author }],
     openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      url,
+      ...social.openGraph,
       type: 'article',
       publishedTime: post.date,
       modifiedTime: post.dateModified,
       authors: [post.author],
       ...(post.category && { tags: [post.category] }),
     },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.title,
-      description: post.excerpt,
-    },
+    twitter: social.twitter,
   }
 }
 

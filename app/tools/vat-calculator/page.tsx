@@ -5,10 +5,10 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import {
   breadcrumbListSchema,
   faqPageSchema,
-  howToSchema,
   softwareToolSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
 
 const PAGE_URL = `${SITE_URL}/tools/vat-calculator`
 const PAGE_TITLE = 'Nepal VAT Calculator (13%)'
@@ -19,23 +19,11 @@ export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   alternates: { canonical: '/tools/vat-calculator' },
-  keywords: [
-    'vat calculator nepal',
-    '13 percent vat calculator',
-    'nepal vat calculation',
-    'remove vat nepal',
-    'add vat nepal',
-    'vat inclusive exclusive nepal',
-    'vat invoice nepal',
-    'extract vat from inclusive amount',
-    'reverse vat calculator nepal',
-  ],
-  openGraph: {
+  ...socialMeta({
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
     url: '/tools/vat-calculator',
-    type: 'website',
-  },
+  }),
 }
 
 const FAQ = [
@@ -71,21 +59,6 @@ const FAQ = [
   },
 ]
 
-const HOW_TO_STEPS = [
-  {
-    name: 'Choose your input mode',
-    text: "Pick whether your amount is the base price (excluding VAT — the calculator will add 13%) or the total price (including VAT — the calculator will extract the 13% VAT component).",
-  },
-  {
-    name: 'Enter line items',
-    text: 'Type a description and amount for each item on your invoice. Add as many lines as needed using the "Add line" button. Each line is computed independently, then summed into totals.',
-  },
-  {
-    name: 'Read off net, VAT, and gross',
-    text: "Each line shows its own breakdown — Net (excl. VAT), VAT (13%), and Gross (incl. VAT). The Totals card at the bottom sums every line for invoice-ready figures.",
-  },
-]
-
 export default function VatCalculatorPage() {
   return (
     <main className="bg-white pb-16 pt-8">
@@ -95,18 +68,6 @@ export default function VatCalculatorPage() {
           name: PAGE_TITLE,
           url: PAGE_URL,
           description: PAGE_DESCRIPTION,
-        })}
-      />
-      <JsonLd
-        id="ld-vat-howto"
-        data={howToSchema({
-          name: 'How to add or extract 13% VAT in Nepal',
-          description:
-            'Compute net, VAT, and gross amounts for any Nepal invoice using the standard 13% VAT rate.',
-          url: PAGE_URL,
-          totalTimeIso: 'PT1M',
-          tools: ['Mero Dafa VAT Calculator'],
-          steps: HOW_TO_STEPS.map((s) => ({ ...s, url: PAGE_URL })),
         })}
       />
       <JsonLd id="ld-vat-faq" data={faqPageSchema(FAQ)} />

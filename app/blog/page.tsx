@@ -8,19 +8,21 @@ import {
   breadcrumbListSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
+
+const PAGE_TITLE = 'Blog — Nepal Tax & Compliance Analysis'
+const PAGE_DESCRIPTION =
+  'Weekly analysis of Nepal Gazette updates, NRB circulars, IRD notices, and tax law changes — for working CAs, compliance teams, and tax lawyers.'
 
 export const metadata: Metadata = {
-  title: 'Blog — Nepal Tax & Compliance Analysis',
-  description:
-    'Weekly analysis of Nepal Gazette updates, NRB circulars, IRD notices, and tax law changes — written for working CAs, banking compliance teams, and tax lawyers.',
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
   alternates: { canonical: '/blog' },
-  openGraph: {
+  ...socialMeta({
     title: 'The Rajpatra Pulse — Mero Dafa Blog',
-    description:
-      'Legal analysis and insights for Nepal’s financial professionals.',
+    description: 'Legal analysis and insights for Nepal’s financial professionals.',
     url: '/blog',
-    type: 'website',
-  },
+  }),
 }
 
 function formatDate(dateStr: string) {

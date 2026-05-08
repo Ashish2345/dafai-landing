@@ -14,6 +14,15 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Hide scrollbar visually while keeping scroll behavior intact. */
+.scrollbar-hide {
+  -ms-overflow-style: none;   /* IE & old Edge */
+  scrollbar-width: none;       /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;               /* Chrome, Safari, Opera */
+}
+
 /* Blog article content styles */
 .blog-content h1,
 .blog-content h2,

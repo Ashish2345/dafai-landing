@@ -5,38 +5,25 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import {
   breadcrumbListSchema,
   faqPageSchema,
-  howToSchema,
   softwareToolSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
 
 const PAGE_URL = `${SITE_URL}/tools/bluebook-fine-calculator`
 const PAGE_TITLE = 'Bluebook Fine & Vehicle Tax Renewal Calculator'
 const PAGE_DESCRIPTION =
-  'Find out exactly how much you owe to renew your bike or car bluebook in Nepal — provincial vehicle tax + late renewal penalty (5%, 10%, 20%, 32% bands) calculated automatically.'
+  'Calculate exact bluebook renewal cost in Nepal — provincial vehicle tax + late renewal penalty (5%, 10%, 20%, 32% bands) automatically.'
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   alternates: { canonical: '/tools/bluebook-fine-calculator' },
-  keywords: [
-    'bluebook fine calculator nepal',
-    'vehicle renewal penalty nepal',
-    'bike tax bagmati',
-    'car tax nepal',
-    'yatayat tax calculator',
-    'sawari sadhan kar',
-    'bluebook renewal late fee',
-    'motor vehicle tax nepal',
-    'vehicle registration renewal nepal',
-    'transport tax bagmati',
-  ],
-  openGraph: {
+  ...socialMeta({
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
     url: '/tools/bluebook-fine-calculator',
-    type: 'website',
-  },
+  }),
 }
 
 const FAQ = [
@@ -72,25 +59,6 @@ const FAQ = [
   },
 ]
 
-const HOW_TO_STEPS = [
-  {
-    name: 'Enter your vehicle and engine size',
-    text: 'Pick two-wheeler or four-wheeler, then type your engine capacity in cc. The calculator matches your cc to the right tier in the provincial rate table.',
-  },
-  {
-    name: 'Pick your province',
-    text: 'Bagmati province has the rate table shipped by default. For other provinces, tick "Enter base tax manually" and type the amount from your transport-office leaflet.',
-  },
-  {
-    name: 'Enter your registration expiry date',
-    text: 'This is the date printed on your bluebook (registration certificate). The calculator counts days from this date to today and applies the correct penalty band — 0%, 5%, 10%, 20%, or 32%.',
-  },
-  {
-    name: 'Read the breakdown',
-    text: 'The right-side panel shows your base vehicle tax, the penalty applied, and the total amount you need to take to the transport office today.',
-  },
-]
-
 export default function BluebookCalculatorPage() {
   return (
     <main className="bg-white pb-16 pt-8">
@@ -100,18 +68,6 @@ export default function BluebookCalculatorPage() {
           name: PAGE_TITLE,
           url: PAGE_URL,
           description: PAGE_DESCRIPTION,
-        })}
-      />
-      <JsonLd
-        id="ld-bb-howto"
-        data={howToSchema({
-          name: 'How to calculate your Nepal bluebook renewal cost',
-          description:
-            'Find out exactly how much your delayed bluebook renewal will cost — vehicle tax plus penalty.',
-          url: PAGE_URL,
-          totalTimeIso: 'PT1M',
-          tools: ['Mero Dafa Bluebook Fine Calculator'],
-          steps: HOW_TO_STEPS.map((s) => ({ ...s, url: PAGE_URL })),
         })}
       />
       <JsonLd id="ld-bb-faq" data={faqPageSchema(FAQ)} />

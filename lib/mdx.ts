@@ -9,6 +9,7 @@ const BLOG_DIR = path.join(process.cwd(), 'content/blog')
 export type PostMeta = {
   slug: string
   title: string
+  metaTitle?: string
   date: string
   dateModified?: string
   excerpt: string
@@ -32,6 +33,7 @@ function parsePost(slug: string): Post {
   return {
     slug,
     title: data.title ?? '',
+    metaTitle: data.metaTitle,
     date: data.date ?? '',
     dateModified: data.dateModified,
     excerpt: data.excerpt ?? '',

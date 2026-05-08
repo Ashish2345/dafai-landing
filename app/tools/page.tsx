@@ -3,19 +3,21 @@ import Link from 'next/link'
 import { PageHero } from '@/components/ui/PageHero'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { breadcrumbListSchema, SITE_URL } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
+
+const PAGE_TITLE = 'Free Tools — Nepal Tax & Compliance'
+const PAGE_DESCRIPTION =
+  "Free calculators for Nepal's salaried employees, CAs, and HR teams. Salary TDS, VAT, NEPSE CGT — kept current with the latest Finance Act."
 
 export const metadata: Metadata = {
-  title: 'Free Tools — Nepal Tax & Compliance',
-  description:
-    "Free, no-signup calculators and reference tools for Nepal's salaried employees, CAs, and HR teams. Salary TDS, VAT, and more — all kept current with the latest Finance Act.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
   alternates: { canonical: '/tools' },
-  openGraph: {
+  ...socialMeta({
     title: 'Free Tools for Nepal Tax & Compliance — Mero Dafa',
-    description:
-      "Free calculators for Nepal's salaried employees, CAs, and HR teams. Always updated with the latest Finance Act.",
+    description: PAGE_DESCRIPTION,
     url: '/tools',
-    type: 'website',
-  },
+  }),
 }
 
 type Tool = {

@@ -5,38 +5,25 @@ import { JsonLd } from '@/components/seo/JsonLd'
 import {
   breadcrumbListSchema,
   faqPageSchema,
-  howToSchema,
   softwareToolSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
 
 const PAGE_URL = `${SITE_URL}/tools/share-cgt-calculator`
 const PAGE_TITLE = 'NEPSE Share Profit & CGT Calculator'
 const PAGE_DESCRIPTION =
-  'Calculate your real bankable profit on NEPSE share trades — broker commission, SEBON fee, DP charge, and Capital Gains Tax (7.5%/5%/10%) all handled. For individual & institutional investors.'
+  'Calculate real bankable profit on NEPSE trades — broker commission, SEBON fee, DP charge, and CGT (7.5%/5%/10%) all handled.'
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
   alternates: { canonical: '/tools/share-cgt-calculator' },
-  keywords: [
-    'nepse cgt calculator',
-    'capital gains tax nepal',
-    'nepse share profit calculator',
-    'broker commission calculator nepal',
-    'sebon fee calculator',
-    'cgt nepal 7.5 percent',
-    'long term capital gains nepal',
-    'short term capital gains nepal',
-    'share trading tax nepal',
-    'dp charge cdsc',
-  ],
-  openGraph: {
+  ...socialMeta({
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
     url: '/tools/share-cgt-calculator',
-    type: 'website',
-  },
+  }),
 }
 
 const FAQ = [
@@ -77,21 +64,6 @@ const FAQ = [
   },
 ]
 
-const HOW_TO_STEPS = [
-  {
-    name: 'Choose investor type',
-    text: 'Pick "Individual" for a person trading in their own name, or "Institutional" for a company, mutual fund, or other registered entity. This determines the CGT rate (7.5%/5% holding-period-based for individuals, 10% flat for institutions).',
-  },
-  {
-    name: 'Enter trade details',
-    text: 'Type the quantity of shares, the buy price per share, the sell price per share, the buy date, and the sell date. The calculator computes the holding period from the dates and applies the correct CGT rate automatically.',
-  },
-  {
-    name: 'Read the breakdown',
-    text: 'The right-side panel shows your buy-leg total cost (including broker commission, SEBON fee, and DP charge), your sell-leg expenses, the resulting capital gain, the CGT applied, and finally the exact net amount you will receive in your bank.',
-  },
-]
-
 export default function SharCgtCalculatorPage() {
   return (
     <main className="bg-white pb-16 pt-8">
@@ -101,18 +73,6 @@ export default function SharCgtCalculatorPage() {
           name: PAGE_TITLE,
           url: PAGE_URL,
           description: PAGE_DESCRIPTION,
-        })}
-      />
-      <JsonLd
-        id="ld-cgt-howto"
-        data={howToSchema({
-          name: 'How to calculate net profit and CGT on NEPSE shares',
-          description:
-            'Compute your real bankable profit on a NEPSE share trade — including all transaction costs and Capital Gains Tax.',
-          url: PAGE_URL,
-          totalTimeIso: 'PT2M',
-          tools: ['Mero Dafa NEPSE CGT Calculator'],
-          steps: HOW_TO_STEPS.map((s) => ({ ...s, url: PAGE_URL })),
         })}
       />
       <JsonLd id="ld-cgt-faq" data={faqPageSchema(FAQ)} />

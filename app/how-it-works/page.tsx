@@ -7,19 +7,23 @@ import {
   breadcrumbListSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
+
+const PAGE_TITLE = 'How It Works — From Question to Cited Answer'
+const PAGE_DESCRIPTION =
+  'How Mero Dafa scrapes the Nepal Gazette, parses scanned PDFs, verifies with CAs, and answers tax questions with section-level citations.'
 
 export const metadata: Metadata = {
-  title: 'How It Works — From Question to Cited Answer',
-  description:
-    'See how Mero Dafa scrapes the Nepal Gazette, parses scanned PDFs, verifies with CAs, and answers tax questions with section-level citations — in English or Nepali.',
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
   alternates: { canonical: '/how-it-works' },
-  openGraph: {
+  ...socialMeta({
     title: 'How It Works — Mero Dafa',
     description:
       'Browse, ask, read, save — the four-step workflow behind cited AI answers from Nepal Gazette, NRB directives, and IRD circulars.',
     url: '/how-it-works',
     type: 'article',
-  },
+  }),
 }
 
 const faq = [

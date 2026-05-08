@@ -6,19 +6,21 @@ import {
   breadcrumbListSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
+
+const PAGE_TITLE = 'Pricing — Plans for CAs, Audit Firms & Banks'
+const PAGE_DESCRIPTION =
+  "Transparent firm-based pricing for Nepal's tax & compliance professionals. Free Starter, Pro at Rs 7,999/mo, and Enterprise BFSI deployments."
 
 export const metadata: Metadata = {
-  title: 'Pricing — Plans for CAs, Audit Firms & Banks',
-  description:
-    "Transparent firm-based pricing for Nepal's tax & compliance professionals. Free Starter plan, Pro at Rs 7,999/mo, and Enterprise BFSI deployments.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
   alternates: { canonical: '/pricing' },
-  openGraph: {
+  ...socialMeta({
     title: 'Pricing — Mero Dafa',
-    description:
-      "Transparent firm-based pricing for Nepal's tax & compliance professionals.",
+    description: "Transparent firm-based pricing for Nepal's tax & compliance professionals.",
     url: '/pricing',
-    type: 'website',
-  },
+  }),
 }
 
 const pricingPlans: { name: string; description: string; priceNpr: string | null; url: string }[] = [

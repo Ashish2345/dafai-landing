@@ -9,6 +9,7 @@ import {
   breadcrumbListSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
 
 export async function generateStaticParams() {
   return getAllAuthors().map((a) => ({ slug: a.slug }))
@@ -30,12 +31,12 @@ export async function generateMetadata({
     title: `${author.name} — Author`,
     description,
     alternates: { canonical: url },
-    openGraph: {
+    ...socialMeta({
       title: `${author.name} — Mero Dafa`,
       description,
       url,
       type: 'profile',
-    },
+    }),
   }
 }
 

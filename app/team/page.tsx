@@ -8,19 +8,21 @@ import {
   breadcrumbListSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
+import { socialMeta } from '@/lib/seo/metadata'
+
+const PAGE_TITLE = 'Team & Mission'
+const PAGE_DESCRIPTION =
+  "Built by engineers, verified by CAs. Meet the team eliminating Nepal's compliance risk gap with hierarchy-aware AI for tax and legal research."
 
 export const metadata: Metadata = {
-  title: 'Team & Mission',
-  description:
-    "Built by engineers, verified by CAs. Meet the team eliminating Nepal's compliance risk gap with hierarchy-aware AI for tax and legal research.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
   alternates: { canonical: '/team' },
-  openGraph: {
+  ...socialMeta({
     title: 'Team & Mission — Mero Dafa',
-    description:
-      "Built by engineers, verified by CAs. Meet the team eliminating Nepal's compliance risk gap.",
+    description: "Built by engineers, verified by CAs. Meet the team eliminating Nepal's compliance risk gap.",
     url: '/team',
-    type: 'website',
-  },
+  }),
 }
 
 const teamMembers: TeamMember[] = [
