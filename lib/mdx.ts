@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import readingTime from 'reading-time'
+import { getAuthorByName, type Author } from '@/lib/authors'
 
 const BLOG_DIR = path.join(process.cwd(), 'content/blog')
 
@@ -9,8 +10,10 @@ export type PostMeta = {
   slug: string
   title: string
   date: string
+  dateModified?: string
   excerpt: string
   author: string
+  authorEntity: Author | null
   category: string
   readingTime: string
 }
@@ -24,13 +27,16 @@ function parsePost(slug: string): Post {
   const raw = fs.readFileSync(filePath, 'utf-8')
   const { data, content } = matter(raw)
   const rt = readingTime(content)
+  const authorName: string = data.author ?? ''
 
   return {
     slug,
     title: data.title ?? '',
     date: data.date ?? '',
+    dateModified: data.dateModified,
     excerpt: data.excerpt ?? '',
-    author: data.author ?? '',
+    author: authorName,
+    authorEntity: authorName ? getAuthorByName(authorName) : null,
     category: data.category ?? '',
     readingTime: rt.text,
     content,
@@ -60,4 +66,8 @@ export function getPostBySlug(slug: string): Post | null {
   } catch {
     return null
   }
+}
+
+export function getPostsByAuthorSlug(authorSlug: string): PostMeta[] {
+  return getAllPosts().filter((p) => p.authorEntity?.slug === authorSlug)
 }

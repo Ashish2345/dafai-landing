@@ -8,10 +8,13 @@ import { Pricing } from '@/components/sections/Pricing'
 import { FAQ } from '@/components/sections/FAQ'
 import { CtaBanner } from '@/components/sections/CtaBanner'
 import { FadeInView } from '@/components/ui/FadeInView'
+import { JsonLd } from '@/components/seo/JsonLd'
+import { softwareApplicationSchema } from '@/lib/seo/schema'
 
 export default function Home() {
   return (
     <main className="bg-white">
+      <JsonLd id="ld-software" data={softwareApplicationSchema()} />
       <Hero />
       <FadeInView><BeforeAfter /></FadeInView>
       <FadeInView><ProductShowcase /></FadeInView>

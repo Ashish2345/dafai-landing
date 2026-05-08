@@ -1,5 +1,49 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PageHero } from '@/components/ui/PageHero'
+import { JsonLd } from '@/components/seo/JsonLd'
+import {
+  faqPageSchema,
+  breadcrumbListSchema,
+  SITE_URL,
+} from '@/lib/seo/schema'
+
+export const metadata: Metadata = {
+  title: 'How It Works — From Question to Cited Answer',
+  description:
+    'See how Mero Dafa scrapes the Nepal Gazette, parses scanned PDFs, verifies with CAs, and answers tax questions with section-level citations — in English or Nepali.',
+  alternates: { canonical: '/how-it-works' },
+  openGraph: {
+    title: 'How It Works — Mero Dafa',
+    description:
+      'Browse, ask, read, save — the four-step workflow behind cited AI answers from Nepal Gazette, NRB directives, and IRD circulars.',
+    url: '/how-it-works',
+    type: 'article',
+  },
+}
+
+const faq = [
+  {
+    question: 'What documents does Mero Dafa cover?',
+    answer:
+      'Income Tax Act 2058 (with all Finance Act amendments through 2081), VAT Act, Company Act, NRB directives, IRD circulars, Finance Acts, and Supreme Court case law relevant to financial-legal compliance in Nepal.',
+  },
+  {
+    question: 'Can I ask questions in Nepali?',
+    answer:
+      'Yes. You can search in English or नेपाली and Mero Dafa returns the answer in the same language, with the original Nepali Rajpatra source displayed alongside.',
+  },
+  {
+    question: 'How does Mero Dafa cite its answers?',
+    answer:
+      'Every answer includes the act or directive name, the section number, and the exact page in the scanned source PDF. Click any citation to jump to the original document side-by-side.',
+  },
+  {
+    question: 'Who verifies the AI’s answers?',
+    answer:
+      'A network of practicing Chartered Accountants reviews the AI’s legal interpretations daily. Mero Dafa is built by engineers and verified by CAs.',
+  },
+]
 
 const steps = [
   {
@@ -71,6 +115,14 @@ const steps = [
 export default function HowItWorksPage() {
   return (
     <main className="bg-white pb-16">
+      <JsonLd id="ld-how-faq" data={faqPageSchema(faq)} />
+      <JsonLd
+        id="ld-how-breadcrumb"
+        data={breadcrumbListSchema([
+          { name: 'Home', url: SITE_URL },
+          { name: 'How It Works', url: `${SITE_URL}/how-it-works` },
+        ])}
+      />
       <PageHero
         kicker="How it works"
         title="From question to"

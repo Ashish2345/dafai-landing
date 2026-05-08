@@ -1,4 +1,46 @@
+import type { Metadata } from 'next'
 import { Pricing } from '@/components/sections/Pricing'
+import { JsonLd } from '@/components/seo/JsonLd'
+import {
+  pricingProductSchema,
+  breadcrumbListSchema,
+  SITE_URL,
+} from '@/lib/seo/schema'
+
+export const metadata: Metadata = {
+  title: 'Pricing — Plans for CAs, Audit Firms & Banks',
+  description:
+    "Transparent firm-based pricing for Nepal's tax & compliance professionals. Free Starter plan, Pro at Rs 7,999/mo, and Enterprise BFSI deployments.",
+  alternates: { canonical: '/pricing' },
+  openGraph: {
+    title: 'Pricing — Mero Dafa',
+    description:
+      "Transparent firm-based pricing for Nepal's tax & compliance professionals.",
+    url: '/pricing',
+    type: 'website',
+  },
+}
+
+const pricingPlans: { name: string; description: string; priceNpr: string | null; url: string }[] = [
+  {
+    name: 'Starter',
+    description: 'Solo CAs & students — 10 questions/day, latest 2 years of Gazette, free.',
+    priceNpr: '0',
+    url: `${SITE_URL}/pricing`,
+  },
+  {
+    name: 'Pro',
+    description: 'Audit firms & busy CAs — unlimited questions, full archive, priority support.',
+    priceNpr: '7999',
+    url: `${SITE_URL}/pricing`,
+  },
+  {
+    name: 'Enterprise',
+    description: 'Banks, insurance & MNCs — on-premise option, API access, custom legal logic.',
+    priceNpr: null,
+    url: `${SITE_URL}/pricing`,
+  },
+]
 
 const tableRows: {
   feature: string
@@ -111,8 +153,16 @@ function CellValue({ value }: { value: string | boolean }) {
 export default function PricingPage() {
   return (
     <main className="bg-white pb-16">
-      {/* Reuse the Pricing section component */}
-      <Pricing />
+      <JsonLd id="ld-pricing-product" data={pricingProductSchema(pricingPlans)} />
+      <JsonLd
+        id="ld-pricing-breadcrumb"
+        data={breadcrumbListSchema([
+          { name: 'Home', url: SITE_URL },
+          { name: 'Pricing', url: `${SITE_URL}/pricing` },
+        ])}
+      />
+      {/* Reuse the Pricing section component — promoted heading to h1 on this route */}
+      <Pricing headingAs="h1" />
 
       {/* Feature comparison — wrapped in bordered card matching theme */}
       <section className="px-4 sm:px-6 pt-2 sm:pt-4 pb-10">

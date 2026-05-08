@@ -1,13 +1,26 @@
-'use client'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { PageHero } from '@/components/ui/PageHero'
+import { TeamCard, type TeamMember } from './TeamCard'
+import { JsonLd } from '@/components/seo/JsonLd'
+import {
+  teamPersonSchemas,
+  breadcrumbListSchema,
+  SITE_URL,
+} from '@/lib/seo/schema'
 
-type TeamMember = {
-  name: string
-  role: string
-  bio: string
-  photo: string
-  initials: string
+export const metadata: Metadata = {
+  title: 'Team & Mission',
+  description:
+    "Built by engineers, verified by CAs. Meet the team eliminating Nepal's compliance risk gap with hierarchy-aware AI for tax and legal research.",
+  alternates: { canonical: '/team' },
+  openGraph: {
+    title: 'Team & Mission — Mero Dafa',
+    description:
+      "Built by engineers, verified by CAs. Meet the team eliminating Nepal's compliance risk gap.",
+    url: '/team',
+    type: 'website',
+  },
 }
 
 const teamMembers: TeamMember[] = [
@@ -21,7 +34,7 @@ const teamMembers: TeamMember[] = [
   {
     name: 'Sabin Adhikari',
     role: 'Co-founder & CA',
-    bio: 'Practicing Chartered Accountant who reviews how the system interprets Nepal\u2019s tax law. Ensures every answer is accurate.',
+    bio: "Practicing Chartered Accountant who reviews how the system interprets Nepal's tax law. Ensures every answer is accurate.",
     photo: '/team/sabin-adhikari.jpg',
     initials: 'SA',
   },
@@ -30,21 +43,33 @@ const teamMembers: TeamMember[] = [
 const VALUES = [
   {
     title: 'Accuracy over speed',
-    description: 'Every answer links to the original source. We\u2019d rather say "not found" than give an unverified answer.',
+    description:
+      'Every answer links to the original source. We’d rather say "not found" than give an unverified answer.',
   },
   {
     title: 'Built by practitioners',
-    description: 'A CA validates the AI\u2019s interpretation. We don\u2019t ship what we can\u2019t professionally stand behind.',
+    description:
+      "A CA validates the AI's interpretation. We don't ship what we can't professionally stand behind.",
   },
   {
     title: 'Nepal-first',
-    description: 'Not a generic legal AI adapted for Nepal. Built from the ground up for Nepali acts, directives, and gazettes.',
+    description:
+      'Not a generic legal AI adapted for Nepal. Built from the ground up for Nepali acts, directives, and gazettes.',
   },
 ]
 
 export default function TeamPage() {
   return (
     <main className="bg-white pb-16">
+      <JsonLd id="ld-team-people" data={teamPersonSchemas(teamMembers)} />
+      <JsonLd
+        id="ld-team-breadcrumb"
+        data={breadcrumbListSchema([
+          { name: 'Home', url: SITE_URL },
+          { name: 'Team', url: `${SITE_URL}/team` },
+        ])}
+      />
+
       <PageHero
         kicker="Who we are"
         title="Built by the people who"
@@ -132,33 +157,5 @@ export default function TeamPage() {
         </div>
       </section>
     </main>
-  )
-}
-
-function TeamCard({ member }: { member: TeamMember }) {
-  return (
-    <div className="bg-white rounded-xl border border-slate-200 p-8 flex flex-col items-center text-center gap-5 hover:shadow-md transition-shadow duration-200">
-      {/* Avatar */}
-      <div
-        className="relative w-24 h-24 rounded-full overflow-hidden flex items-center justify-center text-white font-bold text-2xl shadow-md"
-        style={{ background: 'linear-gradient(135deg, #09383e 0%, #0d4f57 100%)' }}
-      >
-        <span className="absolute inset-0 flex items-center justify-center">{member.initials}</span>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={member.photo}
-          alt={member.name}
-          className="absolute inset-0 w-full h-full object-cover"
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
-        />
-      </div>
-
-      {/* Info */}
-      <div className="flex flex-col gap-1.5">
-        <h3 className="font-display font-semibold text-xl text-slate-900">{member.name}</h3>
-        <p className="text-sm font-medium" style={{ color: '#09383e' }}>{member.role}</p>
-      </div>
-      <p className="text-sm text-slate-500 leading-relaxed max-w-xs">{member.bio}</p>
-    </div>
   )
 }

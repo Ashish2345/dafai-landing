@@ -54,7 +54,9 @@ const plans = [
   },
 ]
 
-export function Pricing() {
+export function Pricing({ headingAs = 'h2' }: { headingAs?: 'h1' | 'h2' } = {}) {
+  const Heading = headingAs
+
   function handleCta(plan: (typeof plans)[number]) {
     if (plan.ctaTier === 'enterprise') {
       window.location.href = 'mailto:support@merodafa.com'
@@ -107,7 +109,7 @@ export function Pricing() {
                   <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#09383e' }} />
                   Pricing
                 </span>
-                <h2 className="font-display font-bold text-slate-900 text-3xl sm:text-4xl lg:text-[2.75rem] leading-tight tracking-tight max-w-2xl">
+                <Heading className="font-display font-bold text-slate-900 text-3xl sm:text-4xl lg:text-[2.75rem] leading-tight tracking-tight max-w-2xl">
                   Pricing that{' '}
                   <span
                     style={{
@@ -119,7 +121,7 @@ export function Pricing() {
                   >
                     fits how you work.
                   </span>
-                </h2>
+                </Heading>
                 <p className="text-slate-600 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
                   Start with the free Starter plan. Upgrade when you need unlimited questions and full archive access.
                 </p>

@@ -1,6 +1,27 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllPosts } from '@/lib/mdx'
 import { PageHero } from '@/components/ui/PageHero'
+import { JsonLd } from '@/components/seo/JsonLd'
+import {
+  blogListSchema,
+  breadcrumbListSchema,
+  SITE_URL,
+} from '@/lib/seo/schema'
+
+export const metadata: Metadata = {
+  title: 'Blog — Nepal Tax & Compliance Analysis',
+  description:
+    'Weekly analysis of Nepal Gazette updates, NRB circulars, IRD notices, and tax law changes — written for working CAs, banking compliance teams, and tax lawyers.',
+  alternates: { canonical: '/blog' },
+  openGraph: {
+    title: 'The Rajpatra Pulse — Mero Dafa Blog',
+    description:
+      'Legal analysis and insights for Nepal’s financial professionals.',
+    url: '/blog',
+    type: 'website',
+  },
+}
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-US', {
@@ -15,6 +36,16 @@ export default function BlogPage() {
 
   return (
     <main className="bg-white pb-16">
+      {posts.length > 0 && (
+        <JsonLd id="ld-blog-list" data={blogListSchema(posts)} />
+      )}
+      <JsonLd
+        id="ld-blog-breadcrumb"
+        data={breadcrumbListSchema([
+          { name: 'Home', url: SITE_URL },
+          { name: 'Blog', url: `${SITE_URL}/blog` },
+        ])}
+      />
       <PageHero
         kicker="Blog"
         title="The Rajpatra"
