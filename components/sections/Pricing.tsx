@@ -3,66 +3,62 @@ import { PricingCard } from '@/components/ui/PricingCard'
 
 const plans = [
   {
-    tier: 'Starter',
-    description: 'Solo CAs & students',
-    price: 'Free',
+    tier: 'Free',
+    description: 'Students, lawyers, CAs & curious professionals',
+    price: 'Rs 0',
     period: undefined,
     features: [
-      '10 questions per day',
-      'Latest 2 years of Gazette',
+      '5 questions per day',
+      'Latest 1 year of Nepal Gazette',
       'English & Nepali answers',
-      '3 PDF downloads per day',
       'Star & save responses',
       'Email support',
     ],
     cta: 'Create free account',
     highlighted: false,
-    ctaTier: 'starter',
+    ctaTier: 'free',
   },
   {
     tier: 'Pro',
-    description: 'Audit firms & busy CAs',
-    price: 'रू 7,999',
+    description: 'Solo CAs, tax lawyers & busy professionals',
+    price: 'Rs 499',
     period: '/mo',
     features: [
-      'Everything in Starter',
-      'Unlimited questions & PDFs',
-      'Full archive (2015\u20132081)',
+      'Unlimited questions',
+      'Full archive (Gazette 2015–2081)',
       'Unlimited chat history',
-      '50 starred responses',
+      'Hierarchy-aware citations',
       'Priority email support',
+      'Single user seat',
     ],
     cta: 'Upgrade to Pro',
     highlighted: true,
     ctaTier: 'pro',
   },
   {
-    tier: 'Enterprise',
-    description: 'Banks, Insurance & MNCs',
-    price: 'Contact Sales',
-    period: undefined,
+    tier: 'Firm',
+    description: 'Audit firms, law firms & in-house tax teams',
+    price: 'Rs 2,499',
+    period: '/mo',
     features: [
       'Everything in Pro',
-      'Dedicated account manager',
-      'On-premise / private cloud',
-      'API access',
-      'Custom legal logic',
+      'Up to 10 team seats',
+      'Shared workspace & saved searches',
+      'Team admin & seat management',
+      'Priority chat support',
+      'Quarterly review call with a CA',
     ],
-    cta: 'Contact Sales',
+    cta: 'Upgrade to Firm',
     highlighted: false,
-    ctaTier: 'enterprise',
+    ctaTier: 'firm',
   },
 ]
 
 export function Pricing({ headingAs = 'h2' }: { headingAs?: 'h1' | 'h2' } = {}) {
   const Heading = headingAs
 
-  function handleCta(plan: (typeof plans)[number]) {
-    if (plan.ctaTier === 'enterprise') {
-      window.location.href = 'mailto:support@merodafa.com'
-    } else {
-      window.location.href = 'https://app.merodafa.com/signup'
-    }
+  function handleCta() {
+    window.location.href = 'https://app.merodafa.com/signup'
   }
 
   return (
@@ -123,7 +119,7 @@ export function Pricing({ headingAs = 'h2' }: { headingAs?: 'h1' | 'h2' } = {}) 
                   </span>
                 </Heading>
                 <p className="text-slate-600 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
-                  Start with the free Starter plan. Upgrade when you need unlimited questions and full archive access.
+                  Start free, upgrade to Pro for Rs 499/mo when you need unlimited questions and the full Gazette archive.
                 </p>
               </div>
 
@@ -139,10 +135,23 @@ export function Pricing({ headingAs = 'h2' }: { headingAs?: 'h1' | 'h2' } = {}) 
                     features={plan.features}
                     cta={plan.cta}
                     highlighted={plan.highlighted}
-                    onCtaClick={() => handleCta(plan)}
+                    onCtaClick={handleCta}
                   />
                 ))}
               </div>
+
+              {/* Enterprise / BFSI footnote */}
+              <p className="text-center text-sm text-slate-500 mt-10 max-w-2xl mx-auto leading-relaxed">
+                Need on-premise deployment, API access, or BFSI compliance for a bank or insurance company?{' '}
+                <a
+                  href="mailto:support@merodafa.com?subject=Enterprise%20%2F%20BFSI%20enquiry"
+                  className="font-medium underline-offset-2 hover:underline"
+                  style={{ color: '#09383e' }}
+                >
+                  Talk to us about Enterprise
+                </a>
+                .
+              </p>
             </div>
           </div>
         </div>

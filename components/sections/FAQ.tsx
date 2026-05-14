@@ -30,7 +30,7 @@ const FAQS: QA[] = [
   },
   {
     q: 'Is there a free plan?',
-    a: 'Yes. The Starter plan is free and includes 10 questions per day, 3 PDF downloads, and access to the last 2 years of Gazette content. No credit card required.',
+    a: 'Yes. The Free plan includes 5 questions per day and access to the latest 1 year of Gazette content — no credit card required. Upgrade to Pro (Rs 499/mo) for unlimited questions and the full archive, or Firm (Rs 2,499/mo) for up to 10 team seats.',
   },
 ]
 

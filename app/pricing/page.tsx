@@ -8,9 +8,9 @@ import {
 } from '@/lib/seo/schema'
 import { socialMeta } from '@/lib/seo/metadata'
 
-const PAGE_TITLE = 'Pricing — Plans for CAs, Audit Firms & Banks'
+const PAGE_TITLE = 'Pricing — Free, Pro Rs 499/mo, Firm Rs 2,499/mo'
 const PAGE_DESCRIPTION =
-  "Transparent firm-based pricing for Nepal's tax & compliance professionals. Free Starter, Pro at Rs 7,999/mo, and Enterprise BFSI deployments."
+  "Transparent Nepal-first pricing for Mero Dafa AI legal research. Free plan for students, lawyers & casual users, Pro at Rs 499/mo, Firm at Rs 2,499/mo for audit teams."
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -18,103 +18,97 @@ export const metadata: Metadata = {
   alternates: { canonical: '/pricing' },
   ...socialMeta({
     title: 'Pricing — Mero Dafa',
-    description: "Transparent firm-based pricing for Nepal's tax & compliance professionals.",
+    description: PAGE_DESCRIPTION,
     url: '/pricing',
   }),
 }
 
 const pricingPlans: { name: string; description: string; priceNpr: string | null; url: string }[] = [
   {
-    name: 'Starter',
-    description: 'Solo CAs & students — 10 questions/day, latest 2 years of Gazette, free.',
+    name: 'Free',
+    description: 'Students, lawyers & curious professionals — 5 questions/day, latest 1 year of Gazette, no card needed.',
     priceNpr: '0',
     url: `${SITE_URL}/pricing`,
   },
   {
     name: 'Pro',
-    description: 'Audit firms & busy CAs — unlimited questions, full archive, priority support.',
-    priceNpr: '7999',
+    description: 'Solo CAs, tax lawyers & busy professionals — unlimited questions, full Gazette archive, priority support.',
+    priceNpr: '499',
     url: `${SITE_URL}/pricing`,
   },
   {
-    name: 'Enterprise',
-    description: 'Banks, insurance & MNCs — on-premise option, API access, custom legal logic.',
-    priceNpr: null,
+    name: 'Firm',
+    description: 'Audit firms, law firms & in-house tax teams — up to 10 seats, shared workspace, quarterly CA review.',
+    priceNpr: '2499',
     url: `${SITE_URL}/pricing`,
   },
 ]
 
 const tableRows: {
   feature: string
-  starter: string | boolean
+  free: string | boolean
   pro: string | boolean
-  enterprise: string | boolean
+  firm: string | boolean
 }[] = [
   {
-    feature: 'Unlimited Search',
-    starter: true,
-    pro: true,
-    enterprise: true,
-  },
-  {
-    feature: 'Gazette Archive',
-    starter: 'Last 2 years',
-    pro: 'Full (2015–2081)',
-    enterprise: 'Full + Custom',
-  },
-  {
-    feature: 'RAG Chat',
-    starter: 'Standard',
-    pro: 'Priority',
-    enterprise: 'Custom Logic',
-  },
-  {
-    feature: 'PDF Downloads',
-    starter: '5/day',
+    feature: 'Questions per day',
+    free: '5',
     pro: 'Unlimited',
-    enterprise: 'Unlimited',
+    firm: 'Unlimited',
   },
   {
-    feature: 'Table Extraction',
-    starter: 'Basic',
-    pro: 'Priority Docsumo',
-    enterprise: 'Custom Pipeline',
+    feature: 'Gazette archive',
+    free: 'Last 1 year',
+    pro: 'Full (2015–2081)',
+    firm: 'Full (2015–2081)',
   },
   {
-    feature: 'Team Collaboration',
-    starter: false,
+    feature: 'English & Nepali answers',
+    free: true,
     pro: true,
-    enterprise: true,
+    firm: true,
   },
   {
-    feature: 'API Access',
-    starter: false,
-    pro: false,
-    enterprise: true,
+    feature: 'Chat history',
+    free: '7 days',
+    pro: 'Unlimited',
+    firm: 'Unlimited',
   },
   {
-    feature: 'Dedicated Account Manager',
-    starter: false,
-    pro: false,
-    enterprise: true,
+    feature: 'Starred responses',
+    free: false,
+    pro: 'Unlimited',
+    firm: 'Unlimited',
   },
   {
-    feature: 'On-Prem / Private Cloud',
-    starter: false,
-    pro: false,
-    enterprise: true,
+    feature: 'Team seats',
+    free: '1',
+    pro: '1',
+    firm: 'Up to 10',
   },
   {
-    feature: 'Custom Legal Logic',
-    starter: false,
+    feature: 'Shared workspace',
+    free: false,
     pro: false,
-    enterprise: true,
+    firm: true,
+  },
+  {
+    feature: 'Team admin & seat management',
+    free: false,
+    pro: false,
+    firm: true,
+  },
+  {
+    feature: 'Quarterly review call with a CA',
+    free: false,
+    pro: false,
+    firm: true,
   },
   {
     feature: 'Support',
-    starter: 'Email',
-    pro: 'Priority Email',
-    enterprise: 'Dedicated',
+    free: 'Email',
+    pro: 'Priority email',
+    firm: 'Priority chat',
   },
 ]
 
@@ -198,7 +192,7 @@ export default function PricingPage() {
                       Feature
                     </th>
                     <th className="px-5 py-4 font-semibold text-center text-slate-300 w-36">
-                      Starter
+                      Free
                     </th>
                     <th className="px-5 py-4 font-semibold text-center w-36">
                       <span className="inline-flex items-center gap-1.5">
@@ -212,7 +206,7 @@ export default function PricingPage() {
                       </span>
                     </th>
                     <th className="px-5 py-4 font-semibold text-center text-slate-300 w-36">
-                      Enterprise
+                      Firm
                     </th>
                   </tr>
                 </thead>
@@ -230,7 +224,7 @@ export default function PricingPage() {
                         {row.feature}
                       </td>
                       <td className="px-5 py-3.5 text-center border-r border-slate-100">
-                        <CellValue value={row.starter} />
+                        <CellValue value={row.free} />
                       </td>
                       <td
                         className="px-5 py-3.5 text-center border-r border-slate-100"
@@ -239,7 +233,7 @@ export default function PricingPage() {
                         <CellValue value={row.pro} />
                       </td>
                       <td className="px-5 py-3.5 text-center">
-                        <CellValue value={row.enterprise} />
+                        <CellValue value={row.firm} />
                       </td>
                     </tr>
                   ))}

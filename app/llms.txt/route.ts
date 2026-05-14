@@ -23,7 +23,7 @@ Key differentiators:
 
 - [Home](${process.env.NEXT_PUBLIC_BASE_URL ?? 'https://merodafa.com'}/): Product overview, features, pricing summary, FAQ.
 - [How It Works](${process.env.NEXT_PUBLIC_BASE_URL ?? 'https://merodafa.com'}/how-it-works): The pipeline — Scrape, Parse, Verify, Answer.
-- [Pricing](${process.env.NEXT_PUBLIC_BASE_URL ?? 'https://merodafa.com'}/pricing): Starter (Rs 1,999/mo), Pro (Rs 7,999/mo), Enterprise (contact sales).
+- [Pricing](${process.env.NEXT_PUBLIC_BASE_URL ?? 'https://merodafa.com'}/pricing): Free (Rs 0), Pro (Rs 499/mo), Firm (Rs 2,499/mo — up to 10 team seats). On-prem / API / BFSI: contact sales.
 - [Team](${process.env.NEXT_PUBLIC_BASE_URL ?? 'https://merodafa.com'}/team): The engineers and CAs behind Mero Dafa.
 
 ## Free tools

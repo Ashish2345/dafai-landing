@@ -23,6 +23,15 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  // Rewrite the canonical asset URLs to the dynamic next/og generators in
+  // app/api/*. Keeps the externally-advertised URLs (og:image, logo schema)
+  // stable while letting us iterate on the image design in code.
+  async rewrites() {
+    return [
+      { source: '/og-image.png', destination: '/api/og-image' },
+      { source: '/logo.png', destination: '/api/logo' },
+    ]
+  },
 };
 
 export default nextConfig;

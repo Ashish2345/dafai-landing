@@ -50,8 +50,8 @@ export function softwareApplicationSchema() {
     offers: {
       '@type': 'AggregateOffer',
       priceCurrency: 'NPR',
-      lowPrice: '1999',
-      highPrice: '7999',
+      lowPrice: '0',
+      highPrice: '2499',
       offerCount: 3,
     },
     audience: {
