@@ -45,12 +45,12 @@ const FAQ = [
   {
     question: 'How does the combined retirement deduction cap work?',
     answer:
-      "Per Section 63 of the Income Tax Act 2058, your CIT, PF, and SSF contributions are added together, and the deductible portion is the lowest of three values: (1) the actual combined contribution, (2) one-third of gross annual income, and (3) Rs 5,00,000. Example: on Rs 13,00,000 gross income with Rs 6,00,000 combined retirement contribution, 1/3 of gross is Rs 4,33,333 — lower than both the actual contribution and the Rs 5,00,000 cap — so Rs 4,33,333 is the allowed deduction and taxable income becomes Rs 8,66,667. The remaining Rs 1,66,667 is still saved into your retirement accounts but does not reduce TDS this year.",
+      "Per Section 63 of the Income Tax Act 2058 (published by the Inland Revenue Department at ird.gov.np), your CIT, PF, and SSF contributions are added together, and the deductible portion is the lowest of three values: (1) the actual combined contribution, (2) one-third of gross annual income, and (3) Rs 5,00,000. Example: on Rs 13,00,000 gross income with Rs 6,00,000 combined retirement contribution, 1/3 of gross is Rs 4,33,333 — lower than both the actual contribution and the Rs 5,00,000 cap — so Rs 4,33,333 is the allowed deduction and taxable income becomes Rs 8,66,667. The remaining Rs 1,66,667 is still saved into your retirement accounts but does not reduce TDS this year.",
   },
   {
     question: "What's the difference between SSF and PF (Provident Fund)?",
     answer:
-      "SSF (Social Security Fund) is the contributory scheme administered by the Social Security Fund Secretariat — employees contribute 11% of basic salary, employers contribute 20%, and participating employees are exempt from the 1% Social Security Tax. PF (Provident Fund / EPF) is administered by the Employees Provident Fund — employees and employers each typically contribute 10% of basic salary. Both contributions are deductible from taxable income, but they are separate schemes and have different governing laws. Many private-sector employees contribute to PF; SSF is mandatory for some employer categories.",
+      "SSF (Social Security Fund) is the contributory scheme administered by the Social Security Fund Secretariat (ssf.gov.np) — employees contribute 11% of basic salary, employers contribute 20%, and participating employees are exempt from the 1% Social Security Tax. PF (Provident Fund / EPF) is administered by the Employees Provident Fund — employees and employers each typically contribute 10% of basic salary. Both contributions are deductible from taxable income, but they are separate schemes and have different governing laws. Many private-sector employees contribute to PF; SSF is mandatory for some employer categories.",
   },
   {
     question: 'What is the difference between SST, SSF, and TDS?',
@@ -105,13 +105,30 @@ export default function SalaryTaxCalculatorPage() {
 
           {/* Header */}
           <header className="mb-6 max-w-3xl">
-            <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-2">
+            <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-1.5">
               Nepal Salary Tax Calculator{' '}
               <span className="text-slate-500 font-medium">FY 2081/82</span>
             </h1>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Monthly TDS for single and married salaried employees. Finance Act 2081
-              slabs with SSF, PF, CIT, life and health insurance deductions handled.
+            <p
+              className="text-slate-500 text-sm mb-3"
+              lang="ne"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              नेपाली तलब कर क्यालकुलेटर — आर्थिक वर्ष २०८१/८२
+            </p>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-3">
+              Free monthly TDS calculator for salaried employees in Nepal. Computes
+              income tax for single and married filers using Finance Act 2081 slabs,
+              with SSF, PF / EPF, CIT, life insurance and health insurance deductions
+              handled automatically.
+            </p>
+            <p className="text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Verified against Finance Act 2081 by Sabin Adhikari, CA · Last reviewed April 2026
+              </span>
             </p>
           </header>
 
@@ -153,15 +170,34 @@ export default function SalaryTaxCalculatorPage() {
             </summary>
             <article className="px-5 sm:px-8 py-6 border-t border-slate-100 prose prose-slate max-w-none">
             <h2 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight mt-2 mb-5">
-              How is salary tax calculated in Nepal for FY 2081/82?
+              How is monthly salary income tax calculated in Nepal (FY 2081/82)?
             </h2>
             <p className="text-slate-700 text-base leading-relaxed mb-5">
               Nepal uses a progressive slab system for salaried employees, set each
               year in the Finance Act. For FY 2081/82 (Shrawan 2081 – Ashadh 2082),
-              the slabs were defined in <strong>Finance Act 2081</strong> — and they
-              differ between single (unmarried) and married (couple) filing status.
-              Below the calculator output, you can see exactly which slab each rupee
-              of your taxable income falls into.
+              the slabs were defined in{' '}
+              <strong>
+                <a
+                  href="https://mof.gov.np/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#09383e] underline-offset-2 hover:underline"
+                >
+                  Finance Act 2081
+                </a>
+              </strong>{' '}
+              — amending the{' '}
+              <a
+                href="https://ird.gov.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#09383e] underline-offset-2 hover:underline"
+              >
+                Income Tax Act 2058
+              </a>{' '}
+              — and they differ between single (unmarried) and married (couple)
+              filing status. Below the calculator output, you can see exactly which
+              slab each rupee of your taxable income falls into.
             </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
@@ -322,6 +358,71 @@ export default function SalaryTaxCalculatorPage() {
                 </li>
               </ul>
             </div>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              Calculator vs manual Excel calculation
+            </h2>
+            <p className="text-slate-700 text-base leading-relaxed mb-3">
+              Most HR teams in Nepal still compute monthly TDS in Excel — copying
+              last year&apos;s slab table, manually adjusting for Finance Act 2081
+              amendments, and patching the formula every time SSF rules or the
+              retirement cap change. Three common mistakes we see in manual
+              spreadsheets:
+            </p>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Forgetting the 1/3-of-gross retirement ceiling.</strong>{' '}
+                Excel formulas often hard-code the Rs 5,00,000 cap and miss that for
+                lower-income employees the proportional ceiling binds first.
+              </li>
+              <li>
+                <strong>Wrong SSF treatment.</strong> SSF participants&apos; first
+                slab is 0%, not 1%. Manual calculators frequently overtax SSF
+                members by Rs 5,000–6,000 per year.
+              </li>
+              <li>
+                <strong>Missing the 20% surcharge above Rs 20 lakh.</strong> The
+                effective top-bracket rate is 36% (30% + 20% surcharge on the tax
+                amount), not 30%. Easy to miss in a slab-formula chain.
+              </li>
+            </ul>
+            <p className="text-slate-700 text-base leading-relaxed mb-5">
+              This online Nepali income tax calculator handles all three correctly,
+              and updates every time the Finance Act changes — so HR teams,
+              salaried employees, and CAs don&apos;t have to rebuild their
+              spreadsheet each Shrawan.
+            </p>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              Who should use this Nepal income tax calculator?
+            </h2>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Salaried employees in Nepal</strong> — verify your monthly
+                TDS deduction is correct before HR finalises payroll
+              </li>
+              <li>
+                <strong>HR &amp; payroll teams</strong> — compute TDS for single
+                and married couple employees with SSF, PF / EPF, CIT contributions
+                in one place
+              </li>
+              <li>
+                <strong>Chartered Accountants &amp; tax consultants</strong> —
+                quick sanity-check during audit or client onboarding
+              </li>
+              <li>
+                <strong>NEPSE investors &amp; freelancers</strong> — pair this
+                with our{' '}
+                <Link href="/tools/share-cgt-calculator" className="text-[#09383e] underline-offset-2 hover:underline">
+                  NEPSE CGT calculator
+                </Link>{' '}
+                and{' '}
+                <Link href="/tools/vat-calculator" className="text-[#09383e] underline-offset-2 hover:underline">
+                  VAT calculator
+                </Link>{' '}
+                for full-picture tax planning
+              </li>
+            </ul>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
               FAQ

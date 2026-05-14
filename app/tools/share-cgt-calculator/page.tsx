@@ -40,22 +40,22 @@ const FAQ = [
   {
     question: 'How is broker commission calculated on NEPSE?',
     answer:
-      'Per the SEBON Brokerage Commission Regulation, commission rates are slabbed by transaction value: up to Rs 50,000 → 0.40%; Rs 50,001–5,00,000 → 0.37%; Rs 5,00,001–20,00,000 → 0.34%; Rs 20,00,001–1,00,00,000 → 0.30%; above Rs 1 crore → 0.27%. The minimum commission per transaction is Rs 10. Commission is charged on both the buy and the sell leg separately.',
+      'Per the SEBON Brokerage Commission Regulation (sebon.gov.np), commission rates are slabbed by transaction value: up to Rs 50,000 → 0.40%; Rs 50,001–5,00,000 → 0.37%; Rs 5,00,001–20,00,000 → 0.34%; Rs 20,00,001–1,00,00,000 → 0.30%; above Rs 1 crore → 0.27%. The minimum commission per transaction is Rs 10. Commission is charged on both the buy and the sell leg separately.',
   },
   {
     question: 'What other charges apply besides broker commission?',
     answer:
-      'Two more deductions besides broker commission: (1) SEBON Regulatory Fee at 0.015% of transaction value, on both buy and sell legs; (2) CDSC Depository (DP) Charge of Rs 25 per transaction, also on both legs. Plus, on the sell side, Capital Gains Tax is deducted at source by the broker before crediting your bank.',
+      'Two more deductions besides broker commission: (1) SEBON Regulatory Fee at 0.015% of transaction value, on both buy and sell legs; (2) CDSC Depository (DP) Charge of Rs 25 per transaction by CDS and Clearing Limited (cdscnepal.com), also on both legs. Plus, on the sell side, Capital Gains Tax is deducted at source by the broker before crediting your bank.',
   },
   {
     question: 'Is the CGT amount deducted automatically?',
     answer:
-      'Yes. The broker deducts CGT at source from your sell-side proceeds and remits it to the Inland Revenue Department on your behalf, just like TDS on salary. The amount you see credited to your bank is already net of CGT. You should still report your capital gains in your annual income tax return — the CGT deducted is a credit you can offset against your overall tax liability.',
+      'Yes. The broker deducts CGT at source from your sell-side proceeds and remits it to the Inland Revenue Department (ird.gov.np) on your behalf, just like TDS on salary. The amount you see credited to your bank is already net of CGT. You should still report your capital gains in your annual income tax return — the CGT deducted is a credit you can offset against your overall tax liability.',
   },
   {
     question: 'What if I sold at a loss?',
     answer:
-      'No CGT applies on a loss. Capital losses on listed securities can be carried forward and set off against future capital gains under Section 36 of the Income Tax Act 2058 — but only against capital gains, not against business or salary income. Keep transaction records (broker contract notes, DP bills) for the carry-forward claim.',
+      'No CGT applies on a loss. Capital losses on listed securities can be carried forward and set off against future capital gains under Section 36 of the Income Tax Act 2058 (published by the IRD at ird.gov.np) — but only against capital gains, not against business or salary income. Keep transaction records (broker contract notes, DP bills) for the carry-forward claim.',
   },
   {
     question: 'Are bonus shares and right shares handled differently?',
@@ -105,13 +105,30 @@ export default function SharCgtCalculatorPage() {
 
           {/* Header */}
           <header className="mb-6 max-w-3xl">
-            <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-2">
+            <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-1.5">
               NEPSE Share Profit{' '}
               <span className="text-slate-500 font-medium">& CGT Calculator</span>
             </h1>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Real bankable profit after broker commission, SEBON fee, DP charge, and
-              CGT (7.5% / 5% / 10%) — for individual and institutional investors.
+            <p
+              className="text-slate-500 text-sm mb-3"
+              lang="ne"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              नेप्से शेयर नाफा र पुँजीगत लाभ कर क्यालकुलेटर
+            </p>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-3">
+              Free Nepal capital gains tax calculator for NEPSE share trades. Computes
+              real bankable profit after SEBON broker commission, SEBON regulatory
+              fee, CDSC DP charge, and Capital Gains Tax (7.5% short-term / 5%
+              long-term for individuals, 10% flat for institutional investors).
+            </p>
+            <p className="text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Verified against SEBON regulations &amp; Income Tax Act 2058 by Sabin Adhikari, CA · Last reviewed April 2026
+              </span>
             </p>
           </header>
 
@@ -153,14 +170,41 @@ export default function SharCgtCalculatorPage() {
             </summary>
             <article className="px-5 sm:px-8 py-6 border-t border-slate-100 prose prose-slate max-w-none">
             <h2 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight mt-2 mb-5">
-              The math behind your NEPSE profit
+              How to calculate NEPSE share profit and Capital Gains Tax in Nepal
             </h2>
             <p className="text-slate-700 text-base leading-relaxed mb-5">
-              When you sell a share, what you actually receive in your bank is
-              meaningfully different from <em>(sell price − buy price) × quantity</em>.
-              Three regulatory deductions and one tax sit between you and the
-              gross profit you see on screen. This calculator walks through each
-              one in the order brokers apply them.
+              When you sell a share on NEPSE, what you actually receive in your
+              bank is meaningfully different from <em>(sell price − buy price) × quantity</em>.
+              Three regulatory deductions — broker commission set by{' '}
+              <a
+                href="https://sebon.gov.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#09383e] underline-offset-2 hover:underline"
+              >
+                SEBON
+              </a>
+              , the SEBON regulatory fee, and the{' '}
+              <a
+                href="https://cdscnepal.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#09383e] underline-offset-2 hover:underline"
+              >
+                CDSC
+              </a>{' '}
+              depository charge — sit between you and the gross profit, then
+              Capital Gains Tax under the{' '}
+              <a
+                href="https://ird.gov.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#09383e] underline-offset-2 hover:underline"
+              >
+                Income Tax Act 2058
+              </a>{' '}
+              is deducted at source on the sell side. This calculator walks
+              through each one in the order brokers apply them.
             </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
@@ -312,6 +356,75 @@ export default function SharCgtCalculatorPage() {
                 to broker commission, SEBON, DP, and CGT.
               </p>
             </div>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              Where NEPSE investors get CGT wrong
+            </h2>
+            <p className="text-slate-700 text-base leading-relaxed mb-3">
+              Most retail NEPSE investors do this math in a notebook or in their
+              broker app, and three errors come up over and over — overstating
+              profit by Rs 500 to Rs 5,000 per trade on a 100-share position:
+            </p>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Forgetting fees are charged on both legs.</strong> Broker
+                commission, SEBON regulatory fee, and the Rs 25 DP charge apply to
+                the buy leg <em>and</em> the sell leg separately — so a round-trip
+                trade incurs six fees, not three. Mental shortcuts that only count
+                the sell leg systematically overestimate net profit.
+              </li>
+              <li>
+                <strong>Confusing the 7.5% short-term rate with the 10%
+                institutional rate.</strong> Individuals pay 7.5% if held ≤365
+                days, 5% if held &gt;365 days. Companies and mutual funds pay 10%
+                regardless of holding period. Trading through a private company
+                changes the math.
+              </li>
+              <li>
+                <strong>Applying CGT to gross profit instead of capital gain.</strong>{' '}
+                CGT applies to <em>(sell − buy − all six fees)</em>, not to
+                (sell − buy). The fees are deductible from the capital-gain base
+                before the tax is calculated.
+              </li>
+            </ul>
+            <p className="text-slate-700 text-base leading-relaxed mb-5">
+              This calculator handles all three correctly and shows the math step
+              by step — including the SEBON commission slab that applies to your
+              specific transaction value.
+            </p>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              Who should use this NEPSE CGT calculator?
+            </h2>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Retail NEPSE investors</strong> — verify the net bank
+                credit before you place a trade, especially on large round-trips
+                where the slab tiers actually shift
+              </li>
+              <li>
+                <strong>Day traders &amp; swing traders</strong> — see whether a
+                Rs 2 / share gain even covers the buy + sell fee stack before
+                CGT
+              </li>
+              <li>
+                <strong>Long-term investors</strong> — compare net profit at the
+                5% long-term rate vs the 7.5% short-term rate to time exits past
+                the 365-day mark
+              </li>
+              <li>
+                <strong>Brokers, CAs &amp; tax consultants</strong> — quick sanity
+                check on client contract notes, or use alongside our{' '}
+                <Link href="/tools/salary-tax-calculator" className="text-[#09383e] underline-offset-2 hover:underline">
+                  Nepal salary tax calculator
+                </Link>{' '}
+                and{' '}
+                <Link href="/tools/vat-calculator" className="text-[#09383e] underline-offset-2 hover:underline">
+                  VAT calculator
+                </Link>{' '}
+                for full-portfolio tax planning
+              </li>
+            </ul>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
               FAQ

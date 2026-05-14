@@ -13,6 +13,7 @@ const TOOLS_LINKS = [
   { label: 'NEPSE CGT Calculator', href: '/tools/share-cgt-calculator' },
   { label: 'VAT Calculator (13%)', href: '/tools/vat-calculator' },
   { label: 'Bluebook Fine Calculator', href: '/tools/bluebook-fine-calculator' },
+  { label: 'Customs Duty Calculator', href: '/tools/customs-calculator' },
   { label: 'All free tools →', href: '/tools' },
 ]
 

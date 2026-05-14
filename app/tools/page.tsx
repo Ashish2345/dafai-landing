@@ -26,7 +26,7 @@ type Tool = {
   description: string
   audience: string
   status: 'live' | 'soon'
-  icon: 'calc' | 'doc' | 'percent' | 'chart' | 'car'
+  icon: 'calc' | 'doc' | 'percent' | 'chart' | 'car' | 'plane'
 }
 
 const TOOLS: Tool[] = [
@@ -65,6 +65,15 @@ const TOOLS: Tool[] = [
     audience: 'Vehicle owners · Bike & car drivers',
     status: 'live',
     icon: 'car',
+  },
+  {
+    href: '/tools/customs-calculator',
+    title: 'Customs Duty Calculator (Gold, Mobile, TV)',
+    description:
+      'Personal-baggage customs rules for travellers arriving in Nepal — gold jewelry, raw gold, mobile phones, and televisions. Free vs taxable vs not allowed.',
+    audience: 'Travellers · NRNs · Returning workers',
+    status: 'live',
+    icon: 'plane',
   },
   {
     href: '/tools/finance-act-changelog',
@@ -182,7 +191,7 @@ export default function ToolsIndexPage() {
   )
 }
 
-function ToolIcon({ name }: { name: 'calc' | 'doc' | 'percent' | 'chart' | 'car' }) {
+function ToolIcon({ name }: { name: 'calc' | 'doc' | 'percent' | 'chart' | 'car' | 'plane' }) {
   if (name === 'calc') {
     return (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
@@ -208,6 +217,13 @@ function ToolIcon({ name }: { name: 'calc' | 'doc' | 'percent' | 'chart' | 'car'
     return (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 9l1.5-4.5A2 2 0 016.4 3h11.2a2 2 0 011.9 1.5L21 9m-18 0v9a1 1 0 001 1h2a1 1 0 001-1v-2h12v2a1 1 0 001 1h2a1 1 0 001-1V9m-18 0h18M7 14a1 1 0 100-2 1 1 0 000 2zm10 0a1 1 0 100-2 1 1 0 000 2z" />
+      </svg>
+    )
+  }
+  if (name === 'plane') {
+    return (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1L15 22v-1.5L13 19v-5.5l8 2.5z" />
       </svg>
     )
   }

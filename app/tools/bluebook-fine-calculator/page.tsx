@@ -100,14 +100,31 @@ export default function BluebookCalculatorPage() {
 
           {/* Header */}
           <header className="mb-6 max-w-3xl">
-            <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-2">
+            <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-1.5">
               Bluebook Fine{' '}
               <span className="text-slate-500 font-medium">& Vehicle Tax Calculator</span>
             </h1>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Annual vehicle tax + late-renewal penalty (5% → 10% → 20% → 32%) for
-              two- and four-wheelers. Bagmati rates shipped, manual override for
-              other provinces.
+            <p
+              className="text-slate-500 text-sm mb-3"
+              lang="ne"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              ब्लूबुक नवीकरण जरिवाना र सवारी कर क्यालकुलेटर — नेपाल
+            </p>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-3">
+              Free Nepal bluebook renewal calculator for bikes and cars. Computes
+              annual vehicle tax (सवारी कर) plus the late-renewal penalty (5% →
+              10% → 20% → 32% bands) used by the Department of Transport
+              Management for two- and four-wheelers. Bagmati Province rates
+              shipped; manual override for other provinces.
+            </p>
+            <p className="text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Verified against Bagmati Provincial Finance Act 2081 by Sabin Adhikari, CA · Last reviewed April 2026
+              </span>
             </p>
           </header>
 
@@ -149,15 +166,33 @@ export default function BluebookCalculatorPage() {
             </summary>
             <article className="px-5 sm:px-8 py-6 border-t border-slate-100 prose prose-slate max-w-none">
             <h2 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight mt-2 mb-5">
-              How the bluebook renewal penalty works
+              How the Nepal bluebook renewal penalty works
             </h2>
             <p className="text-slate-700 text-base leading-relaxed mb-5">
               Nepal&apos;s vehicle registration system runs annually. Your
               bluebook (the registration certificate) shows the date your
               current registration expires, usually one year from your last
-              renewal. Once that date passes, the Department of Transport
-              Management applies a graduated penalty — small at first, then
-              steeper the longer you delay.
+              renewal. Once that date passes, the{' '}
+              <a
+                href="https://www.dotm.gov.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#09383e] underline-offset-2 hover:underline"
+              >
+                Department of Transport Management
+              </a>{' '}
+              applies a graduated penalty — small at first, then steeper the
+              longer you delay. Vehicle tax rates themselves are set province by
+              province; Bagmati Province publishes its rates via its{' '}
+              <a
+                href="https://ofmcm.bagamati.gov.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#09383e] underline-offset-2 hover:underline"
+              >
+                Provincial Finance Act
+              </a>{' '}
+              each year.
             </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
@@ -302,6 +337,73 @@ export default function BluebookCalculatorPage() {
                 </li>
               </ul>
             </div>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              Common bluebook renewal mistakes in Nepal
+            </h2>
+            <p className="text-slate-700 text-base leading-relaxed mb-3">
+              Three mistakes turn a routine bluebook renewal into an unexpected
+              bill — usually Rs 1,000 to Rs 15,000 more than expected:
+            </p>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Misreading the 30-day grace period.</strong> The 0%
+                grace runs <em>from the expiry date</em> printed on your
+                bluebook, not from a calendar month. Day 31 = 5% band, sharply.
+                Missing this by even two days adds 5% of your annual tax.
+              </li>
+              <li>
+                <strong>Forgetting Ashadh 31 is the cliff.</strong> Crossing the
+                fiscal-year boundary (~July 15 in the Gregorian calendar) jumps
+                the penalty from 20% to <strong>32%</strong> overnight. A renewal
+                that costs Rs 7,800 on Ashadh 30 costs Rs 8,580 on Shrawan 1.
+                Plan your transport-office visit before the FY ends.
+              </li>
+              <li>
+                <strong>Confusing province rates.</strong> Vehicle tax differs
+                meaningfully across Nepal&apos;s seven provinces — a 1,500 cc
+                car taxed Rs 23,500 in Bagmati can be Rs 18,000 to Rs 28,000 in
+                another province. Always check your province&apos;s current
+                Finance Act, not last year&apos;s or another province&apos;s.
+              </li>
+            </ul>
+            <p className="text-slate-700 text-base leading-relaxed mb-5">
+              This Nepal vehicle tax calculator covers the Bagmati rate table
+              and lets you override the base tax for other provinces — so the
+              penalty math stays right wherever you are.
+            </p>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              Who should use this bluebook fine calculator?
+            </h2>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Bike &amp; car owners</strong> — find out exactly what
+                you owe before queuing at the Yatayat Vyavasthapan Karyalaya,
+                with no surprises at the cashier
+              </li>
+              <li>
+                <strong>Delayed renewals</strong> — see whether it&apos;s worth
+                paying the penalty now versus waiting (hint: never wait past
+                Ashadh 31 — the 32% cliff costs more than the wait saves)
+              </li>
+              <li>
+                <strong>Used-vehicle buyers</strong> — confirm the renewal
+                liability you&apos;ll inherit before agreeing on a price
+              </li>
+              <li>
+                <strong>Salaried employees &amp; investors</strong> — pair with
+                our{' '}
+                <Link href="/tools/salary-tax-calculator" className="text-[#09383e] underline-offset-2 hover:underline">
+                  Nepal salary tax calculator
+                </Link>{' '}
+                and{' '}
+                <Link href="/tools/share-cgt-calculator" className="text-[#09383e] underline-offset-2 hover:underline">
+                  NEPSE CGT calculator
+                </Link>{' '}
+                for the full personal-tax picture
+              </li>
+            </ul>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
               FAQ

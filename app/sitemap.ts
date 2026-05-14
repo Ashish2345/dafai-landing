@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/tools/vat-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
     { url: `${BASE_URL}/tools/share-cgt-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
     { url: `${BASE_URL}/tools/bluebook-fine-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
+    { url: `${BASE_URL}/tools/customs-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
   ]
 
   const posts: MetadataRoute.Sitemap = getAllPosts().map((post) => ({

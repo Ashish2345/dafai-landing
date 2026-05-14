@@ -1,0 +1,158 @@
+---
+title: "NEPSE Share Profit & Capital Gains Tax in Nepal — Complete Guide (FY 2081/82)"
+metaTitle: "NEPSE Capital Gains Tax & Share Profit Guide — Nepal FY 2081/82"
+date: "2026-05-09"
+excerpt: "How NEPSE share profit is actually calculated in Nepal — broker commission, SEBON fee, DP charge, and CGT (7.5% / 5% / 10%). With section references, real numbers, and a worked example."
+author: "Sabin Adhikari"
+category: "Tax Guide"
+---
+
+You buy a NEPSE share at Rs 800, hold it for six months, and sell at Rs 1,000. The screen shows Rs 200 profit per share. **The amount that actually lands in your bank is Rs 178 — and most retail investors don't see it coming.**
+
+The Rs 22 gap isn't fees stacked at the end. It's four separate deductions, applied in a specific order, governed by three different regulators. This guide walks through every one of them as they apply under Nepal's Income Tax Act 2058 (amended by Finance Act 2081) and SEBON regulations.
+
+## The four deductions on every NEPSE round-trip
+
+Between the price you see on screen and the rupee that enters your bank account, four items get pulled out:
+
+1. **Broker commission** — slab-based on transaction value, set by SEBON
+2. **SEBON Regulatory Fee** — 0.015% of transaction value
+3. **CDSC Depository (DP) Charge** — flat Rs 25 per transaction
+4. **Capital Gains Tax (CGT)** — deducted at source from your sell-side proceeds
+
+Items 1–3 are **charged on both the buy leg and the sell leg separately**. Item 4 is charged only on the sell side, only when there's a positive capital gain.
+
+> Try the math live — our [NEPSE Share Profit & CGT Calculator](/tools/share-cgt-calculator) handles all four deductions automatically and shows the bank-credit number for any trade.
+
+## Broker commission — the slab table you need to know
+
+The Securities Board of Nepal (SEBON) sets brokerage commission rates as a slab that scales down with transaction size. The slab applies *per leg*, not on the round-trip total:
+
+| Transaction value (per leg) | Commission rate |
+|---|---|
+| Up to Rs 50,000 | 0.40% |
+| Rs 50,001 – Rs 5,00,000 | 0.37% |
+| Rs 5,00,001 – Rs 20,00,000 | 0.34% |
+| Rs 20,00,001 – Rs 1,00,00,000 | 0.30% |
+| Above Rs 1 crore | 0.27% |
+
+The minimum commission per transaction is **Rs 10**. This matters for small trades — a Rs 1,500 trade gets the floor, not the 0.40% rate.
+
+**Key implication:** breaking a Rs 5,00,000 trade into ten Rs 50,000 chunks pushes you into the 0.40% slab on every chunk instead of 0.37% on the whole thing. Block trades save commission.
+
+## SEBON Regulatory Fee and CDSC DP Charge
+
+Two smaller items round out the trading costs:
+
+- **SEBON Regulatory Fee** — 0.015% of transaction value, on both legs. Used to fund SEBON's market oversight role.
+- **CDSC Depository (DP) Charge** — Rs 25 per transaction (flat), levied by CDS and Clearing Limited for depository services on both legs.
+
+Together, the broker commission + SEBON fee + DP charge make up your trading-cost stack. On a typical Rs 1,00,000 trade, that's roughly Rs 410 per leg, or **Rs 820 round-trip before tax**.
+
+## Capital Gains Tax rates
+
+Under the Income Tax Act 2058 (as amended by Finance Act 2081), CGT rates on NEPSE share transactions depend on **who you are** and **how long you held the share**:
+
+| Investor type | Holding period | CGT rate |
+|---|---|---|
+| Resident individual | ≤ 365 days (short-term) | **7.5%** |
+| Resident individual | > 365 days (long-term) | **5%** |
+| Resident institutional (companies, mutual funds) | Any (no holding-period rule) | **10%** |
+
+CGT applies to the **capital gain**, not the gross profit:
+
+```
+Capital gain = (sell turnover − buy turnover) − all 6 fees on both legs
+CGT = max(0, capital gain) × rate
+```
+
+If you sold at a loss, CGT is zero. The broker deducts CGT at source from your sell-side proceeds and remits it to the Inland Revenue Department on your behalf — similar to how your employer deducts TDS on salary.
+
+## Worked example — the Rs 200 profit that becomes Rs 178
+
+Let's take the round-trip from the intro:
+
+**Setup**
+- Individual investor
+- Buys 100 shares at Rs 800 each, total turnover Rs 80,000
+- Holds for 200 days (short-term — 7.5% CGT applies)
+- Sells at Rs 1,000 each, total turnover Rs 1,00,000
+
+**Buy leg**
+- Turnover: Rs 80,000
+- Commission @ 0.37%: Rs 296
+- SEBON @ 0.015%: Rs 12
+- DP charge: Rs 25
+- **Total buy cost: Rs 80,333**
+
+**Sell leg (before CGT)**
+- Turnover: Rs 1,00,000
+- Commission @ 0.37%: Rs 370
+- SEBON @ 0.015%: Rs 15
+- DP charge: Rs 25
+- Total sell fees: Rs 410
+
+**Capital gain calculation**
+- Gross profit: Rs 1,00,000 − Rs 80,000 = Rs 20,000
+- Total transaction fees (both legs): Rs 743
+- Capital gain: Rs 20,000 − Rs 743 = **Rs 19,257**
+- CGT @ 7.5%: Rs 1,444.28
+
+**Bottom line**
+- Bank credit: Rs 1,00,000 − Rs 410 − Rs 1,444.28 = **Rs 98,145.72**
+- Net profit (vs Rs 80,000 cash paid): **Rs 17,812.72**
+- Per share: **Rs 178.13** (vs the Rs 200 "screen profit")
+
+The Rs 21.87 gap per share went to broker commission, SEBON fee, DP charges, and CGT — in that order.
+
+## Five places NEPSE investors get the math wrong
+
+These come up over and over when I review client contract notes:
+
+### 1. Counting fees only on one leg
+The most common mistake. SEBON commission, SEBON fee, and DP charge all apply on the buy leg *and* the sell leg. A round-trip incurs six fees, not three.
+
+### 2. Confusing short-term with institutional rate
+The 7.5% rate is for resident **individuals** holding ≤365 days. The 10% rate is for resident **institutions** regardless of holding period. Trading through a private company changes the math meaningfully — a 200-day round-trip pays 7.5% as an individual but 10% as a Pvt Ltd.
+
+### 3. Applying CGT to gross profit instead of capital gain
+CGT applies to *(sell − buy − all six fees)*, not to *(sell − buy)*. The fees are deductible from the capital-gain base before the tax rate is applied. This isn't generosity from the tax department — it's because the fees are documented transaction costs under Section 36 of the Income Tax Act 2058.
+
+### 4. Missing the long-term threshold by a day
+Hold a share for 366 days and your CGT drops from 7.5% to 5% — a one-third reduction in tax. On a Rs 5 lakh capital gain, that's the difference between Rs 37,500 and Rs 25,000 in tax. The threshold is the gap between buy-settlement date and sell-settlement date.
+
+### 5. Forgetting bonus and right shares change the cost base
+For bonus shares, the IRD treats the cost base as the *average* of all holdings (existing + bonus) at the original purchase prices, weighted by quantity. For right shares, it's the right-issue price plus a share of the original cost. Manual spreadsheets that just track "what I paid for this lot" get this wrong. (Note: our calculator doesn't model bonus/right shares — that needs a portfolio-level CA review.)
+
+## Capital losses — and how to carry them forward
+
+If you sold at a loss, no CGT applies on that trade. But the loss isn't gone — under **Section 36 of the Income Tax Act 2058**, capital losses on listed securities can be carried forward and set off against future capital gains.
+
+**Important caveat:** capital losses can only be set off against capital gains, not against business income or salary income. So if your only loss-making year had no capital gains, you carry the loss to a future year that does.
+
+To claim the carry-forward, keep:
+- Broker contract notes (both buy and sell)
+- DP charge bills from CDSC
+- Bank statements showing the credit
+
+The IRD requires documentation; sworn statements aren't enough.
+
+## When does this apply to me?
+
+If you traded any NEPSE-listed share — common shares, mutual fund units, or right shares — and the trade closed at a profit, CGT applies and the broker has already deducted it. You should still report the gain in your annual income tax return; the CGT deducted at source becomes a credit you can offset against your overall tax liability.
+
+If you're an SSF participant getting the 1% first-slab benefit on your salary, the CGT credit can sometimes wipe out your entire annual income-tax bill — but only if you file. Brokers report individual deductions to the IRD, so missing this in your return creates a mismatch.
+
+## Calculate your real take-home profit
+
+Before placing your next NEPSE trade — especially a large one where the slab tiers shift — run the numbers through our [NEPSE Share Profit & CGT Calculator](/tools/share-cgt-calculator). It implements the SEBON commission slabs, the SEBON fee, the DP charge, and the right CGT rate for your investor type and holding period, and shows your bank-credit number to the rupee.
+
+## Related calculators
+
+- **[NEPSE Share Profit & CGT Calculator](/tools/share-cgt-calculator)** — the calculator behind every number in this guide
+- **[Salary Tax Calculator (FY 2081/82)](/tools/salary-tax-calculator)** — for the income-tax half of your annual return, separate from CGT
+- **[VAT Calculator (13%)](/tools/vat-calculator)** — for the brokerage industry on the supply side
+
+---
+
+*Verified against SEBON Brokerage Commission Regulation and Income Tax Act 2058 (as amended by Finance Act 2081). For section-level legal interpretation and the original Gazette pages, [try Mero Dafa free](https://app.merodafa.com/signup).*

@@ -45,7 +45,7 @@ const FAQ = [
   {
     question: 'Who needs to register for VAT in Nepal?',
     answer:
-      'Per the VAT Act 2052, any business with annual turnover exceeding Rs 50,00,000 from goods (or Rs 20,00,000 from services, or a mix) must register for VAT with the Inland Revenue Department. Voluntary registration below the threshold is allowed. Some sectors — tobacco, liquor, hardware, electronics, software, education consultancy and others — must register regardless of turnover.',
+      'Per the VAT Act 2052 (published by the Inland Revenue Department at ird.gov.np), any business with annual turnover exceeding Rs 50,00,000 from goods (or Rs 20,00,000 from services, or a mix) must register for VAT with the IRD. Voluntary registration below the threshold is allowed. Some sectors — tobacco, liquor, hardware, electronics, software, education consultancy and others — must register regardless of turnover.',
   },
   {
     question: 'What is the difference between zero-rated and VAT-exempt?',
@@ -100,13 +100,30 @@ export default function VatCalculatorPage() {
 
           {/* Header */}
           <header className="mb-6 max-w-3xl">
-            <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-2">
+            <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-1.5">
               Nepal VAT Calculator{' '}
               <span className="text-slate-500 font-medium">13%</span>
             </h1>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Add or extract 13% VAT on any Nepal invoice. Multi-line mode with
-              running totals. Per VAT Act 2052.
+            <p
+              className="text-slate-500 text-sm mb-3"
+              lang="ne"
+              style={{ fontFamily: 'system-ui, sans-serif' }}
+            >
+              नेपाली मूल्य अभिवृद्धि कर (VAT) क्यालकुलेटर — १३%
+            </p>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-3">
+              Free Nepal VAT calculator for invoices, line-item billing, and
+              VAT-inclusive / VAT-exclusive amount conversions. Add 13% VAT to a
+              base price, or extract the VAT portion from a gross amount — per
+              the VAT Act 2052 (last revised by Finance Act 2081).
+            </p>
+            <p className="text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Verified against VAT Act 2052 by Sabin Adhikari, CA · Last reviewed April 2026
+              </span>
             </p>
           </header>
 
@@ -148,17 +165,34 @@ export default function VatCalculatorPage() {
             </summary>
             <article className="px-5 sm:px-8 py-6 border-t border-slate-100 prose prose-slate max-w-none">
             <h2 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight mt-2 mb-5">
-              How VAT works in Nepal
+              How to add and extract 13% VAT in Nepal
             </h2>
             <p className="text-slate-700 text-base leading-relaxed mb-5">
               Value Added Tax in Nepal is a flat <strong>13%</strong> consumption
-              tax governed by the <strong>VAT Act 2052</strong> and administered
-              by the Inland Revenue Department (IRD). The rate hasn&apos;t changed
-              since FY 2062/63 — though the surrounding rules (registration
-              thresholds, exempt schedules, filing frequencies) are revised in
-              most annual Finance Acts. Every VAT-registered business charges 13%
-              on taxable supplies and remits the net (output VAT minus input VAT)
-              to the IRD by the 25th of the following month.
+              tax governed by the{' '}
+              <a
+                href="https://ird.gov.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#09383e] underline-offset-2 hover:underline"
+              >
+                <strong>VAT Act 2052</strong>
+              </a>{' '}
+              and administered by the Inland Revenue Department (IRD). The rate
+              hasn&apos;t changed since FY 2062/63 — though the surrounding rules
+              (registration thresholds, exempt schedules, filing frequencies) are
+              revised in most annual Finance Acts published by the{' '}
+              <a
+                href="https://mof.gov.np/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#09383e] underline-offset-2 hover:underline"
+              >
+                Ministry of Finance
+              </a>
+              . Every VAT-registered business charges 13% on taxable supplies and
+              remits the net (output VAT minus input VAT) to the IRD by the 25th
+              of the following month.
             </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
@@ -238,6 +272,74 @@ export default function VatCalculatorPage() {
               don&apos;t need to handle either category — leave VAT-exempt and
               zero-rated invoices off this tool.
             </p>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              Common VAT calculation mistakes in Nepal
+            </h2>
+            <p className="text-slate-700 text-base leading-relaxed mb-3">
+              Three mistakes account for most of the wrong VAT figures we see on
+              invoices and audit working papers in Nepal:
+            </p>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Extracting VAT by multiplying by 13% instead of 13/113.</strong>{' '}
+                On a Rs 1,130 inclusive amount, the VAT is Rs 130 (= 1,130 × 13 ÷
+                113), not Rs 146.90 (= 1,130 × 13%). The 13% rate applies to the
+                <em>net</em> price, not the gross. Many manual invoices get this
+                backwards.
+              </li>
+              <li>
+                <strong>Charging VAT on zero-rated or exempt supplies.</strong>{' '}
+                Exports are zero-rated (0% output, input recoverable). Schedule 1
+                items — basic foodstuffs, education, health, financial services
+                — are exempt (no output, no input recovery). Charging 13% on
+                either creates a refund obligation the customer will eventually
+                request.
+              </li>
+              <li>
+                <strong>Mixing VAT-inclusive and VAT-exclusive lines on one invoice.</strong>{' '}
+                Common in retail when some items have an MRP that includes VAT
+                and others are priced ex-VAT. The totals row almost always
+                ends up wrong. Pick one mode for the whole invoice.
+              </li>
+            </ul>
+            <p className="text-slate-700 text-base leading-relaxed mb-5">
+              This online Nepal VAT calculator handles both directions (add and
+              extract) and the multi-line mode for invoices with multiple items
+              — so the totals stay consistent regardless of which mode each line
+              was entered in.
+            </p>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              Who should use this Nepal VAT calculator?
+            </h2>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Small businesses &amp; sole proprietors</strong> — generate
+                quick VAT-inclusive quotes and invoices without spreadsheet
+                gymnastics
+              </li>
+              <li>
+                <strong>Freelancers &amp; consultants</strong> — convert a quoted
+                rate into a VAT-inclusive client price (or extract the VAT
+                portion of a received payment)
+              </li>
+              <li>
+                <strong>Accountants &amp; CAs</strong> — quick sanity check on
+                client purchase invoices and supplier bills during reconciliation
+              </li>
+              <li>
+                <strong>Salaried employees &amp; investors</strong> — pair with our{' '}
+                <Link href="/tools/salary-tax-calculator" className="text-[#09383e] underline-offset-2 hover:underline">
+                  Nepal salary tax calculator
+                </Link>{' '}
+                and{' '}
+                <Link href="/tools/share-cgt-calculator" className="text-[#09383e] underline-offset-2 hover:underline">
+                  NEPSE CGT calculator
+                </Link>{' '}
+                for the full personal-tax picture
+              </li>
+            </ul>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
               FAQ
