@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { SalaryTaxCalculator } from './Calculator'
 import { JsonLd } from '@/components/seo/JsonLd'
@@ -6,36 +7,57 @@ import {
   breadcrumbListSchema,
   faqPageSchema,
   softwareToolSchema,
+  webPageReviewedSchema,
   SITE_URL,
 } from '@/lib/seo/schema'
 import { socialMeta } from '@/lib/seo/metadata'
 
 const PAGE_URL = `${SITE_URL}/tools/salary-tax-calculator`
-const PAGE_TITLE = 'Nepal Salary Tax Calculator (FY 2081/82)'
+const PAGE_TITLE = 'Nepal Salary Tax Calculator FY 2082/83 (2025/26)'
 const PAGE_DESCRIPTION =
-  'Calculate monthly salary TDS for FY 2081/82 in seconds. Finance Act 2081 slabs. Handles SSF, PF/EPF, CIT, life & health insurance deductions.'
+  'Free Nepal salary TDS calculator for FY 2082/83 (2025/26). Finance Act 2082 slabs (1% / 10% / 20% / 30% / 36% / 39%) with SSF, PF/EPF, CIT, life & health insurance deductions. Reviewed by Nepali Chartered Accountants.'
+
+const PAGE_PUBLISHED = '2026-04-20'
+const PAGE_MODIFIED = '2026-05-16'
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
+  keywords: [
+    'Nepal salary tax calculator',
+    'salary tax Nepal',
+    'income tax Nepal',
+    'Nepal TDS calculator',
+    'FY 2082/83',
+    'Finance Act 2082',
+    'Nepal income tax slabs 2025/26',
+    'tax calculator Nepal',
+    'SSF PF CIT tax Nepal',
+  ],
   alternates: { canonical: '/tools/salary-tax-calculator' },
   ...socialMeta({
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
     url: '/tools/salary-tax-calculator',
+    image: '/images/nepal-tax-slabs-fy-2082-83.jpg',
   }),
 }
 
 const FAQ = [
   {
-    question: 'What are the salary tax slabs for FY 2081/82 in Nepal?',
+    question: 'What are the salary tax slabs for FY 2082/83 in Nepal?',
     answer:
-      "For single/unmarried individuals: 1% on the first Rs 5,00,000, 10% on Rs 5–7L, 20% on Rs 7–10L, 30% on Rs 10–20L, and 36% (30% + 20% surcharge) on income above Rs 20,00,000. For married couples filing jointly: 1% on the first Rs 6,00,000, 10% on Rs 6–8L, 20% on Rs 8–11L, 30% on Rs 11–20L, and 36% above Rs 20,00,000. The 1% Social Security Tax slab becomes 0% for SSF participants.",
+      "For single/unmarried individuals: 1% on the first Rs 5,00,000, 10% on Rs 5–7L, 20% on Rs 7–10L, 30% on Rs 10–20L, 36% on Rs 20–50L (30% + 20% surcharge), and 39% on income above Rs 50,00,000 (30% + 30% surcharge). For married couples filing jointly: 1% on the first Rs 6,00,000, 10% on Rs 6–8L, 20% on Rs 8–11L, 30% on Rs 11–20L, 36% on Rs 20–50L, and 39% above Rs 50,00,000. The 1% Social Security Tax slab becomes 0% for SSF participants.",
   },
   {
     question: 'How is monthly TDS calculated from annual salary in Nepal?',
     answer:
-      "Annual gross income is computed (basic + allowances × 12 + festival bonus). Then deductions are applied: SSF + PF + CIT are summed and capped at the lowest of (a) actual contribution, (b) 1/3 of gross income, or (c) Rs 5,00,000; life insurance is capped separately at Rs 40,000; health insurance at Rs 20,000. The remaining taxable income runs through the slab table. Annual tax is divided by 12 to give the monthly TDS that HR deducts.",
+      "Annual gross income is computed (basic + allowances × 12 + festival bonus). Then deductions are applied: SSF + PF + CIT are summed and capped at the lowest of (a) actual contribution, (b) 1/3 of gross income, or (c) Rs 5,00,000; life insurance is capped separately at Rs 40,000; health insurance at Rs 20,000. The remaining taxable income runs through the FY 2082/83 slab table. Annual tax is divided by 12 to give the monthly TDS that HR deducts.",
+  },
+  {
+    question: 'What is new in FY 2082/83 compared to FY 2081/82?',
+    answer:
+      "The biggest change is the new 39% top slab on income above Rs 50,00,000. Under FY 2081/82 everything above Rs 20,00,000 was taxed at a flat 36% (30% + 20% surcharge). Under FY 2082/83 the band from Rs 20,00,001 to Rs 50,00,000 stays at 36%, but income above Rs 50,00,000 now attracts a 39% rate (30% + 30% surcharge). Slabs below Rs 20,00,000 and the deduction caps (Rs 5,00,000 retirement, Rs 40,000 life insurance, Rs 20,000 health insurance) remain unchanged.",
   },
   {
     question: 'What deductions can a salaried employee claim in Nepal?',
@@ -58,9 +80,14 @@ const FAQ = [
       "SST (Social Security Tax) is the 1% tax on the first slab of taxable income, paid into a national pool. SSF (Social Security Fund) is a separate contributory scheme — employees contribute 11% of basic salary and employers contribute 20%; participating employees are exempt from the 1% SST. TDS (Tax Deducted at Source) is the broader mechanism by which the employer withholds and pays your monthly income tax to the IRD on your behalf.",
   },
   {
+    question: 'Is there a tax rebate for women in Nepal?',
+    answer:
+      "Yes. Single women with only employment income are entitled to a 10% rebate on the income tax payable. The rebate is not available for married women filing jointly (couple status). This calculator implements the standard slabs and does not auto-apply the women's rebate — apply a 10% reduction to the annual tax output if you qualify, or consult a Chartered Accountant.",
+  },
+  {
     question: 'Is this calculator official?',
     answer:
-      "No. This calculator implements the standard salaried-employee slabs from Finance Act 2081 and is provided for reference. It does not model edge cases like disability exemption, women's rebate, foreign-source income, or remote-area allowances. Always verify with a practicing Chartered Accountant before filing.",
+      "No. This calculator implements the standard salaried-employee slabs from Finance Act 2082 and is provided for reference. It does not model edge cases like disability exemption, women's rebate, foreign-source income, or remote-area allowances. Always verify with a practicing Chartered Accountant before filing.",
   },
 ]
 
@@ -83,6 +110,28 @@ export default function SalaryTaxCalculatorPage() {
           { name: 'Tools', url: `${SITE_URL}/tools` },
           { name: 'Salary Tax Calculator', url: PAGE_URL },
         ])}
+      />
+      <JsonLd
+        id="ld-tool-webpage"
+        data={webPageReviewedSchema({
+          name: PAGE_TITLE,
+          url: PAGE_URL,
+          description: PAGE_DESCRIPTION,
+          datePublished: PAGE_PUBLISHED,
+          dateModified: PAGE_MODIFIED,
+          reviewer: {
+            name: 'Sabin Adhikari',
+            slug: 'sabin-adhikari',
+            role: 'Chartered Accountant',
+          },
+          author: {
+            name: 'Aashish Rayamajhi',
+            slug: 'aashish-rayamajhi',
+            role: 'Co-founder, Mero Dafa',
+          },
+          about: 'Nepal salary income tax FY 2082/83 (2025/26)',
+          image: `${SITE_URL}/images/nepal-tax-slabs-fy-2082-83.jpg`,
+        })}
       />
 
       <section className="px-4 sm:px-6">
@@ -107,18 +156,19 @@ export default function SalaryTaxCalculatorPage() {
           <header className="mb-6 max-w-3xl">
             <h1 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight tracking-tight mb-1.5">
               Nepal Salary Tax Calculator{' '}
-              <span className="text-slate-500 font-medium">FY 2081/82</span>
+              <span className="text-slate-500 font-medium">FY 2082/83 (2025/26)</span>
             </h1>
             <p
               className="text-slate-500 text-sm mb-3"
               lang="ne"
               style={{ fontFamily: 'system-ui, sans-serif' }}
             >
-              नेपाली तलब कर क्यालकुलेटर — आर्थिक वर्ष २०८१/८२
+              नेपाली तलब कर क्यालकुलेटर — आर्थिक वर्ष २०८२/८३
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-3">
               Free monthly TDS calculator for salaried employees in Nepal. Computes
-              income tax for single and married filers using Finance Act 2081 slabs,
+              income tax for single and married filers using Finance Act 2082 slabs —
+              including the new <strong>39% slab on income above Rs 50,00,000</strong> —
               with SSF, PF / EPF, CIT, life insurance and health insurance deductions
               handled automatically.
             </p>
@@ -127,7 +177,22 @@ export default function SalaryTaxCalculatorPage() {
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Verified against Finance Act 2081 by Sabin Adhikari, CA · Last reviewed April 2026
+                Verified against Finance Act 2082 by{' '}
+                <Link
+                  href="/authors/sabin-adhikari"
+                  className="font-medium text-[#09383e] hover:underline underline-offset-2"
+                >
+                  Sabin Adhikari, CA
+                </Link>
+                {' '}· Authored by{' '}
+                <Link
+                  href="/authors/aashish-rayamajhi"
+                  className="font-medium text-[#09383e] hover:underline underline-offset-2"
+                >
+                  Aashish Rayamajhi
+                </Link>
+                {' '}· Last reviewed{' '}
+                <time dateTime={PAGE_MODIFIED}>16 May 2026</time>
               </span>
             </p>
           </header>
@@ -142,6 +207,23 @@ export default function SalaryTaxCalculatorPage() {
             </h2>
             <SalaryTaxCalculator />
           </section>
+
+          {/* Tax slab infographic — single vs married, FY 2082/83 */}
+          <figure className="max-w-3xl mx-auto mb-10">
+            <Image
+              src="/images/nepal-tax-slabs-fy-2082-83.jpg"
+              alt="Nepal income tax slabs FY 2082/83 — single individual vs married couple progressive tax system, 1% to 39% rates"
+              width={1280}
+              height={760}
+              className="w-full h-auto rounded-xl border border-slate-200"
+              sizes="(min-width: 768px) 720px, 100vw"
+              priority={false}
+            />
+            <figcaption className="mt-2 text-xs text-slate-500 text-center">
+              Nepal income tax slabs for FY 2082/83 (2025/26) — single vs married, per
+              Finance Act 2082.
+            </figcaption>
+          </figure>
 
           {/* Long-form explainer (collapsed by default) */}
           <details className="group max-w-3xl mx-auto rounded-xl border border-slate-200 bg-white">
@@ -170,11 +252,11 @@ export default function SalaryTaxCalculatorPage() {
             </summary>
             <article className="px-5 sm:px-8 py-6 border-t border-slate-100 prose prose-slate max-w-none">
             <h2 className="font-display font-bold text-2xl md:text-3xl text-slate-900 leading-tight mt-2 mb-5">
-              How is monthly salary income tax calculated in Nepal (FY 2081/82)?
+              How is monthly salary income tax calculated in Nepal (FY 2082/83)?
             </h2>
             <p className="text-slate-700 text-base leading-relaxed mb-5">
               Nepal uses a progressive slab system for salaried employees, set each
-              year in the Finance Act. For FY 2081/82 (Shrawan 2081 – Ashadh 2082),
+              year in the Finance Act. For FY 2082/83 (Shrawan 2082 – Ashadh 2083),
               the slabs were defined in{' '}
               <strong>
                 <a
@@ -183,7 +265,7 @@ export default function SalaryTaxCalculatorPage() {
                   rel="noopener noreferrer"
                   className="text-[#09383e] underline-offset-2 hover:underline"
                 >
-                  Finance Act 2081
+                  Finance Act 2082
                 </a>
               </strong>{' '}
               — amending the{' '}
@@ -201,7 +283,7 @@ export default function SalaryTaxCalculatorPage() {
             </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
-              Income tax slabs for FY 2081/82
+              Income tax slabs for FY 2082/83
             </h2>
 
             <div className="overflow-x-auto rounded-lg border border-slate-200 mb-3">
@@ -235,15 +317,20 @@ export default function SalaryTaxCalculatorPage() {
                     <td className="px-4 py-3">30%</td>
                   </tr>
                   <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">Above Rs 20,00,000</td>
-                    <td className="px-4 py-3">Above Rs 20,00,000</td>
+                    <td className="px-4 py-3">Rs 20,00,001 – 50,00,000</td>
+                    <td className="px-4 py-3">Rs 20,00,001 – 50,00,000</td>
                     <td className="px-4 py-3">36% (30% + 20% surcharge)</td>
+                  </tr>
+                  <tr className="border-t border-slate-200 bg-slate-50/40">
+                    <td className="px-4 py-3">Above Rs 50,00,000</td>
+                    <td className="px-4 py-3">Above Rs 50,00,000</td>
+                    <td className="px-4 py-3 font-medium text-[#09383e]">39% (30% + 30% surcharge) — new in FY 2082/83</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <p className="text-xs text-slate-500 mb-8">
-              Source: Finance Act 2081 (Income Tax Act 2058 as amended). For
+              Source: Finance Act 2082 (Income Tax Act 2058 as amended). For
               section-level detail, see our{' '}
               <Link
                 href="/blog/tds-rates-nepal-2081-complete-guide"
@@ -252,6 +339,34 @@ export default function SalaryTaxCalculatorPage() {
                 complete TDS guide
               </Link>
               .
+            </p>
+
+            <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
+              What changed in FY 2082/83 vs FY 2081/82?
+            </h2>
+            <p className="text-slate-700 text-base leading-relaxed mb-3">
+              The headline change in Finance Act 2082 is the splitting of the
+              previously flat top slab into two:
+            </p>
+            <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Rs 20,00,001 – Rs 50,00,000</strong> stays at the existing
+                36% rate (30% base + 20% surcharge).
+              </li>
+              <li>
+                <strong>Above Rs 50,00,000</strong> attracts a new 39% rate (30%
+                base + 30% surcharge). Previously, all income above Rs 20,00,000 was
+                a flat 36%.
+              </li>
+            </ul>
+            <p className="text-slate-700 text-base leading-relaxed mb-5">
+              For employees with annual taxable income below Rs 50,00,000, monthly
+              TDS is unchanged between FY 2081/82 and FY 2082/83. The new 39% slab
+              affects only the portion of income above Rs 50 lakh — typically senior
+              executives, partners, and high-earning consultants. Deduction caps
+              (Rs 5,00,000 combined retirement, Rs 40,000 life insurance, Rs 20,000
+              health insurance) and the 1/3-of-gross retirement ceiling all remain
+              unchanged.
             </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
@@ -328,7 +443,7 @@ export default function SalaryTaxCalculatorPage() {
               </p>
             </div>
 
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-5 mb-5">
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-5 mb-4">
               <p className="font-semibold text-slate-900 text-sm mb-2">
                 Worked example B — 1/3-of-gross binds
               </p>
@@ -359,17 +474,53 @@ export default function SalaryTaxCalculatorPage() {
               </ul>
             </div>
 
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-5 mb-5">
+              <p className="font-semibold text-slate-900 text-sm mb-2">
+                Worked example C — high earner with new 39% slab
+              </p>
+              <p className="text-slate-700 text-sm leading-relaxed mb-2">
+                Gross annual income <strong>Rs 60,00,000</strong> for a single filer,
+                with combined CIT + PF + SSF contribution of <strong>Rs 5,00,000</strong>
+                {' '}(retirement cap binds).
+              </p>
+              <p className="text-slate-700 text-sm leading-relaxed mb-2">
+                Taxable income = Rs 55,00,000.
+              </p>
+              <ul className="space-y-0.5 text-sm text-slate-600 list-none pl-0 mb-2 font-mono">
+                <li>Rs 5,00,000 × 1%  = Rs 5,000</li>
+                <li>Rs 2,00,000 × 10% = Rs 20,000</li>
+                <li>Rs 3,00,000 × 20% = Rs 60,000</li>
+                <li>Rs 10,00,000 × 30% = Rs 3,00,000</li>
+                <li>Rs 30,00,000 × 36% = Rs 10,80,000</li>
+                <li>Rs 5,00,000 × 39% = Rs 1,95,000</li>
+                <li className="font-semibold text-slate-900">
+                  Total annual tax  = Rs 16,60,000 (Rs 1,38,333 /month)
+                </li>
+              </ul>
+              <p className="text-xs text-slate-500">
+                Under FY 2081/82 (flat 36% above 20L), the same employee would have
+                paid Rs 16,45,000. The new 39% slab adds Rs 15,000 / year for every
+                Rs 5,00,000 above the Rs 50 lakh threshold.
+              </p>
+            </div>
+
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
               Calculator vs manual Excel calculation
             </h2>
             <p className="text-slate-700 text-base leading-relaxed mb-3">
               Most HR teams in Nepal still compute monthly TDS in Excel — copying
-              last year&apos;s slab table, manually adjusting for Finance Act 2081
+              last year&apos;s slab table, manually adjusting for Finance Act 2082
               amendments, and patching the formula every time SSF rules or the
-              retirement cap change. Three common mistakes we see in manual
+              retirement cap change. Four common mistakes we see in manual
               spreadsheets:
             </p>
             <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+              <li>
+                <strong>Missing the new 39% slab above Rs 50 lakh.</strong> Many
+                FY 2081/82 spreadsheets simply extend the 36% rate to infinity. For
+                executives crossing Rs 50,00,000 of taxable income, this under-deducts
+                tax and creates year-end shortfalls.
+              </li>
               <li>
                 <strong>Forgetting the 1/3-of-gross retirement ceiling.</strong>{' '}
                 Excel formulas often hard-code the Rs 5,00,000 cap and miss that for
@@ -381,13 +532,13 @@ export default function SalaryTaxCalculatorPage() {
                 members by Rs 5,000–6,000 per year.
               </li>
               <li>
-                <strong>Missing the 20% surcharge above Rs 20 lakh.</strong> The
-                effective top-bracket rate is 36% (30% + 20% surcharge on the tax
-                amount), not 30%. Easy to miss in a slab-formula chain.
+                <strong>Missing the surcharge in the 36% and 39% brackets.</strong>{' '}
+                The effective rates are 36% (30% + 20% surcharge) and 39% (30% +
+                30% surcharge), not flat 30%. Easy to miss in a slab-formula chain.
               </li>
             </ul>
             <p className="text-slate-700 text-base leading-relaxed mb-5">
-              This online Nepali income tax calculator handles all three correctly,
+              This online Nepali income tax calculator handles all four correctly,
               and updates every time the Finance Act changes — so HR teams,
               salaried employees, and CAs don&apos;t have to rebuild their
               spreadsheet each Shrawan.
@@ -408,7 +559,8 @@ export default function SalaryTaxCalculatorPage() {
               </li>
               <li>
                 <strong>Chartered Accountants &amp; tax consultants</strong> —
-                quick sanity-check during audit or client onboarding
+                quick sanity-check during audit or client onboarding, including the
+                new FY 2082/83 39% top slab
               </li>
               <li>
                 <strong>NEPSE investors &amp; freelancers</strong> — pair this
@@ -425,7 +577,7 @@ export default function SalaryTaxCalculatorPage() {
             </ul>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
-              FAQ
+              Nepal Salary Tax FAQ — FY 2082/83
             </h2>
             <div className="space-y-5">
               {FAQ.map((it) => (

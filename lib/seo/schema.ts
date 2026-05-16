@@ -28,7 +28,7 @@ export function websiteSchema() {
     url: SITE_URL,
     name: 'Mero Dafa',
     publisher: { '@id': ORG_ID },
-    inLanguage: 'en',
+    inLanguage: 'en-NP',
     // SearchAction removed — /blog?q= didn't exist as a real endpoint, and
     // Google won't surface a sitelinks search box for a non-functional URL.
     // Re-add when a sitewide /search route is implemented.
@@ -290,14 +290,71 @@ export function softwareToolSchema(p: {
     url: p.url,
     description: p.description,
     applicationCategory: p.applicationCategory ?? 'FinanceApplication',
+    applicationSubCategory: 'TaxCalculator',
     operatingSystem: 'Web',
     publisher: { '@id': ORG_ID },
     isAccessibleForFree: true,
+    inLanguage: 'en-NP',
     offers: {
       '@type': 'Offer',
       price: '0',
       priceCurrency: 'NPR',
     },
+  }
+}
+
+// -----------------------------------------------------------------------------
+// WebPage with reviewer/author/date — for YMYL tool pages where Google's
+// Quality Rater Guidelines require visible E-E-A-T signals.
+// -----------------------------------------------------------------------------
+
+type WebPageReviewedParams = {
+  name: string
+  url: string
+  description: string
+  datePublished: string
+  dateModified: string
+  reviewer: { name: string; slug: string; role: string }
+  author?: { name: string; slug: string; role: string }
+  about?: string
+  image?: string
+}
+
+export function webPageReviewedSchema(p: WebPageReviewedParams) {
+  const authorBlock = p.author
+    ? {
+        '@type': 'Person',
+        '@id': `${SITE_URL}/authors/${p.author.slug}`,
+        name: p.author.name,
+        jobTitle: p.author.role,
+        url: `${SITE_URL}/authors/${p.author.slug}`,
+      }
+    : undefined
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': p.url,
+    url: p.url,
+    name: p.name,
+    description: p.description,
+    datePublished: p.datePublished,
+    dateModified: p.dateModified,
+    lastReviewed: p.dateModified,
+    inLanguage: 'en-NP',
+    isPartOf: { '@id': WEBSITE_ID },
+    publisher: { '@id': ORG_ID },
+    reviewedBy: {
+      '@type': 'Person',
+      '@id': `${SITE_URL}/authors/${p.reviewer.slug}`,
+      name: p.reviewer.name,
+      jobTitle: p.reviewer.role,
+      url: `${SITE_URL}/authors/${p.reviewer.slug}`,
+    },
+    ...(authorBlock && { author: authorBlock }),
+    ...(p.about && { about: { '@type': 'Thing', name: p.about } }),
+    ...(p.image && {
+      primaryImageOfPage: { '@type': 'ImageObject', url: p.image },
+    }),
   }
 }
 

@@ -7,7 +7,7 @@ import {
   formatPercent,
   type CalculatorInputs,
   type FilingStatus,
-} from '@/lib/tax/fy-2081-82'
+} from '@/lib/tax/fy-2082-83'
 
 const TEAL = '#09383e'
 
@@ -316,7 +316,7 @@ export function SalaryTaxCalculator() {
 
         {/* Disclaimer */}
         <p className="text-xs text-slate-500 leading-relaxed px-1">
-          Standard salaried-employee slabs from Finance Act 2081 (FY 2081/82). Edge
+          Standard salaried-employee slabs from Finance Act 2082 (FY 2082/83). Edge
           cases — disability, women&apos;s rebate, remote-area allowance, foreign
           income — not modelled. Verify with your CA before filing.
         </p>

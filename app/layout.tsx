@@ -68,7 +68,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
-      lang="en"
+      lang="en-NP"
       data-scroll-behavior="smooth"
       className={`${inter.variable} ${lora.variable}`}
     >

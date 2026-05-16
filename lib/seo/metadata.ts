@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 const SITE_NAME = 'Mero Dafa'
 const DEFAULT_OG_IMAGE = '/og-image.png'
-const DEFAULT_LOCALE = 'en_US'
+const DEFAULT_LOCALE = 'en_NP'
 
 type OgType = 'website' | 'article' | 'profile'
 
