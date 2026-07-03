@@ -29,7 +29,7 @@ Key differentiators:
 ## Free tools
 
 - [Tools index](https://merodafa.com/tools): Free, no-signup calculators for Nepal tax & compliance.
-- [Salary Tax Calculator (FY 2081/82)](https://merodafa.com/tools/salary-tax-calculator): Calculate monthly TDS for any salaried employee in Nepal. Single & couple slabs per Finance Act 2081, with CIT, SSF, life and health insurance deductions handled.
+- [Salary Tax Calculator (FY 2083/84)](https://merodafa.com/tools/salary-tax-calculator): Monthly TDS for salaried employees in Nepal on the new Budget 2083/84 slabs (1% up to Rs 10,00,000, 10% / 20% / 27%, 29% above Rs 40,00,000; single & couple schedules merged), with SSF, PF/EPF, CIT, life and health insurance deductions and the single-woman 10% rebate handled. FY 2082/83 also selectable for prior-year filings.
 - [VAT Calculator (13%)](https://merodafa.com/tools/vat-calculator): Add or extract 13% Nepal VAT on any invoice. Multi-line mode for line-item invoices with running totals. Per VAT Act 2052.
 - [NEPSE Share Profit & CGT Calculator](https://merodafa.com/tools/share-cgt-calculator): Real bankable profit on NEPSE trades — broker commission (0.27%–0.40% slabs), SEBON fee (0.015%), CDSC DP charge (Rs 25), and Capital Gains Tax (7.5%/5% individual, 10% institutional) all handled. Per SEBON regulations and Income Tax Act 2058.
 - [Bluebook Fine & Vehicle Tax Calculator](https://merodafa.com/tools/bluebook-fine-calculator): Annual vehicle tax + late renewal penalty for two- and four-wheelers. Penalty bands: 0% (≤30 days), 5% (31–45), 10% (46–60), 20% (61+ within FY), 32% (past FY end / Ashadh 31). Bagmati rate table shipped; manual override for other provinces.

@@ -32,9 +32,9 @@ type Tool = {
 const TOOLS: Tool[] = [
   {
     href: '/tools/salary-tax-calculator',
-    title: 'Salary Tax Calculator (FY 2081/82)',
+    title: 'Salary Tax Calculator (FY 2083/84)',
     description:
-      'Calculate monthly TDS for any salaried employee in Nepal. Single & couple slabs, with CIT, SSF, life and health insurance deductions handled.',
+      'Monthly TDS on the new Budget 2083/84 slabs — first Rs 10 lakh at 1%, top rate 29%. SSF, PF/EPF, CIT, insurance and the women’s rebate handled. FY 2082/83 included.',
     audience: 'Employees · HR · CAs',
     status: 'live',
     icon: 'calc',

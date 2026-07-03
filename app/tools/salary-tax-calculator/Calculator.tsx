@@ -2,35 +2,87 @@
 
 import { useMemo, useState } from 'react'
 import {
-  computeSalaryTax,
+  computeSalaryTax as compute2084,
   formatNpr,
   formatPercent,
-  type CalculatorInputs,
+} from '@/lib/tax/fy-2083-84'
+import {
+  computeSalaryTax as compute2083,
   type FilingStatus,
 } from '@/lib/tax/fy-2082-83'
 
 const TEAL = '#09383e'
 
-const DEFAULT_INPUTS: CalculatorInputs = {
+type TaxYear = '2083-84' | '2082-83'
+
+/** Superset of both years' inputs — the UI keeps one state and maps per year. */
+type UIInputs = {
+  monthlyBasic: number
+  monthlyAllowances: number
+  festivalBonus: number
+  citContribution: number
+  lifeInsurancePremium: number
+  healthInsurancePremium: number
+  ssfContribution: number
+  pfContribution: number
+  status: FilingStatus // FY 2082/83 only
+  applyWomenRebate: boolean // FY 2083/84 only
+}
+
+const DEFAULT_INPUTS: UIInputs = {
   monthlyBasic: 0,
   monthlyAllowances: 0,
   festivalBonus: 0,
-  status: 'single',
   citContribution: 0,
   lifeInsurancePremium: 0,
   healthInsurancePremium: 0,
   ssfContribution: 0,
   pfContribution: 0,
+  status: 'single',
+  applyWomenRebate: false,
 }
 
+/** Normalized result shape both years render through (2082/83 has no rebate). */
+type ViewResult = ReturnType<typeof compute2084>
+
 export function SalaryTaxCalculator() {
-  const [inputs, setInputs] = useState<CalculatorInputs>(DEFAULT_INPUTS)
+  const [year, setYear] = useState<TaxYear>('2083-84')
+  const [inputs, setInputs] = useState<UIInputs>(DEFAULT_INPUTS)
 
-  const result = useMemo(() => computeSalaryTax(inputs), [inputs])
+  const result: ViewResult = useMemo(() => {
+    if (year === '2083-84') {
+      return compute2084({
+        monthlyBasic: inputs.monthlyBasic,
+        monthlyAllowances: inputs.monthlyAllowances,
+        festivalBonus: inputs.festivalBonus,
+        citContribution: inputs.citContribution,
+        lifeInsurancePremium: inputs.lifeInsurancePremium,
+        healthInsurancePremium: inputs.healthInsurancePremium,
+        ssfContribution: inputs.ssfContribution,
+        pfContribution: inputs.pfContribution,
+        applyWomenRebate: inputs.applyWomenRebate,
+      })
+    }
+    // FY 2082/83 — map into the shared view shape (no rebate concept)
+    const r = compute2083({
+      monthlyBasic: inputs.monthlyBasic,
+      monthlyAllowances: inputs.monthlyAllowances,
+      festivalBonus: inputs.festivalBonus,
+      status: inputs.status,
+      citContribution: inputs.citContribution,
+      lifeInsurancePremium: inputs.lifeInsurancePremium,
+      healthInsurancePremium: inputs.healthInsurancePremium,
+      ssfContribution: inputs.ssfContribution,
+      pfContribution: inputs.pfContribution,
+    })
+    return { ...r, taxBeforeRebate: r.annualTax, womenRebate: 0 }
+  }, [inputs, year])
 
-  function set<K extends keyof CalculatorInputs>(key: K, value: CalculatorInputs[K]) {
+  function set<K extends keyof UIInputs>(key: K, value: UIInputs[K]) {
     setInputs((prev) => ({ ...prev, [key]: value }))
   }
+
+  const isNewYear = year === '2083-84'
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_440px] gap-6">
@@ -40,29 +92,91 @@ export function SalaryTaxCalculator() {
         onSubmit={(e) => e.preventDefault()}
         aria-label="Salary tax calculator inputs"
       >
-        {/* Filing status */}
+        {/* Fiscal year */}
         <fieldset className="rounded-xl border border-slate-200 bg-white p-4">
           <legend className="px-1 text-sm font-semibold text-slate-900">
-            Filing status
+            Fiscal year
           </legend>
           <div className="grid grid-cols-2 gap-2 mt-1">
-            {(['single', 'couple'] as FilingStatus[]).map((s) => (
+            {(
+              [
+                { y: '2083-84' as TaxYear, label: 'FY 2083/84', sub: '2026/27 · new slabs' },
+                { y: '2082-83' as TaxYear, label: 'FY 2082/83', sub: '2025/26' },
+              ]
+            ).map(({ y, label, sub }) => (
               <button
-                key={s}
+                key={y}
                 type="button"
-                onClick={() => set('status', s)}
-                className={`rounded-lg border px-4 py-3 text-sm font-medium transition-colors ${
-                  inputs.status === s
+                onClick={() => setYear(y)}
+                className={`rounded-lg border px-4 py-3 text-sm font-medium transition-colors text-left ${
+                  year === y
                     ? 'border-[#09383e] bg-[#09383e]/5 text-[#09383e]'
                     : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                 }`}
-                aria-pressed={inputs.status === s}
+                aria-pressed={year === y}
               >
-                {s === 'single' ? 'Single / Unmarried' : 'Married / Couple'}
+                <span className="block leading-tight">{label}</span>
+                <span className="block text-xs text-slate-500 mt-0.5">{sub}</span>
               </button>
             ))}
           </div>
+          {isNewYear && (
+            <p className="mt-3 -mx-1 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+              FY 2083/84 slabs are <strong>as proposed in Budget 2083/84</strong> and
+              take effect 1 Shrawan 2083 (~17 Jul 2026). Figures are pending the
+              gazetted Finance Act 2083 — verify with your CA before filing.
+            </p>
+          )}
         </fieldset>
+
+        {/* Filing status — FY 2082/83 only (2083/84 merged single & couple) */}
+        {isNewYear ? (
+          <fieldset className="rounded-xl border border-slate-200 bg-white p-4">
+            <legend className="px-1 text-sm font-semibold text-slate-900">
+              Rebate
+            </legend>
+            <label className="mt-1 flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={inputs.applyWomenRebate}
+                onChange={(e) => set('applyWomenRebate', e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#09383e] focus:ring-[#09383e]/30"
+              />
+              <span className="min-w-0">
+                <span className="block text-sm font-medium text-slate-900 leading-tight">
+                  Single woman — 10% rebate
+                </span>
+                <span className="block text-xs text-slate-500 mt-0.5 leading-snug">
+                  Resident single (unmarried) woman with only employment income.
+                  Applies a 10% reduction on the computed tax. Not for couples.
+                </span>
+              </span>
+            </label>
+          </fieldset>
+        ) : (
+          <fieldset className="rounded-xl border border-slate-200 bg-white p-4">
+            <legend className="px-1 text-sm font-semibold text-slate-900">
+              Filing status
+            </legend>
+            <div className="grid grid-cols-2 gap-2 mt-1">
+              {(['single', 'couple'] as FilingStatus[]).map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => set('status', s)}
+                  className={`rounded-lg border px-4 py-3 text-sm font-medium transition-colors ${
+                    inputs.status === s
+                      ? 'border-[#09383e] bg-[#09383e]/5 text-[#09383e]'
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                  }`}
+                  aria-pressed={inputs.status === s}
+                >
+                  {s === 'single' ? 'Single / Unmarried' : 'Married / Couple'}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        )}
 
         {/* Income */}
         <InputSection
@@ -163,7 +277,7 @@ export function SalaryTaxCalculator() {
         {/* Headline */}
         <div className="rounded-xl border-2 border-[#09383e] bg-white p-5">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-            Your monthly TDS
+            Your monthly TDS · FY {isNewYear ? '2083/84' : '2082/83'}
           </p>
           <p
             className="font-display font-bold text-4xl mb-2 leading-none tabular-nums"
@@ -273,11 +387,13 @@ export function SalaryTaxCalculator() {
 
         {/* Slab breakdown */}
         <ResultCard
-          title={`Slab breakdown · ${inputs.status === 'single' ? 'Single' : 'Couple'}`}
+          title={`Slab breakdown${isNewYear ? '' : ` · ${inputs.status === 'single' ? 'Single' : 'Couple'}`}`}
           subtitle={
             result.ssfParticipant
               ? '1% SST slab → 0% (SSF participant)'
-              : 'standard slabs'
+              : isNewYear
+                ? 'unified slabs — all residents'
+                : 'standard slabs'
           }
           tone="tax"
           total={{
@@ -300,7 +416,7 @@ export function SalaryTaxCalculator() {
                     className="text-xs text-slate-400 leading-tight mt-0.5 tabular-nums"
                     style={{ fontVariantNumeric: 'tabular-nums' }}
                   >
-                    {formatNpr(b.amountInBracket)} × {(b.rate * 100).toFixed(b.rate === 0.075 ? 1 : 0)}%
+                    {formatNpr(b.amountInBracket)} × {(b.rate * 100).toFixed(0)}%
                   </p>
                 </div>
                 <span
@@ -312,13 +428,33 @@ export function SalaryTaxCalculator() {
               </div>
             )
           })}
+          {result.womenRebate > 0 && (
+            <div className="flex items-baseline justify-between gap-3 py-2 border-t border-slate-200 mt-1">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm text-emerald-700 leading-tight font-medium">
+                  Women&apos;s rebate (10%)
+                </p>
+                <p className="text-xs text-slate-400 leading-tight mt-0.5">
+                  on Rs {formatNpr(result.taxBeforeRebate)} tax
+                </p>
+              </div>
+              <span
+                className="text-sm font-medium text-emerald-700 whitespace-nowrap tabular-nums"
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
+                − {formatNpr(result.womenRebate)}
+              </span>
+            </div>
+          )}
         </ResultCard>
 
         {/* Disclaimer */}
         <p className="text-xs text-slate-500 leading-relaxed px-1">
-          Standard salaried-employee slabs from Finance Act 2082 (FY 2082/83). Edge
-          cases — disability, women&apos;s rebate, remote-area allowance, foreign
-          income — not modelled. Verify with your CA before filing.
+          {isNewYear
+            ? 'Unified resident-individual slabs as proposed in Budget 2083/84 (Finance Act 2083, pending gazette).'
+            : 'Standard salaried-employee slabs from Finance Act 2082 (FY 2082/83).'}{' '}
+          Edge cases — disability, remote-area allowance, foreign income — not
+          modelled. Verify with your CA before filing.
         </p>
       </aside>
     </div>
