@@ -14,7 +14,7 @@ import { socialMeta } from '@/lib/seo/metadata'
 const PAGE_URL = `${SITE_URL}/tools/salary-tax-calculator`
 const PAGE_TITLE = 'Nepal Salary Tax Calculator FY 2083/84 (2026/27)'
 const PAGE_DESCRIPTION =
-  'Free Nepal salary TDS calculator for FY 2083/84 (2026/27). New Budget 2083/84 slabs (1% / 10% / 20% / 27% / 29%) — unified single & couple, first Rs 10 lakh at 1%, with SSF, PF/EPF, CIT, life & health insurance and the women’s rebate. FY 2082/83 also included. Reviewed by Nepali Chartered Accountants.'
+  'Free Nepal salary TDS calculator for FY 2083/84 (2026/27). New Budget 2083/84 slabs (1% / 10% / 20% / 27% / 29%) — unified single & couple, first Rs 10 lakh at 1%, with SSF, PF/EPF, CIT, life, health & house insurance and the women’s rebate. FY 2082/83 also included. Reviewed by Nepali Chartered Accountants.'
 
 const PAGE_PUBLISHED = '2026-04-20'
 const PAGE_MODIFIED = '2026-07-03'
@@ -66,7 +66,7 @@ const FAQ = [
   {
     question: 'How is monthly TDS calculated from annual salary in Nepal (FY 2083/84)?',
     answer:
-      'Annual gross income is computed (basic + allowances × 12 + festival bonus). Then deductions are applied: SSF + PF + CIT are summed and capped at the lowest of (a) actual contribution, (b) 1/3 of gross income, or (c) Rs 5,00,000; life insurance is capped separately at Rs 40,000; health insurance at Rs 20,000. The remaining taxable income runs through the unified FY 2083/84 slab table. Annual tax is divided by 12 to give the monthly TDS that HR deducts.',
+      'Annual gross income is computed (basic + allowances × 12 + festival bonus). Then deductions are applied: SSF + PF + CIT are summed and capped at the lowest of (a) actual contribution, (b) 1/3 of gross income, or (c) Rs 5,00,000; life insurance is capped separately at Rs 40,000, health insurance at Rs 20,000 and (new in FY 2083/84) house insurance at Rs 10,000. The remaining taxable income runs through the unified FY 2083/84 slab table. Annual tax is divided by 12 to give the monthly TDS that HR deducts.',
   },
   {
     question: 'Is the single vs married couple distinction gone in FY 2083/84?',
@@ -76,7 +76,7 @@ const FAQ = [
   {
     question: 'What deductions can a salaried employee claim in Nepal?',
     answer:
-      'Retirement contributions (SSF + PF/EPF + CIT) are deductible together, capped at the lowest of: the actual amount contributed, one-third of gross annual income, or Rs 5,00,000. On top of that, life insurance premiums up to Rs 40,000 and health insurance premiums up to Rs 20,000 are deductible separately. These caps are unchanged from Finance Act 2082.',
+      'Retirement contributions (SSF + PF/EPF + CIT) are deductible together, capped at the lowest of: the actual amount contributed, one-third of gross annual income, or Rs 5,00,000. On top of that, life insurance premiums up to Rs 40,000 and health insurance premiums up to Rs 20,000 are deductible separately (unchanged from Finance Act 2082). Finance Act 2083 also doubles the deduction for insurance on your own private residential building from Rs 5,000 to Rs 10,000.',
   },
   {
     question: 'Is there still a tax rebate for women in FY 2083/84?',
@@ -96,7 +96,7 @@ const FAQ = [
   {
     question: 'Are the FY 2083/84 rates final?',
     answer:
-      'They are as proposed in Budget 2083/84, presented on 15 Jestha 2083 (29 May 2026), and apply from 1 Shrawan 2083 (about 17 July 2026). The annual Finance Act 2083 gives them legal force. Until the Finance Act is gazetted, treat the figures as provisional and verify with a practicing Chartered Accountant before filing.',
+      'Yes. The slabs were announced in Budget 2083/84 on 15 Jestha 2083 (29 May 2026) and enacted through Finance Act 2083, which amended Schedule 1 of the Income Tax Act 2058. They apply to salary paid from the first payroll on or after 1 Shrawan 2083 (17 July 2026). IRD may still issue circulars on procedure, so check with a practicing Chartered Accountant for unusual cases.',
   },
   {
     question: 'Is this calculator official?',
@@ -213,7 +213,7 @@ export default function SalaryTaxCalculatorPage() {
 
           {/* Calculator card */}
           <section
-            className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 lg:p-8 mb-10"
+            className="rounded-2xl sm:rounded-3xl border-0 sm:border border-slate-200 bg-white p-0 sm:p-6 lg:p-8 mb-10"
             aria-labelledby="calculator-heading"
           >
             <h2 id="calculator-heading" className="sr-only">
@@ -297,10 +297,10 @@ export default function SalaryTaxCalculatorPage() {
                 {/* Footer */}
                 <div className="flex items-center justify-between gap-3 mt-5 pt-4 border-t border-white/10">
                   <p className="text-[11px] text-slate-400 leading-snug">
-                    Source: Budget 2083/84 (Income Tax Act 2058, as amended).
+                    Source: Finance Act 2083 (Income Tax Act 2058, Sch. 1).
                   </p>
                   <p className="text-[11px] text-slate-400 text-right leading-snug">
-                    As proposed · verify with your CA
+                    In force from 1 Shrawan 2083
                   </p>
                 </div>
               </div>
@@ -406,8 +406,8 @@ export default function SalaryTaxCalculatorPage() {
               </table>
             </div>
             <p className="text-xs text-slate-500 mb-8">
-              Source: Budget 2083/84 (Income Tax Act 2058 as amended), effective 1
-              Shrawan 2083 (~17 July 2026), pending the gazetted Finance Act 2083. See
+              Source: Finance Act 2083 (Income Tax Act 2058, Schedule 1 as
+              amended), effective 1 Shrawan 2083 (17 July 2026). See
               our{' '}
               <Link
                 href="/blog/nepal-income-tax-slabs-fy-2083-84"

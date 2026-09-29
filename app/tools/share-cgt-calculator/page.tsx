@@ -13,7 +13,7 @@ import { socialMeta } from '@/lib/seo/metadata'
 const PAGE_URL = `${SITE_URL}/tools/share-cgt-calculator`
 const PAGE_TITLE = 'NEPSE Share Profit & CGT Calculator'
 const PAGE_DESCRIPTION =
-  'Calculate real bankable profit on NEPSE trades — broker commission, SEBON fee, DP charge, and CGT (7.5%/5%/10%) all handled.'
+  'Calculate real bankable profit on NEPSE trades — broker commission, SEBON fee, DP charge, and CGT (10%/7.5% under Finance Act 2083) all handled.'
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -30,17 +30,17 @@ const FAQ = [
   {
     question: 'What is the Capital Gains Tax rate on NEPSE shares?',
     answer:
-      'For resident individual investors: 7.5% if shares are held for 365 days or less (short-term), 5% if held for more than 365 days (long-term). For resident institutional investors (companies, mutual funds): 10% flat, regardless of holding period. CGT only applies on a positive capital gain — losses do not generate a tax obligation.',
+      'For shares sold on or after 17 July 2026 (Shrawan 1, 2083), Finance Act 2083 sets CGT for resident individuals at 10% if held for 365 days or less (short-term) and 7.5% if held for more than 365 days (long-term). Resident entities (companies, mutual funds) pay 10% flat, and non-residents/other persons pay 25%. Sales before that date used the old 7.5% / 5% individual rates. CGT only applies on a positive capital gain — losses do not generate a tax obligation.',
   },
   {
     question: 'How is the holding period counted for CGT?',
     answer:
-      'The holding period is the number of days between the buy date (T+settlement) and the sell date. If the gap is 365 days or less, the trade is short-term and CGT is 7.5% (individuals). If the gap is more than 365 days, the trade is long-term and CGT drops to 5%. For institutional investors the holding period does not change the rate (10% flat).',
+      'The holding period is the number of days between the buy date (T+settlement) and the sell date. If the gap is 365 days or less, the trade is short-term and CGT is 10% for individuals (FY 2083/84). If the gap is more than 365 days, the trade is long-term and CGT drops to 7.5%. For institutional investors the holding period does not change the rate (10% flat). For IPO, bonus or right shares, the holding period generally runs from the date the shares were credited to your demat account.',
   },
   {
     question: 'How is broker commission calculated on NEPSE?',
     answer:
-      'Per the SEBON Brokerage Commission Regulation (sebon.gov.np), commission rates are slabbed by transaction value: up to Rs 50,000 → 0.40%; Rs 50,001–5,00,000 → 0.37%; Rs 5,00,001–20,00,000 → 0.34%; Rs 20,00,001–1,00,00,000 → 0.30%; above Rs 1 crore → 0.27%. The minimum commission per transaction is Rs 10. Commission is charged on both the buy and the sell leg separately.',
+      'Per the SEBON Brokerage Commission Regulation (sebon.gov.np), commission rates are slabbed by transaction value: up to Rs 2,500 → flat Rs 10; Rs 2,501–50,000 → 0.36%; Rs 50,001–5,00,000 → 0.33%; Rs 5,00,001–20,00,000 → 0.31%; Rs 20,00,001–1,00,00,000 → 0.27%; above Rs 1 crore → 0.24%. The minimum commission per transaction is Rs 10. Commission is charged on both the buy and the sell leg separately.',
   },
   {
     question: 'What other charges apply besides broker commission?',
@@ -50,7 +50,7 @@ const FAQ = [
   {
     question: 'Is the CGT amount deducted automatically?',
     answer:
-      'Yes. The broker deducts CGT at source from your sell-side proceeds and remits it to the Inland Revenue Department (ird.gov.np) on your behalf, just like TDS on salary. The amount you see credited to your bank is already net of CGT. You should still report your capital gains in your annual income tax return — the CGT deducted is a credit you can offset against your overall tax liability.',
+      'Yes. The broker deducts CGT at source from your sell-side proceeds and remits it to the Inland Revenue Department (ird.gov.np) on your behalf, just like TDS on salary. The amount you see credited to your bank is already net of CGT. From FY 2083/84, Finance Act 2083 treats CGT withheld on listed securities as a final withholding tax — no further tax is due on that gain, and it is not credited against your other income.',
   },
   {
     question: 'What if I sold at a loss?',
@@ -60,7 +60,7 @@ const FAQ = [
   {
     question: 'Are bonus shares and right shares handled differently?',
     answer:
-      'Yes — and this calculator does NOT model them. For bonus shares, the IRD treats the cost base as the average of all holdings (existing + bonus) at the original purchase prices, weighted by quantity. For right shares, the cost base is the right-issue price you paid plus your share of original costs. Consult a CA for portfolio-level CGT calculations involving corporate actions.',
+      'Yes — and this calculator does NOT model them. For bonus shares, the IRD treats the cost base as the average of all holdings (existing + bonus) at the original purchase prices, weighted by quantity. For right shares, the cost base is the right-issue price you paid plus your share of original costs. Tip: enter your WACC (weighted average cost, shown in MeroShare) as the buy price for a close estimate. Consult a CA for portfolio-level CGT involving corporate actions.',
   },
 ]
 
@@ -119,22 +119,24 @@ export default function SharCgtCalculatorPage() {
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-3">
               Free Nepal capital gains tax calculator for NEPSE share trades. Computes
               real bankable profit after SEBON broker commission, SEBON regulatory
-              fee, CDSC DP charge, and Capital Gains Tax (7.5% short-term / 5%
-              long-term for individuals, 10% flat for institutional investors).
+              fee, CDSC DP charge, and Capital Gains Tax (10% short-term / 7.5%
+              long-term for individuals, 10% flat for institutional investors,
+              under Finance Act 2083 — the rate is picked automatically from
+              your sell date).
             </p>
             <p className="text-xs text-slate-500">
               <span className="inline-flex items-center gap-1.5">
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Verified against SEBON regulations &amp; Income Tax Act 2058 by Sabin Adhikari, CA · Last reviewed April 2026
+                Verified against SEBON regulations &amp; Income Tax Act 2058 by Sabin Adhikari, CA · Last reviewed April 2026 · Rates updated for Finance Act 2083 (September 2026)
               </span>
             </p>
           </header>
 
           {/* Calculator card */}
           <section
-            className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 lg:p-8 mb-10"
+            className="rounded-2xl sm:rounded-3xl border-0 sm:border border-slate-200 bg-white p-0 sm:p-6 lg:p-8 mb-10"
             aria-labelledby="cgt-calculator-heading"
           >
             <h2 id="cgt-calculator-heading" className="sr-only">
@@ -220,24 +222,28 @@ export default function SharCgtCalculatorPage() {
                 </thead>
                 <tbody className="text-slate-700">
                   <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">Up to Rs 50,000</td>
-                    <td className="px-4 py-3">0.40%</td>
+                    <td className="px-4 py-3">Up to Rs 2,500</td>
+                    <td className="px-4 py-3">Flat Rs 10</td>
                   </tr>
                   <tr className="border-t border-slate-200 bg-slate-50/40">
+                    <td className="px-4 py-3">Rs 2,501 – Rs 50,000</td>
+                    <td className="px-4 py-3">0.36%</td>
+                  </tr>
+                  <tr className="border-t border-slate-200">
                     <td className="px-4 py-3">Rs 50,001 – Rs 5,00,000</td>
-                    <td className="px-4 py-3">0.37%</td>
-                  </tr>
-                  <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">Rs 5,00,001 – Rs 20,00,000</td>
-                    <td className="px-4 py-3">0.34%</td>
+                    <td className="px-4 py-3">0.33%</td>
                   </tr>
                   <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3">Rs 20,00,001 – Rs 1,00,00,000</td>
-                    <td className="px-4 py-3">0.30%</td>
+                    <td className="px-4 py-3">Rs 5,00,001 – Rs 20,00,000</td>
+                    <td className="px-4 py-3">0.31%</td>
                   </tr>
                   <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">Above Rs 1 crore</td>
+                    <td className="px-4 py-3">Rs 20,00,001 – Rs 1,00,00,000</td>
                     <td className="px-4 py-3">0.27%</td>
+                  </tr>
+                  <tr className="border-t border-slate-200 bg-slate-50/40">
+                    <td className="px-4 py-3">Above Rs 1 crore</td>
+                    <td className="px-4 py-3">0.24%</td>
                   </tr>
                 </tbody>
               </table>
@@ -256,28 +262,43 @@ export default function SharCgtCalculatorPage() {
                   <tr>
                     <th className="text-left px-4 py-3 font-semibold">Investor</th>
                     <th className="text-left px-4 py-3 font-semibold">Holding period</th>
-                    <th className="text-left px-4 py-3 font-semibold">CGT rate</th>
+                    <th className="text-left px-4 py-3 font-semibold">FY 2083/84</th>
+                    <th className="text-left px-4 py-3 font-semibold">Before 17 Jul 2026</th>
                   </tr>
                 </thead>
                 <tbody className="text-slate-700">
                   <tr className="border-t border-slate-200">
                     <td className="px-4 py-3">Individual</td>
                     <td className="px-4 py-3">≤ 365 days (short-term)</td>
-                    <td className="px-4 py-3 font-semibold">7.5%</td>
+                    <td className="px-4 py-3 font-semibold">10%</td>
+                    <td className="px-4 py-3">7.5%</td>
                   </tr>
                   <tr className="border-t border-slate-200 bg-slate-50/40">
                     <td className="px-4 py-3">Individual</td>
                     <td className="px-4 py-3">&gt; 365 days (long-term)</td>
-                    <td className="px-4 py-3 font-semibold">5%</td>
+                    <td className="px-4 py-3 font-semibold">7.5%</td>
+                    <td className="px-4 py-3">5%</td>
                   </tr>
                   <tr className="border-t border-slate-200">
                     <td className="px-4 py-3">Institutional</td>
                     <td className="px-4 py-3">Any (no holding rule)</td>
                     <td className="px-4 py-3 font-semibold">10%</td>
+                    <td className="px-4 py-3">10%</td>
+                  </tr>
+                  <tr className="border-t border-slate-200 bg-slate-50/40">
+                    <td className="px-4 py-3">Non-resident / other</td>
+                    <td className="px-4 py-3">Any</td>
+                    <td className="px-4 py-3 font-semibold">25%</td>
+                    <td className="px-4 py-3">25%</td>
                   </tr>
                 </tbody>
               </table>
             </div>
+            <p className="text-xs text-slate-500 mb-5">
+              Source: Income Tax Act 2058 s.95Ka(2)(Ka) as amended by Finance Act
+              2083. The rate follows the sale date; CGT on listed shares is now a
+              final withholding tax.
+            </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
               The full calculation
@@ -326,33 +347,33 @@ export default function SharCgtCalculatorPage() {
               </p>
               <ul className="space-y-0.5 text-sm text-slate-600 list-none pl-0 mb-3 font-mono">
                 <li>Buy turnover: 100 × 800 = Rs 80,000</li>
-                <li>Buy commission @ 0.37%: Rs 296</li>
+                <li>Buy commission @ 0.33%: Rs 264</li>
                 <li>Buy SEBON @ 0.015%: Rs 12</li>
                 <li>Buy DP charge: Rs 25</li>
                 <li className="font-semibold text-slate-900">
-                  Total cash paid: Rs 80,333
+                  Total cash paid: Rs 80,301
                 </li>
                 <li>&nbsp;</li>
                 <li>Sell turnover: 100 × 1,000 = Rs 1,00,000</li>
-                <li>Sell commission @ 0.37%: Rs 370</li>
+                <li>Sell commission @ 0.33%: Rs 330</li>
                 <li>Sell SEBON @ 0.015%: Rs 15</li>
                 <li>Sell DP charge: Rs 25</li>
                 <li>&nbsp;</li>
                 <li>Gross profit: 1,00,000 − 80,000 = Rs 20,000</li>
-                <li>Total transaction costs: Rs 743</li>
-                <li>Capital gain: Rs 19,257</li>
-                <li>CGT @ 7.5% (short-term): Rs 1,444.28</li>
+                <li>Total transaction costs: Rs 671</li>
+                <li>Capital gain: Rs 19,329</li>
+                <li>CGT @ 10% (short-term, FY 2083/84): Rs 1,932.90</li>
                 <li>&nbsp;</li>
                 <li className="font-semibold text-slate-900">
-                  Net profit: Rs 17,812.72
+                  Net profit: Rs 17,396.10
                 </li>
                 <li className="font-semibold text-slate-900">
-                  Net to bank: Rs 98,145.72
+                  Net to bank: Rs 97,697.10
                 </li>
               </ul>
               <p className="text-xs text-slate-500">
                 The screen showed Rs 20,000 profit. Your bank actually received
-                Rs 17,812.72 of that as profit — the remaining Rs 2,187.28 went
+                Rs 17,396.10 of that as profit — the remaining Rs 2,603.90 went
                 to broker commission, SEBON, DP, and CGT.
               </p>
             </div>
@@ -374,9 +395,9 @@ export default function SharCgtCalculatorPage() {
                 the sell leg systematically overestimate net profit.
               </li>
               <li>
-                <strong>Confusing the 7.5% short-term rate with the 10%
-                institutional rate.</strong> Individuals pay 7.5% if held ≤365
-                days, 5% if held &gt;365 days. Companies and mutual funds pay 10%
+                <strong>Using last year&apos;s CGT rates.</strong> Since 17 July
+                2026 individuals pay 10% if held ≤365 days and 7.5% if held
+                &gt;365 days (up from 7.5% / 5%). Companies and mutual funds pay 10%
                 regardless of holding period. Trading through a private company
                 changes the math.
               </li>
@@ -409,7 +430,7 @@ export default function SharCgtCalculatorPage() {
               </li>
               <li>
                 <strong>Long-term investors</strong> — compare net profit at the
-                5% long-term rate vs the 7.5% short-term rate to time exits past
+                7.5% long-term rate vs the 10% short-term rate to time exits past
                 the 365-day mark
               </li>
               <li>

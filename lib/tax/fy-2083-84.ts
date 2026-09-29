@@ -1,12 +1,10 @@
 // =============================================================================
 // Nepal Salary Tax — Fiscal Year 2083/84 (Shrawan 2083 → Ashadh 2084 / 2026-27)
 //
-// Source: Budget 2083/84 (2026/27), presented 15 Jestha 2083 (29 May 2026) by
-// Finance Minister Dr. Swarnim Wagle, amending the Income Tax Act 2058. Legal
-// force comes from the Finance Act 2083.
-//
-// !!  AS PROPOSED — pending the gazetted Finance Act 2083. VERIFY slab          !!
-// !!  boundaries, rates and caps against the final IRD publication before use.  !!
+// Source: Finance Act 2083 (Budget 2083/84, presented 15 Jestha 2083 / 29 May
+// 2026), amending Schedule 1 of the Income Tax Act 2058. Applies to salary
+// paid from the first payroll on/after 1 Shrawan 2083 (17 Jul 2026).
+// Cross-checked against ICAN's "Highlights of Federal Budget 2083/84".
 //
 // What changed vs FY 2082/83 (the biggest personal-tax rewrite in years):
 // - The separate SINGLE vs COUPLE schedules were MERGED into one unified table
@@ -16,10 +14,12 @@
 // - The peak rate was cut from 39% to 29% (structured as 27% + 2% surcharge).
 //
 // Notes baked in:
-// - First slab is 1% Social Security Tax (SST). For employees who contribute to
-//   the Social Security Fund (SSF) or an approved retirement fund, the 1% SST is
-//   exempt → first slab is 0%.
-// - Deduction caps are unchanged from Finance Act 2082.
+// - First slab is 1% Social Security Tax (SST). It is not levied on pension
+//   income, or on people contributing to the Social Security Fund (SSF) or a
+//   contribution-based pension fund → first slab is 0%.
+// - Retirement, life and health caps are unchanged from Finance Act 2082.
+// - NEW: private residential building insurance premium deductible up to
+//   Rs 10,000 (Schedule 1, s.1(16Ka) — doubled from Rs 5,000).
 // - Resident single women with only employment income get a 10% rebate on the
 //   computed tax (opt-in in this calculator). Not available to couples.
 // =============================================================================
@@ -49,6 +49,8 @@ export const DEDUCTION_CAPS = {
   lifeInsurance: 40_000,
   /** Health insurance premium (separate from retirement cap). */
   healthInsurance: 20_000,
+  /** Insurance on your own private residential building. */
+  houseInsurance: 10_000,
 } as const
 
 /** Retirement deduction is bounded at 1/3 of assessable employment income. */
@@ -80,8 +82,12 @@ export type CalculatorInputs = {
   lifeInsurancePremium: number
   /** Annual health insurance premium. Capped at 20,000. */
   healthInsurancePremium: number
+  /** Annual private residential building insurance premium. Capped at 10,000. */
+  houseInsurancePremium?: number
   /** Annual SSF contribution. Any amount > 0 also makes the first slab 0%. */
   ssfContribution: number
+  /** Contributes to a contribution-based pension fund → first slab 0%. */
+  pensionFundContributor?: boolean
   /** Annual PF / EPF (Provident Fund) contribution. */
   pfContribution: number
   /** Resident single woman with only employment income → 10% tax rebate. */
@@ -107,9 +113,11 @@ export type CalculatorResult = {
   // --- Other deductions (capped individually) ---
   lifeInsuranceDeduction: number
   healthInsuranceDeduction: number
+  houseInsuranceDeduction: number
 
   totalDeductions: number
   taxableIncome: number
+  /** True when the 1% SST slab is exempt (SSF or pension-fund contributor). */
   ssfParticipant: boolean
   breakdown: SlabBreakdown[]
 
@@ -147,7 +155,7 @@ export function computeSalaryTax(input: CalculatorInputs): CalculatorResult {
   const combinedRetirementInput =
     ssfContributionInput + pfContributionInput + citContributionInput
 
-  const ssfParticipant = ssfContributionInput > 0
+  const ssfParticipant = ssfContributionInput > 0 || !!input.pensionFundContributor
 
   const lifeInsuranceDeduction = clampDeduction(
     input.lifeInsurancePremium,
@@ -158,10 +166,14 @@ export function computeSalaryTax(input: CalculatorInputs): CalculatorResult {
     DEDUCTION_CAPS.healthInsurance,
   )
 
-  const assessableForRetirement = Math.max(
-    0,
-    grossAnnualIncome - lifeInsuranceDeduction - healthInsuranceDeduction,
+  const houseInsuranceDeduction = clampDeduction(
+    input.houseInsurancePremium ?? 0,
+    DEDUCTION_CAPS.houseInsurance,
   )
+  const insuranceDeductions =
+    lifeInsuranceDeduction + healthInsuranceDeduction + houseInsuranceDeduction
+
+  const assessableForRetirement = Math.max(0, grossAnnualIncome - insuranceDeductions)
   const oneThirdGrossLimit = assessableForRetirement * RETIREMENT_INCOME_FRACTION
   const absoluteRetirementCap = DEDUCTION_CAPS.combinedRetirement
 
@@ -178,8 +190,7 @@ export function computeSalaryTax(input: CalculatorInputs): CalculatorResult {
     retirementBindingRule = 'absolute-cap'
   }
 
-  const totalDeductions =
-    allowedRetirementDeduction + lifeInsuranceDeduction + healthInsuranceDeduction
+  const totalDeductions = allowedRetirementDeduction + insuranceDeductions
   const taxableIncome = Math.max(0, grossAnnualIncome - totalDeductions)
 
   const breakdown: SlabBreakdown[] = []
@@ -231,6 +242,7 @@ export function computeSalaryTax(input: CalculatorInputs): CalculatorResult {
     retirementBindingRule,
     lifeInsuranceDeduction,
     healthInsuranceDeduction,
+    houseInsuranceDeduction,
     totalDeductions,
     taxableIncome,
     ssfParticipant,

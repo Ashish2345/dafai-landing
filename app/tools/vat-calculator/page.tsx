@@ -13,7 +13,7 @@ import { socialMeta } from '@/lib/seo/metadata'
 const PAGE_URL = `${SITE_URL}/tools/vat-calculator`
 const PAGE_TITLE = 'Nepal VAT Calculator (13%)'
 const PAGE_DESCRIPTION =
-  'Add or extract 13% Nepal VAT on any invoice. Multi-line invoice mode with running totals. Per VAT Act 2052 (last revised by Finance Act 2081).'
+  'Add or extract 13% Nepal VAT on any invoice. Multi-line invoice mode with running totals. Per VAT Act 2052 as amended by Finance Act 2083 — 13%, the new 5% rate and the 10% digital-payment rebate.'
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -30,7 +30,7 @@ const FAQ = [
   {
     question: 'What is the VAT rate in Nepal?',
     answer:
-      'The standard VAT rate in Nepal is 13%, set by the VAT Act 2052 and revised periodically through the annual Finance Act. The rate has been 13% continuously since FY 2062/63. Some goods and services are zero-rated (notably exports) and some are VAT-exempt (basic foodstuffs, education, health, financial services) — those are taxed at 0% or fall outside the VAT system entirely.',
+      'The standard VAT rate in Nepal is 13%, set by the VAT Act 2052 and revised periodically through the annual Finance Act. The rate has been 13% continuously since FY 2062/63. Finance Act 2083 added a 5% rate for ride-sharing services on registered platforms and for electricity supplied to end users, and turned the 10% VAT refund for digital payments on IRD-listed items into an instant rebate on the invoice. Some goods and services are zero-rated (notably exports) and some are VAT-exempt (basic foodstuffs, education, health, financial services) — those are taxed at 0% or fall outside the VAT system entirely.',
   },
   {
     question: 'How do I add 13% VAT to a price in Nepal?',
@@ -115,7 +115,7 @@ export default function VatCalculatorPage() {
               Free Nepal VAT calculator for invoices, line-item billing, and
               VAT-inclusive / VAT-exclusive amount conversions. Add 13% VAT to a
               base price, or extract the VAT portion from a gross amount — per
-              the VAT Act 2052 (last revised by Finance Act 2081).
+              the VAT Act 2052 (as amended by Finance Act 2083).
             </p>
             <p className="text-xs text-slate-500">
               <span className="inline-flex items-center gap-1.5">
@@ -129,7 +129,7 @@ export default function VatCalculatorPage() {
 
           {/* Calculator card */}
           <section
-            className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 lg:p-8 mb-10"
+            className="rounded-2xl sm:rounded-3xl border-0 sm:border border-slate-200 bg-white p-0 sm:p-6 lg:p-8 mb-10"
             aria-labelledby="vat-calculator-heading"
           >
             <h2 id="vat-calculator-heading" className="sr-only">

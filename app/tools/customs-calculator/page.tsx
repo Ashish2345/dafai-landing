@@ -33,17 +33,17 @@ const FAQ = [
   {
     question: 'How much gold can I bring to Nepal without paying customs duty?',
     answer:
-      "A passenger arriving in Nepal can bring up to 50 grams (~4.3 tola) of gold jewelry duty-free as part of personal baggage. Between 51 g and 250 g (~4.3–21.4 tola), customs duty is charged at Rs 10,500 per 10 g over the 50 g limit. Above 250 g (~21.4 tola), gold jewelry is not allowed and faces confiscation under the Customs Act 2064.",
+      "Under the FY 2083/84 passenger-baggage rules, a woman can bring 50 grams (~4.3 tola) of gold jewelry duty-free and a man 25 grams (~2.1 tola). Either may bring up to 100 grams more by paying duty: 20% of value on the first 50 g over the free limit and 23% on the next 50 g. Gold beyond that (150 g for women, 125 g for men) is confiscated under the Customs Act 2082.",
   },
   {
     question: 'How does tola convert to grams for Nepal customs?',
     answer:
-      "1 tola (तोला) equals exactly 11.6638 grams — the same as the Indian tola. Nepali jewelers price and weigh gold in tola, while Nepal Customs writes its limits in grams, so the conversion matters at the customs counter. The 50 g duty-free limit is approximately 4.3 tola; the 250 g hard ceiling on jewelry is approximately 21.4 tola; the 100 g raw-gold worker limit is approximately 8.6 tola. The calculator above accepts input in either unit.",
+      "1 tola (तोला) equals exactly 11.6638 grams — the same as the Indian tola. Nepali jewelers price and weigh gold in tola, while Nepal Customs writes its limits in grams, so the conversion matters at the customs counter. The 50 g duty-free limit for women is about 4.3 tola, the 25 g limit for men about 2.1 tola, and the 100 g raw-gold limit about 8.6 tola. The calculator above accepts input in either unit.",
   },
   {
     question: 'How much customs duty for 5 tola of gold in Nepal?',
     answer:
-      "5 tola is 58.32 g, which falls in the taxable band (50–250 g). The duty is Rs 10,500 per 10 g over the 50 g free limit, so duty = ((58.32 − 50) / 10) × Rs 10,500 ≈ Rs 8,736 at customs. For 10 tola (~116.64 g) the duty is approximately Rs 69,970; for 20 tola (~233.28 g) it is approximately Rs 1,92,438. Use the calculator above to compute the exact figure for your weight.",
+      "5 tola is 58.32 g. For a woman, 8.32 g is over the 50 g free limit and is charged 20% of its value; at a customs value of Rs 2,50,000 per tola that is about Rs 35,700. For a man, 33.32 g is over the 25 g limit, so the duty is about Rs 1,42,800. Because duty is now a percentage of value, enter the current gold price in the calculator above for the exact figure.",
   },
   {
     question: 'How much customs duty for an iPhone in Nepal?',
@@ -58,12 +58,12 @@ const FAQ = [
   {
     question: 'Can a tourist bring raw gold (gold bars or biscuits) into Nepal?',
     answer:
-      "No. Raw gold — bars, biscuits, or unworked gold — is restricted to Nepali workers returning with a valid Shram Swikriti (foreign-employment permit). Tourists, students, and other passengers cannot bring raw gold and it will be confiscated at the border. With a valid Shram Swikriti, workers can bring up to 100 g of raw gold subject to graduated customs duty: Rs 9,500 per 10 g for the first 50 g, then Rs 10,500 per 10 g for the next 50 g.",
+      "A passenger may bring up to 100 g of raw gold (bars, biscuits, coins), but all of it is dutiable at 20% of value — there is no free portion. Anything above 100 g is confiscated. Foreign tourists should declare gold they intend to take back out; customs can hold excess ornaments in transit and return them on departure.",
   },
   {
     question: 'What is the customs duty on televisions brought to Nepal?',
     answer:
-      'One TV up to 32 inches is allowed duty-free per passenger as part of personal baggage. TVs above 32 inches are taxable — customs duty is computed on the CIF (Cost + Insurance + Freight) value from the purchase invoice, plus applicable excise and VAT. Always carry the original invoice; under-declared values are reassessed against the customs reference price.',
+      'Since Finance Act 2083, a traveller who has lived abroad for at least 12 consecutive months may bring one TV up to 65 inches duty-free (up from 32 inches). Larger TVs, or TVs brought by travellers abroad for less than a year, are taxable — customs duty is computed on the CIF (Cost + Insurance + Freight) value from the purchase invoice, plus applicable excise and VAT. Always carry the original invoice; under-declared values are reassessed against the customs reference price.',
   },
   {
     question: 'Do I have to pay customs on a mobile phone in my pocket?',
@@ -73,17 +73,17 @@ const FAQ = [
   {
     question: 'Is this customs calculator official?',
     answer:
-      'No. This is a reference calculator built around Nepal Customs personal-baggage practice for FY 2081/82. Rates, reference prices, and item-specific concessions can be updated by the Department of Customs via circular. Always verify at the customs desk on arrival, and consult a Chartered Accountant or licensed customs agent for commercial imports.',
+      'No. This is a reference calculator built around the FY 2083/84 personal-baggage schedule (Finance Act 2083). Rates, reference prices, and item-specific concessions can be updated by the Department of Customs via circular. Always verify at the customs desk on arrival, and consult a Chartered Accountant or licensed customs agent for commercial imports.',
   },
   {
     question: 'What is Shram Swikriti?',
     answer:
-      'Shram Swikriti (श्रम स्वीकृति) is the foreign-employment permit issued by the Department of Foreign Employment to Nepali workers going abroad. It is required to claim the raw-gold concession on return, and to qualify for the additional duty-free mobile phone allowance for returning workers. Tourists and students do not hold Shram Swikriti and therefore cannot claim these allowances.',
+      'Shram Swikriti (श्रम स्वीकृति) is the foreign-employment permit issued by the Department of Foreign Employment to Nepali workers going abroad. It is required to qualify for the additional duty-free mobile phone allowance for returning workers. Tourists and students do not hold Shram Swikriti and therefore cannot claim these allowances.',
   },
   {
     question: 'What other items have free personal-baggage allowances?',
     answer:
-      'Beyond the four items in this calculator, Nepal Customs allows personal-baggage concessions on items like a laptop or tablet (1 unit, used), one camera per passenger, limited quantities of liquor and cigarettes, and personal medications with a prescription. Quantities and categories are revised periodically — confirm the current list at the customs desk or via the Department of Customs website before travel.',
+      'Beyond the items in this calculator (gold, raw gold, silver, TV and phone), Nepal Customs allows personal-baggage concessions on items like a laptop or tablet (1 unit, used), one camera per passenger, limited quantities of liquor and cigarettes, and personal medications with a prescription. Quantities and categories are revised periodically — confirm the current list at the customs desk or via the Department of Customs website before travel.',
   },
 ]
 
@@ -145,8 +145,9 @@ export default function CustomsCalculatorPage() {
               phone price (iPhone, Samsung, Redmi), or TV size, and find out
               whether your item is duty-free, taxable, or not allowed under
               the personal-baggage rules. Works for Tribhuvan International
-              Airport (TIA), Bhairahawa, Pokhara, and all land borders. Based
-              on Nepal Customs practice for FY 2081/82.
+              Airport (TIA), Bhairahawa, Pokhara, and all land borders. Updated
+              for the FY 2083/84 rules — 20% gold duty, gender-based gold
+              allowance, 500 g silver and 65&quot; TVs.
             </p>
             <p className="text-xs text-slate-500">
               <span className="inline-flex items-center gap-1.5">
@@ -164,14 +165,14 @@ export default function CustomsCalculatorPage() {
                   />
                 </svg>
                 Verified against Nepal Customs personal-baggage practice by
-                Sabin Adhikari, CA · Last reviewed April 2026
+                Sabin Adhikari, CA · Last reviewed April 2026 · Rules updated for Finance Act 2083 (September 2026)
               </span>
             </p>
           </header>
 
           {/* Calculator card */}
           <section
-            className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 lg:p-8 mb-10"
+            className="rounded-2xl sm:rounded-3xl border-0 sm:border border-slate-200 bg-white p-0 sm:p-6 lg:p-8 mb-10"
             aria-labelledby="customs-calculator-heading"
           >
             <h2 id="customs-calculator-heading" className="sr-only">
@@ -232,110 +233,80 @@ export default function CustomsCalculatorPage() {
                 </a>
                 . Each item type has a duty-free allowance, a taxable range, and
                 in some cases a hard ceiling above which the item is confiscated
-                under the Customs Act 2064.
+                under the Customs Act 2082.
               </p>
               <p className="text-slate-700 text-base leading-relaxed mb-5">
-                This calculator covers the four items most travellers ask about
-                — gold jewelry, raw gold, televisions, and mobile phones. For
+                This calculator covers the items most travellers ask about —
+                gold jewelry, raw gold, silver jewelry, televisions, and mobile
+                phones. For
                 everything else (laptops, cameras, liquor, cigarettes, gifts),
                 ask the customs officer or carry the receipt.
               </p>
 
               <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
-                Gold jewelry — the 50 / 250 gram (≈ 4.3 / 21.4 tola) rule
+                Gold jewelry — 50 g for women, 25 g for men
               </h2>
               <p className="text-slate-700 text-base leading-relaxed mb-3">
                 Nepali jewelers price gold in <strong>tola</strong> (तोला);
-                customs writes its limits in grams. <strong>1 tola =
-                11.6638 grams</strong>, so the duty-free 50 g threshold equals
-                about <strong>4.3 tola</strong> and the hard 250 g ceiling is
-                roughly <strong>21.4 tola</strong>. The calculator above lets
-                you enter weight in either unit and converts live.
+                customs writes its limits in grams (<strong>1 tola = 11.6638
+                g</strong>). Under the FY 2083/84 baggage rules a woman may bring{' '}
+                <strong>50 g (~4.3 tola)</strong> of gold jewelry duty-free and a
+                man <strong>25 g (~2.1 tola)</strong>. Either may bring up to{' '}
+                <strong>100 g more</strong> by paying duty. Finance Act 2083
+                doubled the gold tariff from 10% to <strong>20%</strong>: the
+                first 50 g over the free limit is charged 20% of its value and
+                the next 50 g 23% (20% + 3% additional duty). Anything beyond
+                that is confiscated.
               </p>
               <div className="overflow-x-auto rounded-lg border border-slate-200 mb-5">
                 <table className="w-full min-w-[560px] text-sm">
                   <thead className="bg-slate-50 text-slate-900">
                     <tr>
-                      <th className="text-left px-4 py-3 font-semibold">Weight (g)</th>
-                      <th className="text-left px-4 py-3 font-semibold">Weight (tola)</th>
-                      <th className="text-left px-4 py-3 font-semibold">Status</th>
-                      <th className="text-left px-4 py-3 font-semibold">Duty</th>
+                      <th className="text-left px-4 py-3 font-semibold">Passenger</th>
+                      <th className="text-left px-4 py-3 font-semibold">Duty-free</th>
+                      <th className="text-left px-4 py-3 font-semibold">With duty</th>
+                      <th className="text-left px-4 py-3 font-semibold">Confiscated above</th>
                     </tr>
                   </thead>
                   <tbody className="text-slate-700">
                     <tr className="border-t border-slate-200">
-                      <td className="px-4 py-3">≤ 50 g</td>
-                      <td className="px-4 py-3">≤ ~4.3 tola</td>
-                      <td className="px-4 py-3 font-semibold text-emerald-700">Free</td>
-                      <td className="px-4 py-3">Rs 0</td>
+                      <td className="px-4 py-3">Woman</td>
+                      <td className="px-4 py-3">50 g (~4.3 tola)</td>
+                      <td className="px-4 py-3">Next 50 g @ 20% + next 50 g @ 23%</td>
+                      <td className="px-4 py-3">150 g (~12.9 tola)</td>
                     </tr>
                     <tr className="border-t border-slate-200 bg-slate-50/40">
-                      <td className="px-4 py-3">51 – 250 g</td>
-                      <td className="px-4 py-3">~4.3 – 21.4 tola</td>
-                      <td className="px-4 py-3 font-semibold">Taxable</td>
-                      <td className="px-4 py-3">Rs 10,500 per 10 g over 50 g</td>
-                    </tr>
-                    <tr className="border-t border-slate-200">
-                      <td className="px-4 py-3">&gt; 250 g</td>
-                      <td className="px-4 py-3">&gt; ~21.4 tola</td>
-                      <td className="px-4 py-3 font-semibold text-red-600">Not allowed</td>
-                      <td className="px-4 py-3">Confiscation risk</td>
+                      <td className="px-4 py-3">Man</td>
+                      <td className="px-4 py-3">25 g (~2.1 tola)</td>
+                      <td className="px-4 py-3">Next 50 g @ 20% + next 50 g @ 23%</td>
+                      <td className="px-4 py-3">125 g (~10.7 tola)</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-
               <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
-                Raw gold — only with Shram Swikriti
+                Raw gold, silver and TVs
               </h2>
-              <p className="text-slate-700 text-base leading-relaxed mb-3">
-                Raw gold (bars, biscuits, unworked metal) is restricted to{' '}
-                <strong>Nepali workers returning with a valid Shram Swikriti</strong>{' '}
-                — the foreign-employment permit issued by the Department of
-                Foreign Employment. Tourists and students cannot bring raw gold;
-                it will be seized at the customs counter.
-              </p>
-              <div className="overflow-x-auto rounded-lg border border-slate-200 mb-5">
-                <table className="w-full min-w-[560px] text-sm">
-                  <thead className="bg-slate-50 text-slate-900">
-                    <tr>
-                      <th className="text-left px-4 py-3 font-semibold">Weight (g)</th>
-                      <th className="text-left px-4 py-3 font-semibold">Weight (tola)</th>
-                      <th className="text-left px-4 py-3 font-semibold">Duty (with Shram Swikriti)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-slate-700">
-                    <tr className="border-t border-slate-200">
-                      <td className="px-4 py-3">First 50 g</td>
-                      <td className="px-4 py-3">~4.3 tola</td>
-                      <td className="px-4 py-3">Rs 9,500 per 10 g</td>
-                    </tr>
-                    <tr className="border-t border-slate-200 bg-slate-50/40">
-                      <td className="px-4 py-3">Next 50 g (51 – 100 g)</td>
-                      <td className="px-4 py-3">~4.3 – 8.6 tola</td>
-                      <td className="px-4 py-3">Rs 10,500 per 10 g</td>
-                    </tr>
-                    <tr className="border-t border-slate-200">
-                      <td className="px-4 py-3">&gt; 100 g</td>
-                      <td className="px-4 py-3">&gt; ~8.6 tola</td>
-                      <td className="px-4 py-3 font-semibold text-red-600">
-                        Not allowed — confiscation
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
-                Television — the 32-inch line
-              </h2>
-              <p className="text-slate-700 text-base leading-relaxed mb-5">
-                One TV up to 32 inches is allowed duty-free per passenger as
-                personal baggage. Anything above 32 inches is taxable on the
-                invoice value (CIF) plus excise and VAT. Carry the original
-                receipt and original packaging when possible — under-declared
-                values are reassessed at the customs reference price.
-              </p>
+              <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
+                <li>
+                  <strong>Raw gold</strong> (bars, biscuits, coins) — up to{' '}
+                  <strong>100 g (~8.6 tola)</strong> per passenger, all of it
+                  dutiable at 20% of value; there is no free portion. Bullion
+                  bent into bangles or rings is still treated as raw gold.
+                </li>
+                <li>
+                  <strong>Silver jewelry</strong> — up to{' '}
+                  <strong>500 g</strong> duty-free, and a further 500 g on
+                  payment of duty (Finance Act 2083).
+                </li>
+                <li>
+                  <strong>Television</strong> — one TV up to{' '}
+                  <strong>65 inches</strong> is duty-free for a traveller who
+                  has lived abroad for 12 consecutive months or more (raised
+                  from 32&quot;). Larger sets, or travellers abroad for less
+                  than a year, pay duty on the invoice (CIF) value.
+                </li>
+              </ul>
 
               <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
                 Mobile phone — used vs new, slab-based duty
@@ -414,76 +385,78 @@ export default function CustomsCalculatorPage() {
                 Worked examples — how much customs duty for X tola of gold?
               </h2>
               <p className="text-slate-700 text-base leading-relaxed mb-3">
-                The most-searched query for Nepal gold customs is some variant
-                of <em>&quot;how much customs for X tola gold?&quot;</em>. Here
-                are the most common amounts, converted at 1 tola = 11.6638 g
-                and run through the jewelry slab:
+                Duty is now a percentage of the gold&apos;s value, so the rupee
+                figure moves with the gold price. The table assumes a customs
+                value of <strong>Rs 2,50,000 per tola</strong> — enter today&apos;s
+                price in the calculator for your exact figure.
               </p>
               <div className="overflow-x-auto rounded-lg border border-slate-200 mb-5">
                 <table className="w-full min-w-[560px] text-sm">
                   <thead className="bg-slate-50 text-slate-900">
                     <tr>
-                      <th className="text-left px-4 py-3 font-semibold">Gold weight</th>
+                      <th className="text-left px-4 py-3 font-semibold">Gold jewelry</th>
                       <th className="text-left px-4 py-3 font-semibold">In grams</th>
-                      <th className="text-left px-4 py-3 font-semibold">Status</th>
-                      <th className="text-left px-4 py-3 font-semibold">Customs duty</th>
+                      <th className="text-left px-4 py-3 font-semibold">Duty — woman</th>
+                      <th className="text-left px-4 py-3 font-semibold">Duty — man</th>
                     </tr>
                   </thead>
                   <tbody className="text-slate-700">
                     <tr className="border-t border-slate-200">
                       <td className="px-4 py-3 font-semibold">1 tola</td>
                       <td className="px-4 py-3">11.66 g</td>
-                      <td className="px-4 py-3 text-emerald-700">Free</td>
-                      <td className="px-4 py-3">Rs 0</td>
+                      <td className="px-4 py-3">Free</td>
+                      <td className="px-4 py-3">Free</td>
                     </tr>
                     <tr className="border-t border-slate-200 bg-slate-50/40">
+                      <td className="px-4 py-3 font-semibold">2 tola</td>
+                      <td className="px-4 py-3">23.33 g</td>
+                      <td className="px-4 py-3">Free</td>
+                      <td className="px-4 py-3">Free</td>
+                    </tr>
+                    <tr className="border-t border-slate-200">
                       <td className="px-4 py-3 font-semibold">3 tola</td>
-                      <td className="px-4 py-3">35.00 g</td>
-                      <td className="px-4 py-3 text-emerald-700">Free</td>
-                      <td className="px-4 py-3">Rs 0 — under the 50 g limit</td>
+                      <td className="px-4 py-3">34.99 g</td>
+                      <td className="px-4 py-3">Free</td>
+                      <td className="px-4 py-3">~Rs 42,831</td>
+                    </tr>
+                    <tr className="border-t border-slate-200 bg-slate-50/40">
+                      <td className="px-4 py-3 font-semibold">4 tola</td>
+                      <td className="px-4 py-3">46.66 g</td>
+                      <td className="px-4 py-3">Free</td>
+                      <td className="px-4 py-3">~Rs 92,831</td>
                     </tr>
                     <tr className="border-t border-slate-200">
                       <td className="px-4 py-3 font-semibold">5 tola</td>
                       <td className="px-4 py-3">58.32 g</td>
-                      <td className="px-4 py-3">Taxable</td>
-                      <td className="px-4 py-3 font-mono">~Rs 8,736</td>
+                      <td className="px-4 py-3">~Rs 35,662</td>
+                      <td className="px-4 py-3">~Rs 1,42,831</td>
                     </tr>
                     <tr className="border-t border-slate-200 bg-slate-50/40">
                       <td className="px-4 py-3 font-semibold">8 tola</td>
                       <td className="px-4 py-3">93.31 g</td>
-                      <td className="px-4 py-3">Taxable</td>
-                      <td className="px-4 py-3 font-mono">~Rs 45,476</td>
+                      <td className="px-4 py-3">~Rs 1,85,662</td>
+                      <td className="px-4 py-3">~Rs 3,04,605</td>
                     </tr>
                     <tr className="border-t border-slate-200">
                       <td className="px-4 py-3 font-semibold">10 tola</td>
                       <td className="px-4 py-3">116.64 g</td>
-                      <td className="px-4 py-3">Taxable</td>
-                      <td className="px-4 py-3 font-mono">~Rs 69,970</td>
+                      <td className="px-4 py-3">~Rs 2,96,360</td>
+                      <td className="px-4 py-3">~Rs 4,19,605</td>
                     </tr>
                     <tr className="border-t border-slate-200 bg-slate-50/40">
-                      <td className="px-4 py-3 font-semibold">15 tola</td>
-                      <td className="px-4 py-3">174.96 g</td>
-                      <td className="px-4 py-3">Taxable</td>
-                      <td className="px-4 py-3 font-mono">~Rs 1,31,205</td>
-                    </tr>
-                    <tr className="border-t border-slate-200">
-                      <td className="px-4 py-3 font-semibold">20 tola</td>
-                      <td className="px-4 py-3">233.28 g</td>
-                      <td className="px-4 py-3">Taxable</td>
-                      <td className="px-4 py-3 font-mono">~Rs 1,92,438</td>
-                    </tr>
-                    <tr className="border-t border-slate-200 bg-slate-50/40">
-                      <td className="px-4 py-3 font-semibold">25 tola</td>
-                      <td className="px-4 py-3">291.60 g</td>
-                      <td className="px-4 py-3 text-red-600">Not allowed</td>
-                      <td className="px-4 py-3">Confiscation — over 250 g limit</td>
+                      <td className="px-4 py-3 font-semibold">12 tola</td>
+                      <td className="px-4 py-3">139.97 g</td>
+                      <td className="px-4 py-3">~Rs 4,11,360</td>
+                      <td className="px-4 py-3">Not allowed</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <p className="text-xs text-slate-500 mb-5">
-                Duty rounded to nearest rupee. Use the calculator above for
-                exact figures on any specific weight.
+                At 20% on the first 50 g over the free limit and 23% on the next
+                50 g. Customs values gold at the international price converted
+                at the NRB rate, which is usually a little below the Kathmandu
+                retail price.
               </p>
 
               <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
@@ -573,15 +546,15 @@ export default function CustomsCalculatorPage() {
               </h2>
               <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
                 <li>
-                  <strong>Assuming all gold under 250 g is free.</strong> The
-                  free limit is 50 g. Between 50 g and 250 g you owe duty even
-                  though it&apos;s allowed in.
+                  <strong>Assuming the free limit is the same for everyone.</strong>{' '}
+                  Women get 50 g duty-free, men only 25 g. Above that you owe
+                  20–23% of the gold&apos;s value, and beyond another 100 g it
+                  is seized.
                 </li>
                 <li>
-                  <strong>Thinking tourists can bring raw gold.</strong> Raw
-                  gold is reserved for Shram-Swikriti holders. Tourists carrying
-                  bars or biscuits will have them confiscated, regardless of
-                  quantity.
+                  <strong>Thinking raw gold has a free allowance.</strong> Bars,
+                  biscuits and coins are dutiable from the first gram and capped
+                  at 100 g. Bullion reshaped into bangles is still raw gold.
                 </li>
                 <li>
                   <strong>Forgetting to register the new phone IMEI.</strong>{' '}
@@ -590,7 +563,7 @@ export default function CustomsCalculatorPage() {
                   networks after the temporary visitor window.
                 </li>
                 <li>
-                  <strong>Carrying gold jewelry as a gift.</strong> The 50 g
+                  <strong>Carrying gold jewelry as a gift.</strong> The free
                   limit is per passenger, not per recipient. Distributing
                   jewelry across travellers does not unlock additional
                   allowance — each passenger owns what they declare.

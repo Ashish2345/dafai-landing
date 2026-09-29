@@ -9,11 +9,12 @@ import {
   SITE_URL,
 } from '@/lib/seo/schema'
 import { socialMeta } from '@/lib/seo/metadata'
+import { ALL_PROVINCES, PROVINCE_LABELS, PROVINCES } from '@/lib/tax/bluebook-fine'
 
 const PAGE_URL = `${SITE_URL}/tools/bluebook-fine-calculator`
 const PAGE_TITLE = 'Bluebook Fine & Vehicle Tax Renewal Calculator'
 const PAGE_DESCRIPTION =
-  'Calculate exact bluebook renewal cost in Nepal — provincial vehicle tax + late renewal penalty (5%, 10%, 20%, 32% bands) automatically.'
+  'Calculate exact bluebook renewal cost in Nepal — provincial vehicle tax + late fine for all 7 provinces, EVs and multi-year arrears (FY 2083/84).'
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -30,22 +31,22 @@ const FAQ = [
   {
     question: 'What is the bluebook renewal penalty in Nepal?',
     answer:
-      'Per the Department of Transport Management practice: 0% in the first 30 days from your registration expiry (grace period), 5% from days 31–45, 10% from days 46–60, 20% from day 61 until the end of the current fiscal year, and 32% if you renew after the fiscal year ends (Ashadh 31, ~July 15). The penalty is computed as a percentage of your annual base vehicle tax.',
+      'In Bagmati there is no fine for 90 days after your bluebook expires. After that grace window the fine is 5% of the annual tax for the first 30 days, 10% up to 45 days, and 20% until the fiscal year ends (Ashadh end, ~15 July). Once the fiscal year has passed, each year in arrears carries a 32% fine, and a late renewal also doubles the renewal fee. Other provinces differ — Gandaki and Lumbini escalate to 100–120% for old arrears, while Madhesh, Karnali and Sudurpaschim charge 30% per year in arrears.',
   },
   {
     question: 'When does the Nepali fiscal year end for vehicle tax purposes?',
     answer:
-      'The Nepali fiscal year ends on Ashadh 31, which is approximately July 15 in the Gregorian calendar each year. If your registration expired during the current fiscal year and you renew before that date, you pay 0–20% penalty depending on how late you are. Once Ashadh 31 passes, the penalty jumps to 32%.',
+      'The Nepali fiscal year ends on Ashadh 31, which is approximately July 15 in the Gregorian calendar each year. If you renew before the fiscal year ends you pay 0–20% depending on how late you are. Once it passes, that year moves into arrears and the fine jumps (32% in Bagmati).',
   },
   {
     question: 'How do I find my exact base vehicle tax amount?',
     answer:
-      'Vehicle tax rates differ by province and are revised every year via the provincial Finance Act. Bagmati Province publishes its rates around the start of each fiscal year. You can also check the leaflet posted at any Yatayat Vyavasthapan Karyalaya (transport office) — these are usually the most up-to-date sources. If your province isn’t in the calculator yet, use the manual override field with the rate from your transport-office reference.',
+      'Vehicle tax rates differ by province and are revised every year via the provincial Finance Act. This calculator ships the FY 2083/84 schedule for all seven provinces (Sudurpaschim still uses 2082/83 rates). You can also check the leaflet posted at any Yatayat Vyavasthapan Karyalaya (transport office). If your office quotes a different figure, use the manual base-tax field and the fine math still applies.',
   },
   {
     question: 'Does this calculator include pollution tax and insurance?',
     answer:
-      'No. This calculator handles only the annual vehicle tax (सवारी कर) and the late-renewal penalty. Other components of a renewal bill — pollution tax (4-wheelers), third-party insurance (mandatory), road tax, and route-permit fees for commercial vehicles — are billed separately and have their own rate structures.',
+      'Not fully. This calculator covers the annual vehicle tax (सवारी कर), the late fine and the bluebook renewal fee. Other components of a renewal bill — pollution tax (4-wheelers), third-party insurance (mandatory), road tax, and route-permit fees for commercial vehicles — are billed separately and have their own rate structures.',
   },
   {
     question: 'What happens if I drive without renewing?',
@@ -55,7 +56,7 @@ const FAQ = [
   {
     question: 'Are EVs and commercial vehicles handled the same way?',
     answer:
-      'No. EVs (electric vehicles) have a different tax structure and often qualify for reduced or zero vehicle tax under provincial Finance Acts. Commercial vehicles, taxis, public transport, and route-permit holders pay different annual rates. This calculator targets private two- and four-wheelers; for commercial use, consult your transport office or a CA.',
+      'EVs are taxed by motor power instead of engine cc. In Bagmati an electric scooter pays Rs 1,000–3,000 a year by wattage, and an electric car pays Rs 5,000–30,000 by kW — switch the calculator to “Electric (EV)”. For other provinces, enter the EV rate from your transport office manually. Commercial vehicles, taxis and route-permit holders pay different rates and are not covered.',
   },
 ]
 
@@ -113,24 +114,23 @@ export default function BluebookCalculatorPage() {
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed mb-3">
               Free Nepal bluebook renewal calculator for bikes and cars. Computes
-              annual vehicle tax (सवारी कर) plus the late-renewal penalty (5% →
-              10% → 20% → 32% bands) used by the Department of Transport
-              Management for two- and four-wheelers. Bagmati Province rates
-              shipped; manual override for other provinces.
+              annual vehicle tax (सवारी कर), the late fine after the 90-day grace
+              window, multi-year arrears and the renewal fee — using FY 2083/84
+              rates for all seven provinces, including EVs in Bagmati.
             </p>
             <p className="text-xs text-slate-500">
               <span className="inline-flex items-center gap-1.5">
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Verified against Bagmati Provincial Finance Act 2081 by Sabin Adhikari, CA · Last reviewed April 2026
+                Verified against Bagmati Provincial Finance Act 2081 by Sabin Adhikari, CA · Last reviewed April 2026 · Rates updated to FY 2083/84 (September 2026)
               </span>
             </p>
           </header>
 
           {/* Calculator card */}
           <section
-            className="rounded-2xl sm:rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 lg:p-8 mb-10"
+            className="rounded-2xl sm:rounded-3xl border-0 sm:border border-slate-200 bg-white p-0 sm:p-6 lg:p-8 mb-10"
             aria-labelledby="bb-calculator-heading"
           >
             <h2 id="bb-calculator-heading" className="sr-only">
@@ -152,7 +152,7 @@ export default function BluebookCalculatorPage() {
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Penalty bands, Bagmati rate tables & FAQ
+                Penalty bands, provincial rate tables & FAQ
               </span>
               <svg
                 className="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform"
@@ -196,144 +196,84 @@ export default function BluebookCalculatorPage() {
             </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
-              Penalty bands
+              Penalty bands (Bagmati)
             </h2>
-            <div className="overflow-x-auto rounded-lg border border-slate-200 mb-5">
+            <div className="overflow-x-auto rounded-lg border border-slate-200 mb-3">
               <table className="w-full min-w-[480px] text-sm">
                 <thead className="bg-slate-50 text-slate-900">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Days late</th>
-                    <th className="text-left px-4 py-3 font-semibold">Penalty</th>
+                    <th className="text-left px-4 py-3 font-semibold">When you pay</th>
+                    <th className="text-left px-4 py-3 font-semibold">Fine</th>
                   </tr>
                 </thead>
                 <tbody className="text-slate-700">
                   <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">≤ 30 days</td>
+                    <td className="px-4 py-3">Within 90 days of expiry</td>
                     <td className="px-4 py-3 font-semibold">0% — grace period</td>
                   </tr>
                   <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3">31 – 45 days</td>
-                    <td className="px-4 py-3 font-semibold">5% of base tax</td>
+                    <td className="px-4 py-3">First 30 days after grace</td>
+                    <td className="px-4 py-3 font-semibold">5% of annual tax</td>
                   </tr>
                   <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">46 – 60 days</td>
-                    <td className="px-4 py-3 font-semibold">10% of base tax</td>
+                    <td className="px-4 py-3">31 – 45 days after grace</td>
+                    <td className="px-4 py-3 font-semibold">10% of annual tax</td>
                   </tr>
                   <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3">61+ days, same FY</td>
-                    <td className="px-4 py-3 font-semibold">20% of base tax</td>
+                    <td className="px-4 py-3">Later, but before the fiscal year ends</td>
+                    <td className="px-4 py-3 font-semibold">20% of annual tax</td>
                   </tr>
                   <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">After Ashadh 31 (next FY)</td>
-                    <td className="px-4 py-3 font-semibold">32% of base tax</td>
+                    <td className="px-4 py-3">After Ashadh end (each year in arrears)</td>
+                    <td className="px-4 py-3 font-semibold">32% of that year&apos;s tax</td>
                   </tr>
                 </tbody>
               </table>
             </div>
+            <p className="text-xs text-slate-500 mb-3">
+              Each missed year is taxed and fined separately, and a late renewal
+              also doubles the bluebook renewal fee. Other provinces use
+              different fines:
+            </p>
+            <ul className="space-y-1 text-sm text-slate-700 mb-5 list-disc pl-5">
+              {ALL_PROVINCES.filter((p) => p !== 'bagmati').map((p) => (
+                <li key={p}>
+                  <strong>{PROVINCE_LABELS[p]}:</strong> {PROVINCES[p].penalty.summary}
+                </li>
+              ))}
+            </ul>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
-              Bagmati Province vehicle tax (FY 2081/82)
+              Vehicle tax by province (FY 2083/84)
             </h2>
             <p className="text-xs text-amber-700 mb-3">
-              ⚠ Verify against the Bagmati Provincial Finance Act 2081 or your
-              transport-office leaflet before paying. Rates revise annually.
+              ⚠ Rates change every Shrawan through each provincial Finance Act.
+              Confirm with your transport office before paying.
             </p>
             <h3 className="font-display font-semibold text-base text-slate-900 mb-2">
-              Two-wheelers
+              Two-wheelers (annual tax, Rs)
             </h3>
-            <div className="overflow-x-auto rounded-lg border border-slate-200 mb-4">
-              <table className="w-full min-w-[400px] text-sm">
-                <thead className="bg-slate-50 text-slate-900">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Engine cc</th>
-                    <th className="text-left px-4 py-3 font-semibold">Annual tax</th>
-                  </tr>
-                </thead>
-                <tbody className="text-slate-700">
-                  <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">Up to 125 cc</td>
-                    <td className="px-4 py-3">Rs 3,000</td>
-                  </tr>
-                  <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3">126 – 250 cc</td>
-                    <td className="px-4 py-3">Rs 6,500</td>
-                  </tr>
-                  <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">251 – 400 cc</td>
-                    <td className="px-4 py-3">Rs 12,000</td>
-                  </tr>
-                  <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3">401 – 650 cc</td>
-                    <td className="px-4 py-3">Rs 25,000</td>
-                  </tr>
-                  <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">Above 650 cc</td>
-                    <td className="px-4 py-3">Rs 36,000</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
+            <RateMatrix kind="twoWheeler" />
             <h3 className="font-display font-semibold text-base text-slate-900 mb-2">
-              Four-wheelers (private cars / jeeps / vans)
+              Four-wheelers — private cars / jeeps / vans (annual tax, Rs)
             </h3>
-            <div className="overflow-x-auto rounded-lg border border-slate-200 mb-5">
-              <table className="w-full min-w-[400px] text-sm">
-                <thead className="bg-slate-50 text-slate-900">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Engine cc</th>
-                    <th className="text-left px-4 py-3 font-semibold">Annual tax</th>
-                  </tr>
-                </thead>
-                <tbody className="text-slate-700">
-                  <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">Up to 1,000 cc</td>
-                    <td className="px-4 py-3">Rs 21,000</td>
-                  </tr>
-                  <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3">1,001 – 1,500 cc</td>
-                    <td className="px-4 py-3">Rs 23,500</td>
-                  </tr>
-                  <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">1,501 – 2,000 cc</td>
-                    <td className="px-4 py-3">Rs 25,500</td>
-                  </tr>
-                  <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3">2,001 – 2,500 cc</td>
-                    <td className="px-4 py-3">Rs 35,500</td>
-                  </tr>
-                  <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">2,501 – 2,900 cc</td>
-                    <td className="px-4 py-3">Rs 41,000</td>
-                  </tr>
-                  <tr className="border-t border-slate-200 bg-slate-50/40">
-                    <td className="px-4 py-3">2,901 – 3,500 cc</td>
-                    <td className="px-4 py-3">Rs 49,000</td>
-                  </tr>
-                  <tr className="border-t border-slate-200">
-                    <td className="px-4 py-3">Above 3,500 cc</td>
-                    <td className="px-4 py-3">Rs 58,000</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <RateMatrix kind="fourWheeler" />
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
               Worked example
             </h2>
             <div className="rounded-lg border border-slate-200 bg-slate-50 p-5 mb-5">
               <p className="text-slate-700 text-sm leading-relaxed mb-2">
-                Bagmati two-wheeler, <strong>150 cc</strong>, registration expired{' '}
-                <strong>50 days ago</strong> (still within current FY).
+                Bagmati two-wheeler, <strong>150 cc</strong>, bluebook expired{' '}
+                <strong>110 days ago</strong> (same fiscal year).
               </p>
               <ul className="space-y-0.5 text-sm text-slate-600 list-none pl-0 mb-3 font-mono">
-                <li>Tier: 126–250 cc</li>
-                <li>Base annual tax: Rs 6,500</li>
-                <li>Days late: 50 → falls in 46–60 band</li>
-                <li>Penalty rate: 10%</li>
-                <li>Penalty: Rs 6,500 × 10% = Rs 650</li>
+                <li>Tier: 126–150 cc → Rs 5,000 / year</li>
+                <li>Days late: 110 → 20 days past the 90-day grace</li>
+                <li>Fine: 5% × Rs 5,000 = Rs 250</li>
+                <li>Renewal fee Rs 300 + 100% late fine Rs 300</li>
                 <li className="font-semibold text-slate-900">
-                  Total payable: Rs 7,150
+                  Total payable: Rs 5,850
                 </li>
               </ul>
             </div>
@@ -347,10 +287,10 @@ export default function BluebookCalculatorPage() {
             </p>
             <ul className="space-y-2 text-slate-700 mb-5 list-disc pl-5">
               <li>
-                <strong>Misreading the 30-day grace period.</strong> The 0%
-                grace runs <em>from the expiry date</em> printed on your
-                bluebook, not from a calendar month. Day 31 = 5% band, sharply.
-                Missing this by even two days adds 5% of your annual tax.
+                <strong>Misreading the grace period.</strong> The 90-day,
+                no-fine window runs <em>from the expiry date</em> printed on
+                your bluebook. Day 91 starts the 5% band and doubles your
+                renewal fee.
               </li>
               <li>
                 <strong>Forgetting Ashadh 31 is the cliff.</strong> Crossing the
@@ -362,15 +302,15 @@ export default function BluebookCalculatorPage() {
               <li>
                 <strong>Confusing province rates.</strong> Vehicle tax differs
                 meaningfully across Nepal&apos;s seven provinces — a 1,500 cc
-                car taxed Rs 23,500 in Bagmati can be Rs 18,000 to Rs 28,000 in
-                another province. Always check your province&apos;s current
+                car taxed Rs 27,000 in Bagmati is Rs 32,000 in Koshi and Rs 26,000
+                in Karnali. Always check your province&apos;s current
                 Finance Act, not last year&apos;s or another province&apos;s.
               </li>
             </ul>
             <p className="text-slate-700 text-base leading-relaxed mb-5">
-              This Nepal vehicle tax calculator covers the Bagmati rate table
-              and lets you override the base tax for other provinces — so the
-              penalty math stays right wherever you are.
+              This Nepal vehicle tax calculator carries every province&apos;s
+              rate table and fine rule, and adds up each missed year separately
+              — so the total matches what the transport office will charge.
             </p>
 
             <h2 className="font-display font-bold text-2xl text-slate-900 leading-tight mt-10 mb-4">
@@ -448,5 +388,37 @@ export default function BluebookCalculatorPage() {
         </div>
       </section>
     </main>
+  )
+}
+
+function RateMatrix({ kind }: { kind: 'twoWheeler' | 'fourWheeler' }) {
+  const rows = PROVINCES.bagmati[kind]
+  return (
+    <div className="overflow-x-auto rounded-lg border border-slate-200 mb-5">
+      <table className="w-full min-w-[640px] text-sm">
+        <thead className="bg-slate-50 text-slate-900">
+          <tr>
+            <th className="text-left px-3 py-3 font-semibold">Engine cc</th>
+            {ALL_PROVINCES.map((p) => (
+              <th key={p} className="text-right px-3 py-3 font-semibold">
+                {PROVINCE_LABELS[p]}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="text-slate-700 tabular-nums">
+          {rows.map((row, i) => (
+            <tr key={row.label} className={`border-t border-slate-200 ${i % 2 ? 'bg-slate-50/40' : ''}`}>
+              <td className="px-3 py-2.5 whitespace-nowrap">{row.label}</td>
+              {ALL_PROVINCES.map((p) => (
+                <td key={p} className="px-3 py-2.5 text-right">
+                  {PROVINCES[p][kind][i].baseTax.toLocaleString('en-IN')}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }

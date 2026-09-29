@@ -2,14 +2,24 @@
 // NEPSE Share Trading — Net Profit & Capital Gains Tax (CGT) calculator
 //
 // Sources baked in (verify against the latest before deploy):
-// - SEBON Brokerage Commission Regulation — equity tier table.
+// - SEBON Brokerage Commission Regulation — equity tier table (0.36% → 0.24%,
+//   flat Rs 10 for trades up to Rs 2,500).
 // - SEBON Regulatory Fee — 0.015% on each leg.
 // - CDSC Demat / DP Charge — Rs 25 per transaction (each leg separately).
-// - Income Tax Act 2058 + Finance Act 2081 — CGT rates on disposal of
-//   listed securities:
-//     • Resident individual, holding ≤ 365 days  → 7.5%
-//     • Resident individual, holding > 365 days  → 5%
-//     • Resident entity (institutional)          → 10% (flat, no holding-period rule)
+// - Income Tax Act 2058 s.95Ka(2)(Ka) — CGT (advance tax, collected by the
+//   broker/CDSC) on disposal of listed securities. The rate depends on the
+//   fiscal year of the SALE:
+//
+//     Sold on/after 1 Shrawan 2083 (17 Jul 2026) — Finance Act 2083:
+//       • Resident individual, holding ≤ 365 days → 10%
+//       • Resident individual, holding > 365 days → 7.5%
+//       • Resident entity (institutional)         → 10%
+//       • Others (non-resident etc.)              → 25%
+//       CGT on listed securities is now a FINAL withholding tax (s.92).
+//
+//     Sold before 17 Jul 2026 — Finance Act 2081/2082:
+//       • Resident individual: 7.5% (≤ 365 days) / 5% (> 365 days)
+//       • Resident entity: 10% · Others: 25%
 //
 // Rounding: 2 decimals (paisa) for every monetary value. The compute fn
 // rounds at each line so the displayed breakdown sums exactly to the totals.
@@ -18,7 +28,7 @@
 // !!  for FY 2082/83, copy to nepse-cgt-fy-2082-83.ts and update constants.   !!
 // =============================================================================
 
-export type InvestorType = 'individual' | 'institutional'
+export type InvestorType = 'individual' | 'institutional' | 'other'
 
 // -----------------------------------------------------------------------------
 // SEBON Brokerage commission tiers — equity, per transaction (each leg)
@@ -34,14 +44,15 @@ export type BrokerTier = {
 }
 
 export const BROKER_TIERS: BrokerTier[] = [
-  { upTo:    50_000, rate: 0.0040, label: 'Up to Rs 50,000' },
-  { upTo:   500_000, rate: 0.0037, label: 'Rs 50,001 – Rs 5,00,000' },
-  { upTo: 2_000_000, rate: 0.0034, label: 'Rs 5,00,001 – Rs 20,00,000' },
-  { upTo:10_000_000, rate: 0.0030, label: 'Rs 20,00,001 – Rs 1 crore' },
-  { upTo:      null, rate: 0.0027, label: 'Above Rs 1 crore' },
+  { upTo:     2_500, rate: 0.0036, label: 'Up to Rs 2,500 (flat Rs 10)' },
+  { upTo:    50_000, rate: 0.0036, label: 'Rs 2,501 – Rs 50,000' },
+  { upTo:   500_000, rate: 0.0033, label: 'Rs 50,001 – Rs 5,00,000' },
+  { upTo: 2_000_000, rate: 0.0031, label: 'Rs 5,00,001 – Rs 20,00,000' },
+  { upTo:10_000_000, rate: 0.0027, label: 'Rs 20,00,001 – Rs 1 crore' },
+  { upTo:      null, rate: 0.0024, label: 'Above Rs 1 crore' },
 ]
 
-/** Minimum brokerage charged per transaction by SEBON regulation. */
+/** Minimum brokerage per transaction — trades up to Rs 2,500 pay a flat Rs 10. */
 export const MIN_BROKER_COMMISSION = 10
 
 /** Returns the applicable broker commission rate for a transaction value. */
@@ -74,13 +85,58 @@ export const DP_CHARGE = 25
 // CGT rates
 // -----------------------------------------------------------------------------
 
-/** CGT rate as a decimal, given holding period and investor type. */
+export type CgtRegime = {
+  key: 'fy-2083-84' | 'fy-2082-83'
+  label: string
+  /** First sale date (YYYY-MM-DD, AD) this regime applies to. */
+  effectiveFrom: string
+  individualShortTerm: number
+  individualLongTerm: number
+  institutional: number
+  other: number
+  /** Whether CGT is a final withholding tax under this regime. */
+  isFinal: boolean
+}
+
+/** Newest first. */
+export const CGT_REGIMES: CgtRegime[] = [
+  {
+    key: 'fy-2083-84',
+    label: 'FY 2083/84 (Finance Act 2083)',
+    effectiveFrom: '2026-07-17',
+    individualShortTerm: 0.10,
+    individualLongTerm: 0.075,
+    institutional: 0.10,
+    other: 0.25,
+    isFinal: true,
+  },
+  {
+    key: 'fy-2082-83',
+    label: 'FY 2082/83 and earlier',
+    effectiveFrom: '0000-01-01',
+    individualShortTerm: 0.075,
+    individualLongTerm: 0.05,
+    institutional: 0.10,
+    other: 0.25,
+    isFinal: false,
+  },
+]
+
+/** Regime for a sale date. Missing/invalid date → the current regime. */
+export function cgtRegimeFor(sellDate: string): CgtRegime {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(sellDate)) return CGT_REGIMES[0]
+  return CGT_REGIMES.find((r) => sellDate >= r.effectiveFrom) ?? CGT_REGIMES[0]
+}
+
+/** CGT rate as a decimal, given holding period, investor type and regime. */
 export function cgtRateFor(
   holdingDays: number,
   investorType: InvestorType,
+  regime: CgtRegime = CGT_REGIMES[0],
 ): number {
-  if (investorType === 'institutional') return 0.10
-  return holdingDays > 365 ? 0.05 : 0.075
+  if (investorType === 'institutional') return regime.institutional
+  if (investorType === 'other') return regime.other
+  return holdingDays > 365 ? regime.individualLongTerm : regime.individualShortTerm
 }
 
 // -----------------------------------------------------------------------------
@@ -130,7 +186,8 @@ export type CgtResult = {
   grossProfit: number       // (sell - buy) × qty (no expenses considered)
   totalTransactionCosts: number  // sum of all 6 expense lines
   capitalGain: number       // grossProfit - totalTransactionCosts (taxable, can be negative)
-  cgtRate: number           // 0.075 / 0.05 / 0.10
+  cgtRate: number           // e.g. 0.10 / 0.075 / 0.25
+  cgtRegime: CgtRegime      // fiscal-year rate table picked from the sell date
   cgtAmount: number         // max(0, capitalGain) × rate
 
   // -------- Bottom line --------
@@ -195,7 +252,8 @@ export function computeCgt(input: CgtInputs): CgtResult {
   const isLongTerm = holdingDays !== null && holdingDays > 365
   // If dates are missing, default to short-term (more conservative — higher rate).
   const effectiveDays = holdingDays ?? 0
-  const cgtRate = cgtRateFor(effectiveDays, input.investorType)
+  const cgtRegime = cgtRegimeFor(input.sellDate)
+  const cgtRate = cgtRateFor(effectiveDays, input.investorType, cgtRegime)
   const cgtAmount = round2(Math.max(0, capitalGain) * cgtRate)
 
   // Bottom line
@@ -229,6 +287,7 @@ export function computeCgt(input: CgtInputs): CgtResult {
     totalTransactionCosts,
     capitalGain,
     cgtRate,
+    cgtRegime,
     cgtAmount,
 
     netProfit,

@@ -8,7 +8,9 @@ const TEAL = '#09383e'
 // Types & item config
 // =============================================================================
 
-type ItemKey = 'gold-jewelry' | 'raw-gold' | 'television' | 'mobile-phone'
+type ItemKey = 'gold-jewelry' | 'raw-gold' | 'silver-jewelry' | 'television' | 'mobile-phone'
+
+type Gender = 'female' | 'male'
 
 type Verdict = 'free' | 'pay' | 'illegal'
 
@@ -38,6 +40,16 @@ const ITEMS: { key: ItemKey; label: string; ne: string; icon: React.ReactNode }[
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7" />
+      </svg>
+    ),
+  },
+  {
+    key: 'silver-jewelry',
+    label: 'Silver Jewelry',
+    ne: 'चाँदीको गहना',
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9 5.5-.8L12 3z" />
       </svg>
     ),
   },
@@ -90,7 +102,33 @@ function formatTola(g: number): string {
   return `${(g / GRAMS_PER_TOLA).toLocaleString('en-IN', { maximumFractionDigits: 2 })} tola`
 }
 
-function computeGoldJewelry(weightG: number): CalcResult {
+// -----------------------------------------------------------------------------
+// FY 2083/84 passenger-baggage rules (Customs Tariff Annex 4 + Finance Act 2083)
+//   Gold jewelry: duty-free 50 g (women) / 25 g (men); up to 100 g more with
+//     duty — first 50 g at the gold tariff rate, next 50 g at rate + 3%.
+//     Anything beyond is confiscated.
+//   Raw gold: up to 100 g, dutiable (no free portion).
+//   Gold tariff: 20% (doubled from 10% by Finance Act 2083), assessed on the
+//     international market value converted at the NRB rate.
+//   Silver jewelry: 500 g duty-free, next 500 g dutiable.
+//   TV: one set up to 65" duty-free after 12+ consecutive months abroad.
+// -----------------------------------------------------------------------------
+
+const GOLD_DUTY_RATE = 0.20
+const GOLD_SECOND_BAND_SURCHARGE = 0.03
+const GOLD_DUTIABLE_BAND_G = 50
+const GOLD_MAX_DUTIABLE_G = 100
+const GOLD_FREE_G: Record<Gender, number> = { female: 50, male: 25 }
+const RAW_GOLD_MAX_G = 100
+const SILVER_FREE_G = 500
+const SILVER_MAX_DUTIABLE_G = 500
+const TV_FREE_MAX_INCHES = 65
+
+function pricePerGram(pricePerTola: number): number {
+  return pricePerTola > 0 ? pricePerTola / GRAMS_PER_TOLA : 0
+}
+
+function computeGoldJewelry(weightG: number, gender: Gender, pricePerTola: number): CalcResult {
   if (weightG <= 0) {
     return {
       verdict: 'free',
@@ -98,41 +136,53 @@ function computeGoldJewelry(weightG: number): CalcResult {
       detail: 'Enter a weight to calculate.',
     }
   }
-  if (weightG <= 50) {
+  const free = GOLD_FREE_G[gender]
+  const who = gender === 'female' ? 'women' : 'men'
+  if (weightG <= free) {
     return {
       verdict: 'free',
       headline: 'FREE',
-      detail: 'Rs 0 tax. Up to 50 g of gold jewelry is allowed duty-free.',
-      note: 'Per Nepal Customs personal-baggage allowance for passengers.',
+      detail: `Rs 0 duty. Up to ${free} g (${formatTola(free)}) of gold jewelry is duty-free for ${who}.`,
+      note: 'Must be worn/finished jewelry. Bullion bent into bangles or rings is treated as raw gold.',
     }
   }
-  if (weightG <= 250) {
-    const tax = ((weightG - 50) / 10) * 10500
-    return {
-      verdict: 'pay',
-      headline: 'PAY TAX',
-      detail: `You must pay ${formatNpr(tax)} at customs on arrival.`,
-      taxRs: tax,
-      note: `Tax = ((${weightG} − 50) ÷ 10) × Rs 10,500 = ${formatNpr(tax)}.`,
-    }
-  }
-  return {
-    verdict: 'illegal',
-    headline: 'ILLEGAL',
-    detail: 'Confiscation risk. You cannot bring more than 250 g of gold jewelry into Nepal.',
-    note: 'Exceeding the 250 g ceiling can lead to seizure under the Customs Act 2064.',
-  }
-}
-
-function computeRawGold(weightG: number, hasShramSwikriti: boolean): CalcResult {
-  if (!hasShramSwikriti) {
+  const ceiling = free + GOLD_MAX_DUTIABLE_G
+  if (weightG > ceiling) {
     return {
       verdict: 'illegal',
       headline: 'ILLEGAL',
-      detail: 'Tourists and students cannot bring raw gold into Nepal. It will be confiscated.',
-      note: 'Raw gold import is reserved for Nepali workers returning with valid Shram Swikriti (foreign-employment permit).',
+      detail: `Confiscation risk. ${who[0].toUpperCase() + who.slice(1)} may bring at most ${ceiling} g (${formatTola(ceiling)}) of gold jewelry — ${free} g free plus 100 g with duty.`,
+      note: 'Gold above the passenger limit is seized under the Customs Act 2082.',
     }
   }
+  const dutiable = weightG - free
+  const band1 = Math.min(dutiable, GOLD_DUTIABLE_BAND_G)
+  const band2 = Math.max(0, dutiable - GOLD_DUTIABLE_BAND_G)
+  const rate1 = GOLD_DUTY_RATE
+  const rate2 = GOLD_DUTY_RATE + GOLD_SECOND_BAND_SURCHARGE
+  const perG = pricePerGram(pricePerTola)
+  const bandText =
+    `${formatGrams(band1)} at ${Math.round(rate1 * 100)}%` +
+    (band2 > 0 ? ` + ${formatGrams(band2)} at ${Math.round(rate2 * 100)}%` : '')
+  if (perG === 0) {
+    return {
+      verdict: 'pay',
+      headline: 'PAY TAX',
+      detail: `${formatGrams(dutiable)} is dutiable: ${bandText} of its value. Enter the gold price per tola to see the rupee amount.`,
+      note: `First ${free} g is free for ${who}.`,
+    }
+  }
+  const tax = band1 * perG * rate1 + band2 * perG * rate2
+  return {
+    verdict: 'pay',
+    headline: 'PAY TAX',
+    detail: `You must pay about ${formatNpr(tax)} at customs on arrival.`,
+    taxRs: tax,
+    note: `First ${free} g is free for ${who}. Duty = ${bandText} of value at ${formatNpr(pricePerTola)}/tola (${formatNpr(perG)}/g). Customs values gold at the international price converted at the NRB rate, so the final figure can differ slightly.`,
+  }
+}
+
+function computeRawGold(weightG: number, pricePerTola: number): CalcResult {
   if (weightG <= 0) {
     return {
       verdict: 'free',
@@ -140,37 +190,64 @@ function computeRawGold(weightG: number, hasShramSwikriti: boolean): CalcResult 
       detail: 'Enter a weight to calculate.',
     }
   }
-  if (weightG <= 50) {
-    const tax = (weightG / 10) * 9500
+  if (weightG > RAW_GOLD_MAX_G) {
     return {
-      verdict: 'pay',
-      headline: 'PAY TAX',
-      detail: `You must pay ${formatNpr(tax)} at customs on arrival.`,
-      taxRs: tax,
-      note: `Tax = (${weightG} ÷ 10) × Rs 9,500 = ${formatNpr(tax)}. Concessional rate for the first 50 g.`,
+      verdict: 'illegal',
+      headline: 'ILLEGAL',
+      detail: `Confiscation risk. A passenger may bring at most ${RAW_GOLD_MAX_G} g (${formatTola(RAW_GOLD_MAX_G)}) of raw gold, and all of it is dutiable.`,
+      note: 'Excess gold is seized at the border.',
     }
   }
-  if (weightG <= 100) {
-    const firstFifty = (50 / 10) * 9500
-    const remainder = ((weightG - 50) / 10) * 10500
-    const tax = firstFifty + remainder
+  const perG = pricePerGram(pricePerTola)
+  if (perG === 0) {
     return {
       verdict: 'pay',
       headline: 'PAY TAX',
-      detail: `You must pay ${formatNpr(tax)} at customs on arrival.`,
-      taxRs: tax,
-      note: `First 50 g at Rs 9,500 / 10 g = ${formatNpr(firstFifty)}. Next ${weightG - 50} g at Rs 10,500 / 10 g = ${formatNpr(remainder)}.`,
+      detail: `Raw gold has no duty-free allowance — all ${formatGrams(weightG)} is dutiable at ${Math.round(GOLD_DUTY_RATE * 100)}% of value. Enter the gold price per tola to see the rupee amount.`,
+    }
+  }
+  const tax = weightG * perG * GOLD_DUTY_RATE
+  return {
+    verdict: 'pay',
+    headline: 'PAY TAX',
+    detail: `You must pay about ${formatNpr(tax)} at customs on arrival.`,
+    taxRs: tax,
+    note: `Duty = ${formatGrams(weightG)} × ${formatNpr(perG)}/g × ${Math.round(GOLD_DUTY_RATE * 100)}%. Bars, biscuits and coins count as raw gold. Customs may add further levies on bullion — confirm at the desk.`,
+  }
+}
+
+function computeSilverJewelry(weightG: number): CalcResult {
+  if (weightG <= 0) {
+    return {
+      verdict: 'free',
+      headline: '—',
+      detail: 'Enter a weight to calculate.',
+    }
+  }
+  if (weightG <= SILVER_FREE_G) {
+    return {
+      verdict: 'free',
+      headline: 'FREE',
+      detail: `Rs 0 duty. Up to ${SILVER_FREE_G} g (${formatTola(SILVER_FREE_G)}) of silver jewelry is duty-free.`,
+      note: 'Raised by Finance Act 2083.',
+    }
+  }
+  if (weightG <= SILVER_FREE_G + SILVER_MAX_DUTIABLE_G) {
+    return {
+      verdict: 'pay',
+      headline: 'PAY TAX',
+      detail: `${formatGrams(weightG - SILVER_FREE_G)} above the free ${SILVER_FREE_G} g is charged duty at the prevailing silver tariff rate.`,
+      note: `Up to ${SILVER_MAX_DUTIABLE_G} g beyond the free allowance may be brought in on payment of duty.`,
     }
   }
   return {
     verdict: 'illegal',
     headline: 'ILLEGAL',
-    detail: 'Confiscation risk. Workers cannot bring more than 100 g of raw gold under the Shram Swikriti allowance.',
-    note: 'Excess weight is seized at the border.',
+    detail: `Confiscation risk. Silver jewelry above ${SILVER_FREE_G + SILVER_MAX_DUTIABLE_G} g (${formatTola(SILVER_FREE_G + SILVER_MAX_DUTIABLE_G)}) exceeds the passenger allowance.`,
   }
 }
 
-function computeTelevision(inches: number): CalcResult {
+function computeTelevision(inches: number, abroad12Months: boolean): CalcResult {
   if (inches <= 0) {
     return {
       verdict: 'free',
@@ -178,18 +255,26 @@ function computeTelevision(inches: number): CalcResult {
       detail: 'Enter the TV screen size in inches.',
     }
   }
-  if (inches <= 32) {
+  if (!abroad12Months) {
+    return {
+      verdict: 'pay',
+      headline: 'PAY TAX',
+      detail: 'The duty-free TV allowance only applies after living abroad for 12 consecutive months or more. Duty is charged on the invoice (CIF) value.',
+      note: 'Bring the original invoice; under-declared value gets reassessed at the published reference price.',
+    }
+  }
+  if (inches <= TV_FREE_MAX_INCHES) {
     return {
       verdict: 'free',
       headline: 'FREE',
-      detail: 'Rs 0 tax. One TV up to 32 inches is allowed duty-free per passenger.',
-      note: 'Personal-baggage TV allowance under Nepal Customs.',
+      detail: `Rs 0 duty. One TV up to ${TV_FREE_MAX_INCHES} inches is duty-free after 12+ months abroad.`,
+      note: 'Limit raised from 32" to 65" by Finance Act 2083. One set per passenger.',
     }
   }
   return {
     verdict: 'pay',
     headline: 'PAY TAX',
-    detail: 'Taxable. Customs duty is charged based on the purchase invoice (CIF value × applicable rate).',
+    detail: `Taxable. TVs above ${TV_FREE_MAX_INCHES} inches are charged duty on the purchase invoice (CIF value × applicable rate).`,
     note: 'Bring the original invoice; under-declared value gets reassessed at the published reference price.',
   }
 }
@@ -259,17 +344,25 @@ function computeMobilePhone(
 export function CustomsCalculator() {
   const [item, setItem] = useState<ItemKey>('gold-jewelry')
 
+  // Gold (shared price input)
+  const [goldPricePerTola, setGoldPricePerTola] = useState<string>('')
+
   // Gold Jewelry
+  const [gender, setGender] = useState<Gender>('female')
   const [jewelryWeight, setJewelryWeight] = useState<string>('')
   const [jewelryUnit, setJewelryUnit] = useState<WeightUnit>('tola')
 
   // Raw Gold
   const [rawWeight, setRawWeight] = useState<string>('')
   const [rawUnit, setRawUnit] = useState<WeightUnit>('tola')
-  const [hasShramSwikriti, setHasShramSwikriti] = useState<boolean>(false)
+
+  // Silver Jewelry
+  const [silverWeight, setSilverWeight] = useState<string>('')
+  const [silverUnit, setSilverUnit] = useState<WeightUnit>('tola')
 
   // Television
   const [tvInches, setTvInches] = useState<string>('')
+  const [abroad12Months, setAbroad12Months] = useState<boolean>(true)
 
   // Mobile Phone
   const [personalUsed, setPersonalUsed] = useState<boolean>(false)
@@ -282,13 +375,20 @@ export function CustomsCalculator() {
     let r: CalcResult
     switch (item) {
       case 'gold-jewelry':
-        r = computeGoldJewelry(toGrams(Number(jewelryWeight) || 0, jewelryUnit))
+        r = computeGoldJewelry(
+          toGrams(Number(jewelryWeight) || 0, jewelryUnit),
+          gender,
+          Number(goldPricePerTola) || 0,
+        )
         break
       case 'raw-gold':
-        r = computeRawGold(toGrams(Number(rawWeight) || 0, rawUnit), hasShramSwikriti)
+        r = computeRawGold(toGrams(Number(rawWeight) || 0, rawUnit), Number(goldPricePerTola) || 0)
+        break
+      case 'silver-jewelry':
+        r = computeSilverJewelry(toGrams(Number(silverWeight) || 0, silverUnit))
         break
       case 'television':
-        r = computeTelevision(Number(tvInches) || 0)
+        r = computeTelevision(Number(tvInches) || 0, abroad12Months)
         break
       case 'mobile-phone':
         r = computeMobilePhone(personalUsed, returningWorker, Number(phonePriceNpr) || 0)
@@ -300,8 +400,10 @@ export function CustomsCalculator() {
   function handleReset() {
     setJewelryWeight('')
     setRawWeight('')
-    setHasShramSwikriti(false)
+    setSilverWeight('')
+    setGoldPricePerTola('')
     setTvInches('')
+    setAbroad12Months(true)
     setPersonalUsed(false)
     setReturningWorker(false)
     setPhonePriceNpr('')
@@ -327,7 +429,7 @@ export function CustomsCalculator() {
       >
         {/* Item selector */}
         <FormSection
-          label="What are you bringing?"
+          label="What are you bringing? · के ल्याउँदै हुनुहुन्छ?"
           hint="Personal-baggage allowance varies by item type"
         >
           <div className="grid grid-cols-2 gap-2">
@@ -364,53 +466,85 @@ export function CustomsCalculator() {
         {/* Conditional inputs */}
         {item === 'gold-jewelry' && (
           <FormSection
-            label="Weight"
-            hint="Free: ≤ 50 g (~4.3 tola) · Taxable: 50–250 g (~4.3–21.4 tola) · Not allowed: > 250 g (~21.4 tola)"
+            label="Passenger & weight · यात्रु र तौल"
+            hint={`Free: ≤ ${GOLD_FREE_G[gender]} g · With duty: next 100 g (20%, then 23%) · Not allowed: > ${GOLD_FREE_G[gender] + GOLD_MAX_DUTIABLE_G} g`}
           >
+            <div className="grid grid-cols-2 gap-2">
+              {(['female', 'male'] as Gender[]).map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGender(g)}
+                  aria-pressed={gender === g}
+                  className={`rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                    gender === g
+                      ? 'border-[#09383e] bg-[#09383e]/5 text-[#09383e]'
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                  }`}
+                >
+                  {g === 'female' ? 'Woman (50 g free)' : 'Man (25 g free)'}
+                </button>
+              ))}
+            </div>
             <WeightField
               id="jewelryWeight"
-              label="Total weight"
+              label="Total weight · जम्मा तौल"
               value={jewelryWeight}
               onChange={setJewelryWeight}
               unit={jewelryUnit}
               onUnitChange={setJewelryUnit}
             />
+            <GoldPriceField value={goldPricePerTola} onChange={setGoldPricePerTola} />
           </FormSection>
         )}
 
         {item === 'raw-gold' && (
           <FormSection
-            label="Eligibility & weight"
-            hint="Raw gold is restricted — only Shram-Swikriti holders may bring it in"
+            label="Weight · तौल"
+            hint="Bars, biscuits and coins: up to 100 g (~8.6 tola) with 20% duty — no free portion"
           >
-            <Checkbox
-              id="shramSwikriti"
-              label="I have a valid Shram Swikriti (foreign-employment permit)"
-              checked={hasShramSwikriti}
-              onChange={setHasShramSwikriti}
+            <WeightField
+              id="rawWeight"
+              label="Total weight · जम्मा तौल"
+              value={rawWeight}
+              onChange={setRawWeight}
+              unit={rawUnit}
+              onUnitChange={setRawUnit}
             />
-            {hasShramSwikriti && (
-              <WeightField
-                id="rawWeight"
-                label="Total weight"
-                value={rawWeight}
-                onChange={setRawWeight}
-                unit={rawUnit}
-                onUnitChange={setRawUnit}
-                helpHint="With Shram Swikriti: ≤ 50 g (~4.3 tola) @ Rs 9,500/10g · 50–100 g (~4.3–8.6 tola) @ Rs 10,500/10g · > 100 g not allowed"
-              />
-            )}
+            <GoldPriceField value={goldPricePerTola} onChange={setGoldPricePerTola} />
+          </FormSection>
+        )}
+
+        {item === 'silver-jewelry' && (
+          <FormSection
+            label="Weight · तौल"
+            hint="Free: ≤ 500 g (~42.9 tola) · With duty: next 500 g · Not allowed: > 1 kg"
+          >
+            <WeightField
+              id="silverWeight"
+              label="Total weight · जम्मा तौल"
+              value={silverWeight}
+              onChange={setSilverWeight}
+              unit={silverUnit}
+              onUnitChange={setSilverUnit}
+            />
           </FormSection>
         )}
 
         {item === 'television' && (
           <FormSection
-            label="TV size"
-            hint="One TV ≤ 32 inch is duty-free. Larger sizes are taxed on invoice value."
+            label="TV size · टिभीको साइज"
+            hint={`One TV up to ${TV_FREE_MAX_INCHES}" is duty-free after 12+ months abroad. Otherwise it is taxed on invoice value.`}
           >
+            <Checkbox
+              id="abroad12Months"
+              label="I have lived abroad for 12 consecutive months or more · लगातार १२ महिना वा बढी विदेश बसेको"
+              checked={abroad12Months}
+              onChange={setAbroad12Months}
+            />
             <NumberField
               id="tvInches"
-              label="Screen size (inches)"
+              label="Screen size (inches) · स्क्रिन साइज (इन्च)"
               suffix="in"
               value={tvInches}
               onChange={setTvInches}
@@ -420,12 +554,12 @@ export function CustomsCalculator() {
 
         {item === 'mobile-phone' && (
           <FormSection
-            label="Phone status"
+            label="Phone status · फोनको अवस्था"
             hint="Personal used phone is always free. Returning workers get one extra free new phone. Otherwise, duty is slab-based on the phone's price."
           >
             <Checkbox
               id="personalUsed"
-              label="This is a used phone in active personal use (in your pocket)"
+              label="This is a used phone in active personal use (in your pocket) · प्रयोगमा रहेको आफ्नै पुरानो फोन"
               checked={personalUsed}
               onChange={(v) => {
                 setPersonalUsed(v)
@@ -434,7 +568,7 @@ export function CustomsCalculator() {
             />
             <Checkbox
               id="returningWorker"
-              label="I am a foreign worker returning after 6+ months"
+              label="I am a foreign worker returning after 6+ months · ६ महिनापछि फर्केको वैदेशिक रोजगार कामदार"
               checked={returningWorker}
               onChange={setReturningWorker}
               disabled={personalUsed}
@@ -443,7 +577,7 @@ export function CustomsCalculator() {
               <div>
                 <NumberField
                   id="phonePriceNpr"
-                  label="Phone price (NPR)"
+                  label="Phone price (NPR) · फोनको मूल्य"
                   suffix="Rs"
                   value={phonePriceNpr}
                   onChange={setPhonePriceNpr}
@@ -489,7 +623,7 @@ export function CustomsCalculator() {
         {result === null ? (
           <div className="rounded-xl border border-slate-200 bg-white p-5">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-2">
-              Customs verdict
+              Customs verdict · भन्सार नतिजा
             </p>
             <p className="text-sm text-slate-600 leading-relaxed">
               Pick an item, enter the details, and press <strong>Calculate</strong> to
@@ -513,9 +647,9 @@ export function CustomsCalculator() {
               )}
             </div>
             <p className="text-xs text-slate-500 leading-relaxed px-1">
-              Rates reflect Nepal Customs personal-baggage practice as of FY 2081/82.
-              Confirm at your arrival port — declared values, exchange rate, and
-              category-specific reference prices can change.
+              Rules reflect the FY 2083/84 passenger-baggage schedule (Finance
+              Act 2083). Confirm at your arrival port — the customs value of
+              gold, the exchange rate and reference prices change daily.
             </p>
           </>
         )}
@@ -622,6 +756,31 @@ function WeightField({
       {helpHint && (
         <p className="text-[11px] text-slate-500 mt-2 leading-snug">{helpHint}</p>
       )}
+    </div>
+  )
+}
+
+function GoldPriceField({
+  value,
+  onChange,
+}: {
+  value: string
+  onChange: (v: string) => void
+}) {
+  return (
+    <div>
+      <NumberField
+        id="goldPrice"
+        label="Gold value per tola (optional) · प्रति तोला सुनको मूल्य (ऐच्छिक)"
+        suffix="Rs"
+        value={value}
+        onChange={onChange}
+      />
+      <p className="text-[11px] text-slate-500 mt-1.5 leading-snug">
+        Customs uses the international price at the NRB exchange rate, which is
+        a little below the Kathmandu retail price. Leave blank to see the rule
+        only.
+      </p>
     </div>
   )
 }

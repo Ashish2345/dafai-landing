@@ -11,7 +11,11 @@ const PRODUCT_LINKS = [
 const TOOLS_LINKS = [
   { label: 'Salary Tax Calculator', href: '/tools/salary-tax-calculator' },
   { label: 'NEPSE CGT Calculator', href: '/tools/share-cgt-calculator' },
-  { label: 'VAT Calculator (13%)', href: '/tools/vat-calculator' },
+  { label: 'TDS Calculator', href: '/tools/tds-calculator' },
+  { label: 'VAT Calculator', href: '/tools/vat-calculator' },
+  { label: 'Property Tax Calculator', href: '/tools/property-tax-calculator' },
+  { label: 'Gratuity & SSF Calculator', href: '/tools/gratuity-ssf-calculator' },
+  { label: 'Court Fee Calculator', href: '/tools/court-fee-calculator' },
   { label: 'Bluebook Fine Calculator', href: '/tools/bluebook-fine-calculator' },
   { label: 'Customs Duty Calculator', href: '/tools/customs-calculator' },
   { label: 'All free tools →', href: '/tools' },

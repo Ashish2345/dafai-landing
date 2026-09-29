@@ -4,10 +4,12 @@ import { PageHero } from '@/components/ui/PageHero'
 import { JsonLd } from '@/components/seo/JsonLd'
 import { breadcrumbListSchema, SITE_URL } from '@/lib/seo/schema'
 import { socialMeta } from '@/lib/seo/metadata'
+import { ToolIcon } from '@/components/tools/ToolIcon'
+import { TOOLS } from '@/lib/tools-registry'
 
 const PAGE_TITLE = 'Free Tools — Nepal Tax & Compliance'
 const PAGE_DESCRIPTION =
-  "Free calculators for Nepal's salaried employees, CAs, and HR teams. Salary TDS, VAT, NEPSE CGT — kept current with the latest Finance Act."
+  "Free calculators for Nepal tax, law and compliance — salary tax, TDS, VAT, property registration & CGT, NEPSE, gratuity & SSF, court fee, vehicle tax and customs. Updated for Finance Act 2083."
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
@@ -19,72 +21,6 @@ export const metadata: Metadata = {
     url: '/tools',
   }),
 }
-
-type Tool = {
-  href: string
-  title: string
-  description: string
-  audience: string
-  status: 'live' | 'soon'
-  icon: 'calc' | 'doc' | 'percent' | 'chart' | 'car' | 'plane'
-}
-
-const TOOLS: Tool[] = [
-  {
-    href: '/tools/salary-tax-calculator',
-    title: 'Salary Tax Calculator (FY 2083/84)',
-    description:
-      'Monthly TDS on the new Budget 2083/84 slabs — first Rs 10 lakh at 1%, top rate 29%. SSF, PF/EPF, CIT, insurance and the women’s rebate handled. FY 2082/83 included.',
-    audience: 'Employees · HR · CAs',
-    status: 'live',
-    icon: 'calc',
-  },
-  {
-    href: '/tools/vat-calculator',
-    title: 'VAT Calculator (13%)',
-    description:
-      'Add or extract 13% Nepal VAT on any invoice. Multi-line mode for line-item invoices with running totals.',
-    audience: 'Accountants · Small businesses',
-    status: 'live',
-    icon: 'percent',
-  },
-  {
-    href: '/tools/share-cgt-calculator',
-    title: 'NEPSE Share Profit & CGT Calculator',
-    description:
-      'See your real bankable profit on NEPSE trades — broker commission, SEBON fee, DP charge, and Capital Gains Tax (7.5%/5%/10%) all handled.',
-    audience: 'Investors · Brokers · CAs',
-    status: 'live',
-    icon: 'chart',
-  },
-  {
-    href: '/tools/bluebook-fine-calculator',
-    title: 'Bluebook Fine & Vehicle Tax Calculator',
-    description:
-      'Vehicle tax + late renewal penalty (5%/10%/20%/32% bands) for two- and four-wheelers. Bagmati rates with manual override for other provinces.',
-    audience: 'Vehicle owners · Bike & car drivers',
-    status: 'live',
-    icon: 'car',
-  },
-  {
-    href: '/tools/customs-calculator',
-    title: 'Customs Duty Calculator (Gold, Mobile, TV)',
-    description:
-      'Personal-baggage customs rules for travellers arriving in Nepal — gold jewelry, raw gold, mobile phones, and televisions. Free vs taxable vs not allowed.',
-    audience: 'Travellers · NRNs · Returning workers',
-    status: 'live',
-    icon: 'plane',
-  },
-  {
-    href: '/tools/finance-act-changelog',
-    title: 'Finance Act Changelog',
-    description:
-      'Side-by-side diff of every Finance Act change since 2078 — what was deleted, what was added, what was amended.',
-    audience: 'CAs · Tax lawyers',
-    status: 'soon',
-    icon: 'doc',
-  },
-]
 
 export default function ToolsIndexPage() {
   return (
@@ -108,7 +44,7 @@ export default function ToolsIndexPage() {
           hasPart: TOOLS.filter((t) => t.status === 'live').map((t) => ({
             '@type': 'WebApplication',
             name: t.title,
-            url: `${SITE_URL}${t.href}`,
+            url: `${SITE_URL}/tools/${t.slug}`,
             applicationCategory: 'FinanceApplication',
             description: t.description,
             isAccessibleForFree: true,
@@ -175,11 +111,11 @@ export default function ToolsIndexPage() {
                 </div>
               )
               return t.status === 'live' ? (
-                <Link key={t.href} href={t.href} className="block h-full">
+                <Link key={t.slug} href={`/tools/${t.slug}`} className="block h-full">
                   {card}
                 </Link>
               ) : (
-                <div key={t.href} className="block h-full" aria-disabled>
+                <div key={t.slug} className="block h-full" aria-disabled>
                   {card}
                 </div>
               )
@@ -188,48 +124,5 @@ export default function ToolsIndexPage() {
         </div>
       </section>
     </main>
-  )
-}
-
-function ToolIcon({ name }: { name: 'calc' | 'doc' | 'percent' | 'chart' | 'car' | 'plane' }) {
-  if (name === 'calc') {
-    return (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m-6 4h6m-6 4h4M5 5a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5z" />
-      </svg>
-    )
-  }
-  if (name === 'percent') {
-    return (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19 5L5 19m2-12a2 2 0 11-4 0 2 2 0 014 0zm14 12a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
-    )
-  }
-  if (name === 'chart') {
-    return (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 3v18h18M7 14l4-4 4 4 5-7" />
-      </svg>
-    )
-  }
-  if (name === 'car') {
-    return (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 9l1.5-4.5A2 2 0 016.4 3h11.2a2 2 0 011.9 1.5L21 9m-18 0v9a1 1 0 001 1h2a1 1 0 001-1v-2h12v2a1 1 0 001 1h2a1 1 0 001-1V9m-18 0h18M7 14a1 1 0 100-2 1 1 0 000 2zm10 0a1 1 0 100-2 1 1 0 000 2z" />
-      </svg>
-    )
-  }
-  if (name === 'plane') {
-    return (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1L15 22v-1.5L13 19v-5.5l8 2.5z" />
-      </svg>
-    )
-  }
-  return (
-    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z" />
-    </svg>
   )
 }

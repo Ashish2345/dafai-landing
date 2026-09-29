@@ -3,10 +3,12 @@
 import { useMemo, useState } from 'react'
 import {
   calculateVat,
+  DIGITAL_PAYMENT_REBATE_RATE,
   formatNprVat,
   sumVatRows,
-  VAT_RATE,
+  VAT_RATES,
   type VatMode,
+  type VatRateKey,
 } from '@/lib/tax/vat-nepal'
 
 const TEAL = '#09383e'
@@ -15,6 +17,7 @@ type Line = {
   id: string
   label: string
   amount: number
+  rateKey: VatRateKey
 }
 
 let _idCounter = 0
@@ -23,31 +26,47 @@ function newId(): string {
   return `line-${_idCounter}`
 }
 
-const INITIAL_LINES: Line[] = [{ id: newId(), label: '', amount: 0 }]
+function blankLine(): Line {
+  return { id: newId(), label: '', amount: 0, rateKey: 'standard' }
+}
+
+const INITIAL_LINES: Line[] = [blankLine()]
 
 export function VatCalculator() {
   const [mode, setMode] = useState<VatMode>('exclusive')
   const [lines, setLines] = useState<Line[]>(INITIAL_LINES)
+  const [digitalPayment, setDigitalPayment] = useState(false)
 
   const computedRows = useMemo(
-    () => lines.map((line) => ({ ...line, ...calculateVat(line.amount, mode) })),
+    () =>
+      lines.map((line) => ({
+        ...line,
+        ...calculateVat(line.amount, mode, VAT_RATES[line.rateKey].rate),
+      })),
     [lines, mode],
   )
 
   const totals = useMemo(() => sumVatRows(computedRows), [computedRows])
+  const digitalRebate = digitalPayment
+    ? Math.round(totals.totalVat * DIGITAL_PAYMENT_REBATE_RATE * 100) / 100
+    : 0
+  const usedRates = Array.from(new Set(lines.filter((l) => l.amount > 0).map((l) => l.rateKey)))
+  const vatLabel =
+    usedRates.length === 1 ? `VAT (${VAT_RATES[usedRates[0]].label})` : 'VAT'
 
   function updateLine(id: string, patch: Partial<Line>) {
     setLines((prev) => prev.map((l) => (l.id === id ? { ...l, ...patch } : l)))
   }
   function addLine() {
-    setLines((prev) => [...prev, { id: newId(), label: '', amount: 0 }])
+    setLines((prev) => [...prev, blankLine()])
   }
   function removeLine(id: string) {
     setLines((prev) => (prev.length === 1 ? prev : prev.filter((l) => l.id !== id)))
   }
   function reset() {
-    setLines([{ id: newId(), label: '', amount: 0 }])
+    setLines([blankLine()])
     setMode('exclusive')
+    setDigitalPayment(false)
   }
 
   const inputColLabel =
@@ -58,22 +77,22 @@ export function VatCalculator() {
       {/* Mode toggle */}
       <fieldset>
         <legend className="block text-sm font-semibold text-slate-900 mb-3">
-          What do you want to do?
+          What do you want to do? · <span lang="ne" className="font-normal text-slate-400">के गर्ने?</span>
         </legend>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <ModeButton
             active={mode === 'exclusive'}
             onClick={() => setMode('exclusive')}
             iconKind="plus"
-            title="Add 13% VAT"
-            subtitle="My prices don't include VAT — add 13% to every line."
+            title="Add VAT · भ्याट थप्नुहोस्"
+            subtitle="My prices don't include VAT — add it to every line."
           />
           <ModeButton
             active={mode === 'inclusive'}
             onClick={() => setMode('inclusive')}
             iconKind="search"
-            title="Find 13% VAT"
-            subtitle="My prices already include VAT — show 13% inside every line."
+            title="Find VAT · भ्याट छुट्याउनुहोस्"
+            subtitle="My prices already include VAT — show the VAT inside every line."
           />
         </div>
       </fieldset>
@@ -82,7 +101,7 @@ export function VatCalculator() {
       <div>
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-display font-semibold text-slate-900 text-base">
-            Line items
+            Line items · <span lang="ne" className="font-normal text-slate-400">सामानको विवरण</span>
           </h3>
           <span className="text-xs text-slate-500">
             {lines.length} {lines.length === 1 ? 'line' : 'lines'}
@@ -97,6 +116,8 @@ export function VatCalculator() {
               label={line.label}
               amount={line.amount}
               inputLabel={inputColLabel}
+              rateKey={line.rateKey}
+              onRateChange={(rateKey) => updateLine(line.id, { rateKey })}
               onLabelChange={(label) => updateLine(line.id, { label })}
               onAmountChange={(amount) => updateLine(line.id, { amount })}
               onRemove={lines.length > 1 ? () => removeLine(line.id) : undefined}
@@ -137,33 +158,66 @@ export function VatCalculator() {
         aria-live="polite"
       >
         <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-4">
-          Invoice totals
+          Invoice totals · बिलको जम्मा
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <TotalCard
-            label="Subtotal"
+            label="Subtotal · जम्मा (भ्याट बाहेक)"
             sublabel="excl. VAT"
             value={formatNprVat(totals.totalNet)}
           />
           <TotalCard
-            label="VAT (13%)"
+            label={vatLabel}
             value={formatNprVat(totals.totalVat)}
             highlight
           />
           <TotalCard
-            label="Grand total"
+            label="Grand total · कुल जम्मा"
             sublabel="incl. VAT"
             value={formatNprVat(totals.totalGross)}
             strong
           />
         </div>
+
+        <label className="mt-5 pt-4 border-t border-slate-200 flex items-start gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={digitalPayment}
+            onChange={(e) => setDigitalPayment(e.target.checked)}
+            className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#09383e] focus:ring-[#09383e]/30"
+          />
+          <span className="min-w-0">
+            <span className="block text-sm font-medium text-slate-900 leading-tight">
+              Paid digitally (QR, wallet, card, bank transfer)
+            </span>
+            <span className="block text-xs text-slate-500 mt-0.5 leading-snug">
+              Consumers get 10% of the VAT back instantly on items listed in the
+              IRD notice (Finance Act 2083).
+            </span>
+          </span>
+        </label>
+        {digitalPayment && totals.totalVat > 0 && (
+          <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <TotalCard
+              label="Digital-payment rebate · डिजिटल भुक्तानी छुट"
+              sublabel="10% of VAT"
+              value={`− ${formatNprVat(digitalRebate)}`}
+            />
+            <TotalCard
+              label="You pay · तपाईंले तिर्ने"
+              sublabel="after rebate"
+              value={formatNprVat(Math.round((totals.totalGross - digitalRebate) * 100) / 100)}
+              strong
+            />
+          </div>
+        )}
       </div>
 
       <p className="text-xs text-slate-500 leading-relaxed">
-        Calculations use the standard Nepal VAT rate of {(VAT_RATE * 100).toFixed(0)}%
-        (VAT Act 2052, last revised by Finance Act 2081). Some goods and services
-        are zero-rated or VAT-exempt — for those, the rate above does not apply.
-        Amounts are rounded to two decimal places (paisa).
+        Rates per the VAT Act 2052 as amended by Finance Act 2083: 13% standard,
+        5% for platform ride-sharing and electricity to end users, and 0% for
+        exempt or zero-rated supplies. Pick the rate per line. Amounts are
+        rounded to two decimal places (paisa).
       </p>
     </div>
   )
@@ -240,6 +294,8 @@ function LineRow({
   label,
   amount,
   inputLabel,
+  rateKey,
+  onRateChange,
   onLabelChange,
   onAmountChange,
   onRemove,
@@ -248,13 +304,15 @@ function LineRow({
   label: string
   amount: number
   inputLabel: string
+  rateKey: VatRateKey
+  onRateChange: (v: VatRateKey) => void
   onLabelChange: (v: string) => void
   onAmountChange: (v: number) => void
   onRemove?: () => void
 }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
-      <div className="grid grid-cols-1 sm:grid-cols-[1fr_180px_auto] gap-3 items-start">
+      <div className="grid grid-cols-1 sm:grid-cols-[1fr_180px_150px_auto] gap-3 items-start">
         {/* Label input */}
         <div className="min-w-0">
           <label
@@ -307,6 +365,28 @@ function LineRow({
               className="w-full rounded-lg border border-slate-200 bg-white pl-9 pr-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#09383e]/20 focus:border-[#09383e]"
             />
           </div>
+        </div>
+
+        {/* VAT rate */}
+        <div>
+          <label
+            htmlFor={`rate-${index}`}
+            className="block text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5"
+          >
+            VAT rate · भ्याट दर
+          </label>
+          <select
+            id={`rate-${index}`}
+            value={rateKey}
+            onChange={(e) => onRateChange(e.target.value as VatRateKey)}
+            className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#09383e]/20 focus:border-[#09383e]"
+          >
+            {(Object.keys(VAT_RATES) as VatRateKey[]).map((k) => (
+              <option key={k} value={k}>
+                {VAT_RATES[k].label} · {VAT_RATES[k].hint}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Remove button */}

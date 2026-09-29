@@ -23,10 +23,12 @@ type UIInputs = {
   citContribution: number
   lifeInsurancePremium: number
   healthInsurancePremium: number
+  houseInsurancePremium: number // FY 2083/84 only
   ssfContribution: number
   pfContribution: number
   status: FilingStatus // FY 2082/83 only
   applyWomenRebate: boolean // FY 2083/84 only
+  pensionFundContributor: boolean // FY 2083/84 only
 }
 
 const DEFAULT_INPUTS: UIInputs = {
@@ -36,10 +38,12 @@ const DEFAULT_INPUTS: UIInputs = {
   citContribution: 0,
   lifeInsurancePremium: 0,
   healthInsurancePremium: 0,
+  houseInsurancePremium: 0,
   ssfContribution: 0,
   pfContribution: 0,
   status: 'single',
   applyWomenRebate: false,
+  pensionFundContributor: false,
 }
 
 /** Normalized result shape both years render through (2082/83 has no rebate). */
@@ -58,8 +62,10 @@ export function SalaryTaxCalculator() {
         citContribution: inputs.citContribution,
         lifeInsurancePremium: inputs.lifeInsurancePremium,
         healthInsurancePremium: inputs.healthInsurancePremium,
+        houseInsurancePremium: inputs.houseInsurancePremium,
         ssfContribution: inputs.ssfContribution,
         pfContribution: inputs.pfContribution,
+        pensionFundContributor: inputs.pensionFundContributor,
         applyWomenRebate: inputs.applyWomenRebate,
       })
     }
@@ -75,7 +81,7 @@ export function SalaryTaxCalculator() {
       ssfContribution: inputs.ssfContribution,
       pfContribution: inputs.pfContribution,
     })
-    return { ...r, taxBeforeRebate: r.annualTax, womenRebate: 0 }
+    return { ...r, houseInsuranceDeduction: 0, taxBeforeRebate: r.annualTax, womenRebate: 0 }
   }, [inputs, year])
 
   function set<K extends keyof UIInputs>(key: K, value: UIInputs[K]) {
@@ -95,7 +101,7 @@ export function SalaryTaxCalculator() {
         {/* Fiscal year */}
         <fieldset className="rounded-xl border border-slate-200 bg-white p-4">
           <legend className="px-1 text-sm font-semibold text-slate-900">
-            Fiscal year
+            Fiscal year · <span lang="ne" className="font-normal text-slate-400">आर्थिक वर्ष</span>
           </legend>
           <div className="grid grid-cols-2 gap-2 mt-1">
             {(
@@ -122,9 +128,9 @@ export function SalaryTaxCalculator() {
           </div>
           {isNewYear && (
             <p className="mt-3 -mx-1 px-3 py-2 rounded-md bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
-              FY 2083/84 slabs are <strong>as proposed in Budget 2083/84</strong> and
-              take effect 1 Shrawan 2083 (~17 Jul 2026). Figures are pending the
-              gazetted Finance Act 2083 — verify with your CA before filing.
+              FY 2083/84 slabs per <strong>Finance Act 2083</strong>, applied from
+              the first payroll on or after 1 Shrawan 2083 (17 Jul 2026). One
+              unified table for everyone, first Rs 10 lakh at 1%, top rate 29%.
             </p>
           )}
         </fieldset>
@@ -133,7 +139,7 @@ export function SalaryTaxCalculator() {
         {isNewYear ? (
           <fieldset className="rounded-xl border border-slate-200 bg-white p-4">
             <legend className="px-1 text-sm font-semibold text-slate-900">
-              Rebate
+              Rebates &amp; exemptions · <span lang="ne" className="font-normal text-slate-400">छुट र सुविधा</span>
             </legend>
             <label className="mt-1 flex items-start gap-3 cursor-pointer">
               <input
@@ -152,11 +158,28 @@ export function SalaryTaxCalculator() {
                 </span>
               </span>
             </label>
+            <label className="mt-3 flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={inputs.pensionFundContributor}
+                onChange={(e) => set('pensionFundContributor', e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#09383e] focus:ring-[#09383e]/30"
+              />
+              <span className="min-w-0">
+                <span className="block text-sm font-medium text-slate-900 leading-tight">
+                  Pension-fund contributor — 1% SST exempt
+                </span>
+                <span className="block text-xs text-slate-500 mt-0.5 leading-snug">
+                  You contribute to a contribution-based pension fund. Like SSF,
+                  this makes the first Rs 10 lakh slab 0%.
+                </span>
+              </span>
+            </label>
           </fieldset>
         ) : (
           <fieldset className="rounded-xl border border-slate-200 bg-white p-4">
             <legend className="px-1 text-sm font-semibold text-slate-900">
-              Filing status
+              Filing status · <span lang="ne" className="font-normal text-slate-400">वैवाहिक स्थिति</span>
             </legend>
             <div className="grid grid-cols-2 gap-2 mt-1">
               {(['single', 'couple'] as FilingStatus[]).map((s) => (
@@ -180,27 +203,27 @@ export function SalaryTaxCalculator() {
 
         {/* Income */}
         <InputSection
-          title="Income"
+          title="Income · आय"
           subtitle="annual gross — basic + allowances + bonus"
           tone="in"
         >
           <NumberField
             id="monthlyBasic"
-            label="Monthly basic salary"
+            label="Monthly basic salary · मासिक आधारभूत तलब"
             help="Your basic pay (excludes allowances)."
             value={inputs.monthlyBasic}
             onChange={(v) => set('monthlyBasic', v)}
           />
           <NumberField
             id="monthlyAllowances"
-            label="Monthly allowances"
+            label="Monthly allowances · मासिक भत्ता"
             help="Dearness, transport, communication, grade — combined."
             value={inputs.monthlyAllowances}
             onChange={(v) => set('monthlyAllowances', v)}
           />
           <NumberField
             id="festivalBonus"
-            label="Festival bonus (Dashain Kharcha)"
+            label="Festival bonus (Dashain Kharcha) · दशैं खर्च"
             help="One-off annual bonus. Typically equals 1 month's basic."
             value={inputs.festivalBonus}
             onChange={(v) => set('festivalBonus', v)}
@@ -209,27 +232,27 @@ export function SalaryTaxCalculator() {
 
         {/* Retirement contributions */}
         <InputSection
-          title="Retirement contributions"
+          title="Retirement contributions · अवकाश कोष योगदान"
           subtitle="combined SSF + PF + CIT — capped at lowest of actual / 1/3 of gross / Rs 5,00,000"
           tone="retire"
         >
           <NumberField
             id="ssf"
-            label="SSF (Social Security Fund)"
+            label="SSF (Social Security Fund) · सामाजिक सुरक्षा कोष"
             help="Annual employee contribution. Any non-zero amount also makes the first slab 0% (1% SST exemption)."
             value={inputs.ssfContribution}
             onChange={(v) => set('ssfContribution', v)}
           />
           <NumberField
             id="pf"
-            label="PF / EPF (Provident Fund)"
+            label="PF / EPF (Provident Fund) · सञ्चय कोष"
             help="Annual employee contribution."
             value={inputs.pfContribution}
             onChange={(v) => set('pfContribution', v)}
           />
           <NumberField
             id="cit"
-            label="CIT (Citizen Investment Trust)"
+            label="CIT (Citizen Investment Trust) · नागरिक लगानी कोष"
             help="Annual contribution. Counts toward the combined retirement cap above."
             value={inputs.citContribution}
             onChange={(v) => set('citContribution', v)}
@@ -238,13 +261,13 @@ export function SalaryTaxCalculator() {
 
         {/* Other deductions */}
         <InputSection
-          title="Other annual deductions"
+          title="Other annual deductions · अन्य वार्षिक कट्टी"
           subtitle="capped individually, applied separately from the retirement cap"
           tone="other"
         >
           <NumberField
             id="life"
-            label="Life insurance premium"
+            label="Life insurance premium · जीवन बीमा शुल्क"
             help="Capped at Rs 40,000."
             value={inputs.lifeInsurancePremium}
             onChange={(v) => set('lifeInsurancePremium', v)}
@@ -252,12 +275,22 @@ export function SalaryTaxCalculator() {
           />
           <NumberField
             id="health"
-            label="Health insurance premium"
+            label="Health insurance premium · स्वास्थ्य बीमा शुल्क"
             help="Capped at Rs 20,000."
             value={inputs.healthInsurancePremium}
             onChange={(v) => set('healthInsurancePremium', v)}
             cap={20_000}
           />
+          {isNewYear && (
+            <NumberField
+              id="house"
+              label="House (building) insurance premium · घर बीमा शुल्क"
+              help="Insurance on your own private residential building. Capped at Rs 10,000 (new in FY 2083/84)."
+              value={inputs.houseInsurancePremium}
+              onChange={(v) => set('houseInsurancePremium', v)}
+              cap={10_000}
+            />
+          )}
         </InputSection>
 
         <button
@@ -277,7 +310,7 @@ export function SalaryTaxCalculator() {
         {/* Headline */}
         <div className="rounded-xl border-2 border-[#09383e] bg-white p-5">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-            Your monthly TDS · FY {isNewYear ? '2083/84' : '2082/83'}
+            Your monthly TDS · मासिक कर कट्टी · FY {isNewYear ? '2083/84' : '2082/83'}
           </p>
           <p
             className="font-display font-bold text-4xl mb-2 leading-none tabular-nums"
@@ -299,7 +332,7 @@ export function SalaryTaxCalculator() {
 
         {/* Income summary */}
         <ResultCard
-          title="Income summary"
+          title="Income summary · आय सारांश"
           subtitle="gross → taxable"
           tone="in"
           total={{
@@ -308,12 +341,12 @@ export function SalaryTaxCalculator() {
           }}
         >
           <DataRow
-            label="Annual gross income"
+            label="Annual gross income · कुल वार्षिक आय"
             value={formatNpr(result.grossAnnualIncome)}
           />
           <DataRow
-            label="Total deductions"
-            sublabel="retirement + life + health"
+            label="Total deductions · कुल कट्टी"
+            sublabel={isNewYear ? 'retirement + life + health + house' : 'retirement + life + health'}
             value={formatNpr(result.totalDeductions)}
             negative
           />
@@ -322,7 +355,7 @@ export function SalaryTaxCalculator() {
         {/* Retirement deduction */}
         {result.combinedRetirementInput > 0 && (
           <ResultCard
-            title="Retirement deduction"
+            title="Retirement deduction · अवकाश कोष कट्टी"
             subtitle="combined cap — lowest of three"
             tone="retire"
             total={{
@@ -364,9 +397,10 @@ export function SalaryTaxCalculator() {
 
         {/* Other deductions */}
         {(result.lifeInsuranceDeduction > 0 ||
-          result.healthInsuranceDeduction > 0) && (
+          result.healthInsuranceDeduction > 0 ||
+          result.houseInsuranceDeduction > 0) && (
           <ResultCard
-            title="Other deductions"
+            title="Other deductions · अन्य कट्टी"
             subtitle="applied separately from retirement"
             tone="other"
           >
@@ -382,6 +416,12 @@ export function SalaryTaxCalculator() {
                 value={formatNpr(result.healthInsuranceDeduction)}
               />
             )}
+            {result.houseInsuranceDeduction > 0 && (
+              <DataRow
+                label="House insurance"
+                value={formatNpr(result.houseInsuranceDeduction)}
+              />
+            )}
           </ResultCard>
         )}
 
@@ -390,7 +430,7 @@ export function SalaryTaxCalculator() {
           title={`Slab breakdown${isNewYear ? '' : ` · ${inputs.status === 'single' ? 'Single' : 'Couple'}`}`}
           subtitle={
             result.ssfParticipant
-              ? '1% SST slab → 0% (SSF participant)'
+              ? '1% SST slab → 0% (SSF / pension fund)'
               : isNewYear
                 ? 'unified slabs — all residents'
                 : 'standard slabs'

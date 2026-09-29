@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getAllPosts } from '@/lib/mdx'
 import { getAllAuthors } from '@/lib/authors'
+import { LIVE_TOOLS } from '@/lib/tools-registry'
 
 const BASE_URL = 'https://merodafa.com'
 
@@ -14,11 +15,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${BASE_URL}/team`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${BASE_URL}/tools`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${BASE_URL}/tools/salary-tax-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
-    { url: `${BASE_URL}/tools/vat-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
-    { url: `${BASE_URL}/tools/share-cgt-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
-    { url: `${BASE_URL}/tools/bluebook-fine-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
-    { url: `${BASE_URL}/tools/customs-calculator`, lastModified: now, changeFrequency: 'monthly', priority: 0.95 },
+    ...LIVE_TOOLS.map((t) => ({
+      url: `${BASE_URL}/tools/${t.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.95,
+    })),
   ]
 
   const posts: MetadataRoute.Sitemap = getAllPosts().map((post) => ({

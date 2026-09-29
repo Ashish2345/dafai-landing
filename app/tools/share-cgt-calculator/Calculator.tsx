@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import {
+  cgtRegimeFor,
   computeCgt,
   formatNprCgt,
   formatPercentCgt,
@@ -10,6 +11,17 @@ import {
 } from '@/lib/tax/nepse-cgt'
 
 const TEAL = '#09383e'
+
+const INVESTOR_LABELS: Record<InvestorType, string> = {
+  individual: 'Individual',
+  institutional: 'Institution',
+  other: 'Non-resident',
+}
+
+/** 10% → "10%", 7.5% → "7.5%". */
+function pct(rate: number): string {
+  return formatPercentCgt(rate, Number.isInteger(rate * 100) ? 0 : 1)
+}
 
 const DEFAULT_INPUTS: CgtInputs = {
   quantity: 0,
@@ -29,6 +41,14 @@ export function NepseCgtCalculator() {
     setInputs((prev) => ({ ...prev, [key]: value }))
   }
 
+  const regime = cgtRegimeFor(inputs.sellDate)
+  const rateHint =
+    inputs.investorType === 'individual'
+      ? `CGT: ${pct(regime.individualShortTerm)} if held ≤ 365 days, ${pct(regime.individualLongTerm)} if > 365 days`
+      : inputs.investorType === 'institutional'
+        ? `CGT: ${pct(regime.institutional)} flat for resident entities`
+        : `CGT: ${pct(regime.other)} flat for non-residents and other persons`
+
   const hasTrade = inputs.quantity > 0 && inputs.buyPrice > 0 && inputs.sellPrice > 0
   const dateError =
     inputs.buyDate && inputs.sellDate && result.holdingDays === null
@@ -45,37 +65,33 @@ export function NepseCgtCalculator() {
       >
         {/* Investor type */}
         <FormSection
-          label="Investor type"
-          hint={
-            inputs.investorType === 'individual'
-              ? 'CGT: 7.5% if held ≤ 365 days, 5% if > 365 days'
-              : 'CGT: 10% flat (no holding-period rule)'
-          }
+          label="Investor type · लगानीकर्ताको प्रकार"
+          hint={`${rateHint} · ${regime.label} rates (picked from the sell date)`}
         >
-          <div className="grid grid-cols-2 gap-2">
-            {(['individual', 'institutional'] as InvestorType[]).map((t) => (
+          <div className="grid grid-cols-3 gap-2">
+            {(['individual', 'institutional', 'other'] as InvestorType[]).map((t) => (
               <button
                 key={t}
                 type="button"
                 onClick={() => set('investorType', t)}
                 aria-pressed={inputs.investorType === t}
-                className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${
+                className={`rounded-lg border px-1.5 sm:px-3 py-2.5 text-[13px] sm:text-sm whitespace-nowrap font-medium transition-colors ${
                   inputs.investorType === t
                     ? 'border-[#09383e] bg-[#09383e]/5 text-[#09383e]'
                     : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                 }`}
               >
-                {t === 'individual' ? 'Individual' : 'Institutional'}
+                {INVESTOR_LABELS[t]}
               </button>
             ))}
           </div>
         </FormSection>
 
         {/* Trade details */}
-        <FormSection label="Trade">
+        <FormSection label="Trade · कारोबार">
           <NumberField
             id="qty"
-            label="Quantity (shares)"
+            label="Quantity (shares) · सेयर संख्या"
             value={inputs.quantity}
             onChange={(v) => set('quantity', Math.floor(v))}
             integer
@@ -83,13 +99,13 @@ export function NepseCgtCalculator() {
           <div className="grid grid-cols-2 gap-3">
             <NumberField
               id="buyPrice"
-              label="Buy price"
+              label="Buy price · खरिद मूल्य"
               value={inputs.buyPrice}
               onChange={(v) => set('buyPrice', v)}
             />
             <NumberField
               id="sellPrice"
-              label="Sell price"
+              label="Sell price · बिक्री मूल्य"
               value={inputs.sellPrice}
               onChange={(v) => set('sellPrice', v)}
             />
@@ -97,13 +113,13 @@ export function NepseCgtCalculator() {
           <div className="grid grid-cols-2 gap-3">
             <DateField
               id="buyDate"
-              label="Buy date"
+              label="Buy date · खरिद मिति"
               value={inputs.buyDate}
               onChange={(v) => set('buyDate', v)}
             />
             <DateField
               id="sellDate"
-              label="Sell date"
+              label="Sell date · बिक्री मिति"
               value={inputs.sellDate}
               onChange={(v) => set('sellDate', v)}
             />
@@ -158,7 +174,7 @@ export function NepseCgtCalculator() {
                 {result.holdingDays !== null
                   ? `${result.holdingDays} days · `
                   : 'Dates not set · '}
-                CGT {formatPercentCgt(result.cgtRate, result.cgtRate === 0.075 ? 1 : 0)}
+                CGT {pct(result.cgtRate)}
                 {result.holdingDays !== null && (
                   <span> ({result.isLongTerm ? 'long-term' : 'short-term'})</span>
                 )}
@@ -167,30 +183,30 @@ export function NepseCgtCalculator() {
 
             {/* Combined breakdown */}
             <div className="rounded-xl border border-slate-200 bg-white divide-y divide-slate-200">
-              <ResultSection label="Buy leg" hint="cash out">
+              <ResultSection label="Buy leg · खरिद" hint="cash out">
                 <Row
                   label="Shares value"
                   sublabel={`${result.quantity} × ${formatNprCgt(result.buyPrice)}`}
                   value={formatNprCgt(result.buyTurnover)}
                 />
                 <Row
-                  label="Broker commission"
+                  label="Broker commission · ब्रोकर कमिसन"
                   sublabel={`@ ${formatPercentCgt(result.buyCommissionRate, 2)}`}
                   value={formatNprCgt(result.buyCommission)}
                 />
                 <Row label="SEBON @ 0.015%" value={formatNprCgt(result.buySebonFee)} />
                 <Row label="DP charge" value={formatNprCgt(result.buyDpCharge)} />
-                <Row label="Total cost" value={formatNprCgt(result.totalBuyCost)} strong />
+                <Row label="Total cost · कुल लागत" value={formatNprCgt(result.totalBuyCost)} strong />
               </ResultSection>
 
-              <ResultSection label="Sell leg" hint="gross & expenses">
+              <ResultSection label="Sell leg · बिक्री" hint="gross & expenses">
                 <Row
                   label="Shares value"
                   sublabel={`${result.quantity} × ${formatNprCgt(result.sellPrice)}`}
                   value={formatNprCgt(result.sellTurnover)}
                 />
                 <Row
-                  label="Broker commission"
+                  label="Broker commission · ब्रोकर कमिसन"
                   sublabel={`@ ${formatPercentCgt(result.sellCommissionRate, 2)}`}
                   value={formatNprCgt(result.sellCommission)}
                   negative
@@ -198,7 +214,7 @@ export function NepseCgtCalculator() {
                 <Row label="SEBON @ 0.015%" value={formatNprCgt(result.sellSebonFee)} negative />
                 <Row label="DP charge" value={formatNprCgt(result.sellDpCharge)} negative />
                 <Row
-                  label="Net proceeds"
+                  label="Net proceeds · खुद प्राप्ति"
                   sublabel="before CGT"
                   value={formatNprCgt(result.sellTurnover - result.totalSellExpenses)}
                   strong
@@ -206,10 +222,10 @@ export function NepseCgtCalculator() {
               </ResultSection>
 
               <ResultSection
-                label="Capital gain & tax"
+                label="Capital gain & tax · पुँजीगत लाभ र कर"
                 hint={
                   result.capitalGain > 0
-                    ? `${formatPercentCgt(result.cgtRate, result.cgtRate === 0.075 ? 1 : 0)} CGT`
+                    ? `${pct(result.cgtRate)} CGT`
                     : 'no CGT'
                 }
               >
@@ -229,20 +245,20 @@ export function NepseCgtCalculator() {
                 {result.capitalGain > 0 && (
                   <Row
                     label="CGT"
-                    sublabel={`@ ${formatPercentCgt(result.cgtRate, result.cgtRate === 0.075 ? 1 : 0)}`}
+                    sublabel={`@ ${pct(result.cgtRate)} · ${result.cgtRegime.isFinal ? 'final tax' : 'advance tax'}`}
                     value={formatNprCgt(result.cgtAmount)}
                     negative
                   />
                 )}
               </ResultSection>
 
-              <ResultSection label="Bottom line">
+              <ResultSection label="Bottom line · अन्तिम हिसाब">
                 <Row
                   label={result.netProfit >= 0 ? 'Net profit' : 'Net loss'}
                   value={formatNprCgt(result.netProfit)}
                   strong
                 />
-                <Row label="Bank credit" value={formatNprCgt(result.netReceivedInBank)} strong accent />
+                <Row label="Bank credit · बैंकमा आउने रकम" value={formatNprCgt(result.netReceivedInBank)} strong accent />
                 {result.totalBuyCost > 0 && (
                   <Row
                     label="Return on investment"
@@ -253,9 +269,12 @@ export function NepseCgtCalculator() {
             </div>
 
             <p className="text-xs text-slate-500 leading-relaxed px-1">
-              SEBON regulation, CDSC schedule, Income Tax Act 2058 + Finance Act
-              2081. Excludes mutual funds, IPO/FPO/auction shares, bonus/right
-              cost-base, NRN/foreign rates.
+              SEBON commission schedule, CDSC tariff, Income Tax Act 2058
+              s.95Ka as amended by Finance Act 2083 (sales from 17 Jul 2026;
+              earlier sales use FY 2082/83 rates). CGT is withheld by your
+              broker and is now a final tax. Excludes mutual funds, bonds and
+              bonus/right-share cost-base adjustments — use your WACC as the
+              buy price.
             </p>
           </>
         )}

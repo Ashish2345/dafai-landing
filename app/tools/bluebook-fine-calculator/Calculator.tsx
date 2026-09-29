@@ -2,13 +2,17 @@
 
 import { useMemo, useState } from 'react'
 import {
+  ALL_PROVINCES,
   computeBluebookFine,
+  findTier,
   formatNprBluebook,
   formatPercentBluebook,
   getTiers,
   PROVINCE_LABELS,
-  SUPPORTED_PROVINCES,
+  PROVINCES,
+  sizeUnit,
   type BluebookInputs,
+  type Powertrain,
   type Province,
   type VehicleType,
 } from '@/lib/tax/bluebook-fine'
@@ -20,23 +24,15 @@ function todayYmd(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
-const ALL_PROVINCES: Province[] = [
-  'bagmati',
-  'koshi',
-  'madhesh',
-  'gandaki',
-  'lumbini',
-  'karnali',
-  'sudurpaschim',
-]
-
 const DEFAULTS: BluebookInputs = {
   vehicleType: 'two-wheeler',
+  powertrain: 'fuel',
   cc: 0,
   province: 'bagmati',
   expiryDate: '',
   asOfDate: todayYmd(),
   baseTaxOverride: 0,
+  includeRenewalFee: true,
 }
 
 export function BluebookCalculator() {
@@ -54,21 +50,19 @@ export function BluebookCalculator() {
     setInputs((prev) => ({ ...prev, [key]: value }))
   }
 
-  const provinceSupported = SUPPORTED_PROVINCES.includes(inputs.province)
-  const tiers = provinceSupported ? getTiers(inputs.province, inputs.vehicleType) : null
-  const matchedTier = tiers
-    ? tiers.find((t, i, arr) =>
-        t.upTo === null
-          ? inputs.cc > (arr[i - 1]?.upTo ?? 0)
-          : inputs.cc <= t.upTo,
-      )
-    : null
+  const powertrain: Powertrain = inputs.powertrain ?? 'fuel'
+  const unit = sizeUnit(inputs.vehicleType, powertrain)
+  const tiers = getTiers(inputs.province, inputs.vehicleType, powertrain)
+  const provinceSupported = tiers !== null
+  const matchedTier = findTier(inputs.province, inputs.vehicleType, inputs.cc, powertrain)
+  const provinceRates = PROVINCES[inputs.province]
 
   const ready =
     inputs.expiryDate &&
     inputs.asOfDate &&
     ((provinceSupported && inputs.cc > 0) ||
       (useOverride && (inputs.baseTaxOverride ?? 0) > 0))
+  const yearsOwed = result.years.filter((y) => y.daysLate > 0).length
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
@@ -79,7 +73,7 @@ export function BluebookCalculator() {
         aria-label="Bluebook fine calculator inputs"
       >
         {/* Vehicle */}
-        <FormSection label="Vehicle">
+        <FormSection label="Vehicle · सवारी साधन">
           <div className="grid grid-cols-2 gap-2">
             {(['two-wheeler', 'four-wheeler'] as VehicleType[]).map((vt) => (
               <button
@@ -93,47 +87,69 @@ export function BluebookCalculator() {
                     : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
                 }`}
               >
-                {vt === 'two-wheeler' ? 'Two-wheeler' : 'Four-wheeler'}
+                {vt === 'two-wheeler' ? 'Two-wheeler' : 'Car / jeep / van'}
+              </button>
+            ))}
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {(['fuel', 'electric'] as Powertrain[]).map((pt) => (
+              <button
+                key={pt}
+                type="button"
+                onClick={() => set('powertrain', pt)}
+                aria-pressed={powertrain === pt}
+                className={`rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+                  powertrain === pt
+                    ? 'border-[#09383e] bg-[#09383e]/5 text-[#09383e]'
+                    : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                }`}
+              >
+                {pt === 'fuel' ? 'Petrol / diesel' : 'Electric (EV)'}
               </button>
             ))}
           </div>
           <NumberField
             id="cc"
-            label="Engine capacity"
-            inlineLabel="cc"
+            label={
+              unit === 'cc'
+                ? 'Engine capacity'
+                : unit === 'W'
+                  ? 'Motor power (watts)'
+                  : 'Motor power (kW)'
+            }
+            inlineLabel={unit}
             value={inputs.cc}
             onChange={(v) => set('cc', Math.floor(v))}
             integer
             help={
               matchedTier
-                ? `Tier: ${matchedTier.label}`
+                ? `Tier: ${matchedTier.label} · ${formatNprBluebook(matchedTier.baseTax)} / year`
                 : provinceSupported
                   ? undefined
                   : useOverride
                     ? undefined
-                    : 'No rate table — enable manual base tax below.'
+                    : `No ${powertrain === 'electric' ? 'EV ' : ''}rate table for ${PROVINCE_LABELS[inputs.province]} — enter the base tax manually below.`
             }
           />
         </FormSection>
 
         {/* Province */}
-        <FormSection label="Province">
+        <FormSection label="Province · प्रदेश">
           <select
             value={inputs.province}
             onChange={(e) => set('province', e.target.value as Province)}
             className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#09383e]/20 focus:border-[#09383e]"
-            aria-label="Province"
+            aria-label="Province · प्रदेश"
           >
-            {ALL_PROVINCES.map((p) => {
-              const supported = SUPPORTED_PROVINCES.includes(p)
-              return (
-                <option key={p} value={p}>
-                  {PROVINCE_LABELS[p]}
-                  {!supported ? ' — manual override needed' : ''}
-                </option>
-              )
-            })}
+            {ALL_PROVINCES.map((p) => (
+              <option key={p} value={p}>
+                {PROVINCE_LABELS[p]} (FY {PROVINCES[p].fiscalYear})
+              </option>
+            ))}
           </select>
+          <p className="text-xs text-slate-500 leading-snug">
+            Fine rule: {provinceRates.penalty.summary}
+          </p>
 
           <label className="flex items-center gap-2 cursor-pointer pt-1">
             <input
@@ -150,7 +166,7 @@ export function BluebookCalculator() {
           {useOverride && (
             <NumberField
               id="overrideTax"
-              label="Base vehicle tax (annual)"
+              label="Base vehicle tax (annual) · वार्षिक सवारी कर"
               value={inputs.baseTaxOverride ?? 0}
               onChange={(v) => set('baseTaxOverride', v)}
             />
@@ -158,25 +174,37 @@ export function BluebookCalculator() {
         </FormSection>
 
         {/* Dates */}
-        <FormSection label="Dates">
+        <FormSection label="Dates · मिति">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <DateField
               id="expiry"
-              label="Registration expiry"
+              label="Registration expiry · नवीकरण म्याद सकिएको मिति"
               value={inputs.expiryDate}
               onChange={(v) => set('expiryDate', v)}
             />
             <DateField
               id="asof"
-              label="As of"
+              label="As of · आजको मिति"
               value={inputs.asOfDate}
               onChange={(v) => set('asOfDate', v)}
             />
           </div>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={inputs.includeRenewalFee !== false}
+              onChange={(e) => set('includeRenewalFee', e.target.checked)}
+              className="h-4 w-4 rounded border-slate-300 text-[#09383e] focus:ring-[#09383e]"
+            />
+            <span className="text-sm text-slate-700">
+              Include bluebook renewal fee (Rs{' '}
+              {provinceRates.renewalFee[inputs.vehicleType]})
+            </span>
+          </label>
           <button
             type="button"
             onClick={() => {
-              setInputs(DEFAULTS)
+              setInputs({ ...DEFAULTS, asOfDate: todayYmd() })
               setUseOverride(false)
             }}
             className="text-xs text-slate-500 hover:text-[#09383e] underline-offset-2 hover:underline transition-colors mt-1"
@@ -203,7 +231,7 @@ export function BluebookCalculator() {
             {/* Headline */}
             <div className="rounded-xl border-2 border-[#09383e] bg-white p-5">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-1.5">
-                Total payable today
+                Total payable today · आज तिर्नुपर्ने जम्मा
               </p>
               <p
                 className="font-display font-bold text-4xl mb-2 leading-none tabular-nums"
@@ -213,45 +241,72 @@ export function BluebookCalculator() {
               </p>
               <p className="text-sm text-slate-600">
                 {result.daysLate !== null && result.daysLate > 0 ? (
-                  <>
-                    <strong className="tabular-nums" style={{ fontVariantNumeric: 'tabular-nums' }}>
-                      {result.daysLate} days
-                    </strong>{' '}
-                    late · penalty{' '}
-                    {formatPercentBluebook(result.penaltyRate)}
-                    {result.isPastFyEnd && ' (past FY end)'}
-                  </>
+                  result.penaltyAmount > 0 ? (
+                    <>
+                      <strong className="tabular-nums" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                        {result.daysLate} days
+                      </strong>{' '}
+                      since expiry · {yearsOwed} {yearsOwed === 1 ? 'year' : 'years'} owed
+                      {result.isPastFyEnd && ' · in arrears'}
+                    </>
+                  ) : (
+                    <>
+                      Expired {result.daysLate} days ago — still inside the
+                      90-day grace window (ends {result.graceEndsOn}). No fine
+                      yet.
+                    </>
+                  )
                 ) : (
-                  <>On time — no penalty.</>
+                  <>Not yet due — no fine. This is next year&apos;s tax.</>
                 )}
               </p>
             </div>
 
             {/* Combined breakdown */}
             <div className="rounded-xl border border-slate-200 bg-white divide-y divide-slate-100">
+              {result.years.map((y) => (
+                <div key={y.index}>
+                  <BreakdownRow
+                    label={
+                      result.years.length > 1
+                        ? `Year ${y.index} tax · due ${y.dueDate}`
+                        : 'Annual vehicle tax'
+                    }
+                    sublabel={
+                      result.baseTaxIsOverride
+                        ? 'manual override'
+                        : result.tier
+                          ? `${PROVINCE_LABELS[result.province]} · ${result.tier.label}`
+                          : ''
+                    }
+                    value={formatNprBluebook(y.baseTax)}
+                  />
+                  {y.penaltyAmount > 0 && (
+                    <BreakdownRow
+                      label={`Fine · ${formatPercentBluebook(y.penaltyRate)}`}
+                      sublabel={y.penaltyLabel}
+                      value={formatNprBluebook(y.penaltyAmount)}
+                      negative
+                    />
+                  )}
+                </div>
+              ))}
+              {result.renewalFee > 0 && (
+                <BreakdownRow
+                  label="Bluebook renewal fee · ब्लुबुक नवीकरण दस्तुर"
+                  value={formatNprBluebook(result.renewalFee)}
+                />
+              )}
+              {result.renewalFine > 0 && (
+                <BreakdownRow
+                  label="Renewal fee fine · 100%"
+                  sublabel="renewed after the grace window"
+                  value={formatNprBluebook(result.renewalFine)}
+                  negative
+                />
+              )}
               <BreakdownRow
-                label="Base vehicle tax"
-                sublabel={
-                  result.baseTaxIsOverride
-                    ? 'manual override'
-                    : result.tier
-                      ? `${PROVINCE_LABELS[result.province]} · ${result.tier.label}`
-                      : ''
-                }
-                value={formatNprBluebook(result.baseTax)}
-              />
-              <BreakdownRow
-                label={`Penalty · ${formatPercentBluebook(result.penaltyRate)}`}
-                sublabel={
-                  result.appliedBand
-                    ? result.appliedBand.label
-                    : 'within grace period'
-                }
-                value={formatNprBluebook(result.penaltyAmount)}
-                negative={result.penaltyAmount > 0}
-              />
-              <BreakdownRow
-                label="Total payable"
+                label="Total payable · जम्मा तिर्नुपर्ने"
                 value={formatNprBluebook(result.totalPayable)}
                 strong
                 accent
@@ -260,9 +315,11 @@ export function BluebookCalculator() {
 
             {/* Disclaimer */}
             <p className="text-xs text-slate-500 leading-relaxed px-1">
-              Rates revise annually via provincial Finance Act — verify against your
-              transport-office leaflet. Excludes pollution tax, insurance, road tax,
-              and route-permit fees.
+              {provinceRates.sourceNote} Private vehicles only. Excludes
+              third-party insurance, pollution test and commercial/route-permit
+              fees. Fiscal-year end taken as 15 July (Ashadh end).
+              {result.years.length >= 5 &&
+                ' Five or more unpaid years can lapse the registration — visit the transport office.'}
             </p>
           </>
         )}
